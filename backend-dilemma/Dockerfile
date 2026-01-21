@@ -13,7 +13,7 @@ COPY backend-dilemma/package.json backend-dilemma/pnpm-lock.yaml* ./
 RUN pnpm install --frozen-lockfile=false
 
 # Копируем исходный код и конфигурационные файлы
-COPY backend-dilemma/tsconfig.json backend-dilemma/tsconfig.build.json backend-dilemma/nest-cli.json ./
+COPY backend-dilemma/tsconfig.json backend-dilemma/nest-cli.json ./
 COPY backend-dilemma/src ./src
 
 # Собираем приложение
