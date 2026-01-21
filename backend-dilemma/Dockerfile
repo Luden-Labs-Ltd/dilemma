@@ -9,8 +9,7 @@ RUN apk add --no-cache python3 make g++
 # Копируем файлы зависимостей
 COPY backend-dilemma/package.json backend-dilemma/pnpm-lock.yaml* ./
 
-# Устанавливаем все зависимости (включая dev для сборки)
-RUN pnpm install --frozen-lockfile=false
+RUN pnpm install
 
 # Копируем исходный код и конфигурационные файлы
 COPY backend-dilemma/tsconfig.json backend-dilemma/nest-cli.json ./
@@ -30,7 +29,7 @@ RUN apk add --no-cache python3 make g++
 COPY backend-dilemma/package.json backend-dilemma/pnpm-lock.yaml* ./
 
 # Устанавливаем только production зависимости
-RUN pnpm install --frozen-lockfile --production && \
+RUN pnpm install --production && \
     pnpm store prune
 
 # Копируем собранное приложение из builder stage
