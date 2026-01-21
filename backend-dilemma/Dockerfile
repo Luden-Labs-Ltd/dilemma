@@ -7,13 +7,13 @@ WORKDIR /app
 RUN apk add --no-cache python3 make g++
 
 # Копируем файлы зависимостей
-COPY backend-dilemma/package.json yarn.lock ./
+COPY backend-dilemma/package.json backend-dilemma/pnpm-lock.yaml* ./
 
 # Устанавливаем все зависимости (включая dev для сборки)
 RUN pnpm install --frozen-lockfile=false
 
 # Копируем исходный код и конфигурационные файлы
-COPY backend-dilemma/tsconfig.json tsconfig.build.json nest-cli.json ./
+COPY backend-dilemma/tsconfig.json backend-dilemma/tsconfig.build.json backend-dilemma/nest-cli.json ./
 COPY backend-dilemma/src ./src
 
 # Собираем приложение
