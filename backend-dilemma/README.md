@@ -43,12 +43,27 @@ NODE_ENV=development
 ### Без Docker (pnpm)
 
 ```bash
-# Development mode
+# Development mode (backend)
 pnpm run start:dev
 
-# Production mode
+# Production mode (backend)
 pnpm run build
 pnpm run start:prod
+```
+
+### Фронтенд (pnpm, Vite React, папка `frontend-dilemma`)
+
+```bash
+# Установка зависимостей (один раз)
+cd ../frontend-dilemma
+pnpm install
+
+# Development mode (frontend)
+pnpm dev
+
+# Линтеры и типы
+pnpm lint
+pnpm ts-check
 ```
 
 ### С Docker (рекомендуется, pnpm внутри контейнера)
