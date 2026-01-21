@@ -1,0 +1,349 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Dilemma System API",
+    "version": "1.0.0",
+    "description": "API for ethical dilemma system with decision tracking"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/dilemmas": {
+      "get": {
+        "summary": "Get list of active dilemmas",
+        "responses": {
+          "200": {
+            "description": "List of dilemmas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DilemmaListItem"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/dilemmas/{name}": {
+      "get": {
+        "summary": "Get dilemma details",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "X-User-UUID",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dilemma details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DilemmaDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dilemma not found"
+          }
+        }
+      }
+    },
+    "/decisions/initial": {
+      "post": {
+        "summary": "Make initial choice",
+        "parameters": [
+          {
+            "name": "X-User-UUID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InitialChoiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Initial choice created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "404": {
+            "description": "Dilemma not found"
+          },
+          "409": {
+            "description": "User already participated"
+          }
+        }
+      }
+    },
+    "/decisions/final": {
+      "post": {
+        "summary": "Make final choice",
+        "parameters": [
+          {
+            "name": "X-User-UUID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FinalChoiceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Final choice updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DecisionResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error or no initial choice"
+          },
+          "404": {
+            "description": "Dilemma or decision not found"
+          },
+          "409": {
+            "description": "Final choice already set"
+          }
+        }
+      }
+    },
+    "/decisions/my": {
+      "get": {
+        "summary": "Get user's decision history",
+        "parameters": [
+          {
+            "name": "X-User-UUID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User's decisions",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MyDecision"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistics/dilemma/{name}": {
+      "get": {
+        "summary": "Get statistics for a dilemma",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dilemma statistics",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StatisticsResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dilemma not found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DilemmaListItem": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "title": {"type": "string"},
+          "description": {"type": "string"},
+          "participantCount": {"type": "integer"}
+        }
+      },
+      "DilemmaDetails": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "string"},
+          "title": {"type": "string"},
+          "description": {"type": "string"},
+          "optionA": {
+            "type": "object",
+            "properties": {
+              "title": {"type": "string"},
+              "description": {"type": "string"}
+            }
+          },
+          "optionB": {
+            "type": "object",
+            "properties": {
+              "title": {"type": "string"},
+              "description": {"type": "string"}
+            }
+          },
+          "hasParticipated": {"type": "boolean"}
+        }
+      },
+      "InitialChoiceRequest": {
+        "type": "object",
+        "required": ["dilemmaName", "choice"],
+        "properties": {
+          "dilemmaName": {"type": "string"},
+          "choice": {"type": "string", "enum": ["A", "B"]}
+        }
+      },
+      "FinalChoiceRequest": {
+        "type": "object",
+        "required": ["dilemmaName", "choice"],
+        "properties": {
+          "dilemmaName": {"type": "string"},
+          "choice": {"type": "string", "enum": ["A", "B"]}
+        }
+      },
+      "FeedbackResponse": {
+        "type": "object",
+        "properties": {
+          "decisionId": {"type": "integer"},
+          "feedback": {"type": "string"}
+        }
+      },
+      "DecisionResponse": {
+        "type": "object",
+        "properties": {
+          "decisionId": {"type": "integer"},
+          "initialChoice": {"type": "string", "enum": ["A", "B"]},
+          "finalChoice": {"type": "string", "enum": ["A", "B"]},
+          "changedMind": {"type": "boolean"},
+          "path": {"type": "string", "enum": ["AA", "AB", "BB", "BA"]},
+          "timeToDecide": {"type": "integer"}
+        }
+      },
+      "MyDecision": {
+        "type": "object",
+        "properties": {
+          "dilemmaName": {"type": "string"},
+          "dilemmaTitle": {"type": "string"},
+          "initialChoice": {"type": "string", "enum": ["A", "B"]},
+          "finalChoice": {"type": "string", "enum": ["A", "B"], "nullable": true},
+          "changedMind": {"type": "boolean", "nullable": true},
+          "path": {"type": "string", "enum": ["AA", "AB", "BB", "BA"], "nullable": true},
+          "participatedAt": {"type": "string", "format": "date-time"},
+          "timeToDecide": {"type": "integer", "nullable": true}
+        }
+      },
+      "StatisticsResponse": {
+        "type": "object",
+        "properties": {
+          "dilemma": {
+            "type": "object",
+            "properties": {
+              "name": {"type": "string"},
+              "title": {"type": "string"}
+            }
+          },
+          "totalParticipants": {"type": "integer"},
+          "stats": {
+            "type": "object",
+            "properties": {
+              "AA": {"type": "integer"},
+              "AB": {"type": "integer"},
+              "BB": {"type": "integer"},
+              "BA": {"type": "integer"}
+            }
+          },
+          "paths": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {"type": "string"},
+                "count": {"type": "integer"},
+                "percentage": {"type": "number"},
+                "description": {"type": "string"}
+              }
+            }
+          },
+          "changeRate": {"type": "number"},
+          "avgTimeToDecide": {"type": "number"}
+        }
+      }
+    }
+  }
+}
