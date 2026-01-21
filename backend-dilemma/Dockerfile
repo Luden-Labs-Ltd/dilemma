@@ -27,7 +27,7 @@ WORKDIR /app
 RUN apk add --no-cache python3 make g++
 
 # Копируем файлы зависимостей
-COPY package.json pnpm-lock.yaml* ./
+COPY backend-dilemma/package.json backend-dilemma/pnpm-lock.yaml* ./
 
 # Устанавливаем только production зависимости
 RUN pnpm install --frozen-lockfile --production && \
