@@ -92,6 +92,13 @@ type BackendPathStatsResponse = {
   totalCompleted: number;
 };
 
+type BackendUser = {
+  id: string;
+  clientUuid: string;
+  createdAt: string;
+  lastActive: string;
+};
+
 type BackendFeedbackResponse = {
   decisionId: number;
   feedback: string;
@@ -106,16 +113,45 @@ type BackendDecisionResponse = {
   timeToDecide: number;
 };
 
+export type BackendMyDecisionItem = {
+  dilemmaName: string;
+  initialChoice: "A" | "B";
+  finalChoice: "A" | "B" | null;
+  changedMind?: boolean;
+  path?: "AA" | "AB" | "BB" | "BA";
+  timeToDecide?: number;
+};
+
 const USER_UUID_HEADER = "X-User-UUID";
 
 export async function fetchDilemmas(): Promise<BackendDilemma[]> {
   return request<BackendDilemma[]>("/dilemmas");
 }
 
+export async function fetchUsers(): Promise<BackendUser[]> {
+  return request<BackendUser[]>("/users");
+}
+
 export async function fetchDilemmaDetails(
   dilemmaName: DilemmaType
 ): Promise<BackendDilemma> {
   return request<BackendDilemma>(`/dilemmas/${dilemmaName}`);
+}
+
+export async function fetchMyDecisions(): Promise<BackendMyDecisionItem[]> {
+  const userUuid = getClientUuid();
+  try {
+    return await request<BackendMyDecisionItem[]>("/decisions/my", {
+      method: "GET",
+      headers: { [USER_UUID_HEADER]: userUuid },
+    });
+  } catch (e) {
+    const err = e as ApiError;
+    if (err.type === "http" && err.status === 404) {
+      return [];
+    }
+    throw e;
+  }
 }
 
 export async function submitInitialChoice(

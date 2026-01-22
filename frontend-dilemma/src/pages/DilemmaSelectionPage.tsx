@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
@@ -7,7 +8,17 @@ import type { DilemmaType } from "../shared/types";
 export function DilemmaSelectionPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { dilemmas, isLoadingDilemmas, dilemmasError, refreshDilemmas, setCurrentDilemma } = useDilemma();
+  const {
+    dilemmas,
+    isLoadingDilemmas,
+    dilemmasError,
+    refreshDilemmas,
+    setCurrentDilemma,
+  } = useDilemma();
+
+  useEffect(() => {
+    void refreshDilemmas();
+  }, [refreshDilemmas]);
 
   const handleSelectDilemma = (dilemmaName: string) => {
     setCurrentDilemma(dilemmaName as DilemmaType);
@@ -61,7 +72,7 @@ export function DilemmaSelectionPage() {
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05, brightness: 1.2 }}
+                whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={() => handleSelectDilemma(dilemma.name)}
                 className="group relative h-[400px] w-[280px] overflow-hidden rounded-3xl bg-white shadow-lg transition-all hover:shadow-2xl"
@@ -76,7 +87,17 @@ export function DilemmaSelectionPage() {
 
                 {/* Название */}
                 <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
-                  <h3 className="text-xl font-bold">{dilemma.title}</h3>
+                  <div className="flex items-center justify-between gap-2">
+                    <h3 className="text-xl font-bold">{dilemma.title}</h3>
+                    {dilemma.isCompletedByUser && (
+                      <span
+                        className="shrink-0 rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-medium"
+                        title={t("dilemmaSelection.completed") ?? "Completed"}
+                      >
+                        ✓
+                      </span>
+                    )}
+                  </div>
                 </div>
 
                 {/* Hover эффект - осветление */}

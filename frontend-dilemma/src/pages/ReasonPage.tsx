@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
-import { submitFinalChoice } from "@/shared/lib/api";
+import { submitFinalChoice, type ApiError } from "@/shared/lib/api";
 
 export function ReasonPage() {
   const { t } = useTranslation();
@@ -13,43 +13,42 @@ export function ReasonPage() {
   const dilemma = useDilemmaData(currentDilemma);
   const [value, setValue] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!currentDilemma || !choice || !dilemma) {
     navigate("/");
     return null;
   }
 
-  const handleSubmit = () => {
+  const submitFinal = async (trimmedReason: string | null, skippedReason: boolean) => {
     if (isSubmitting) return;
     setIsSubmitting(true);
+    setError(null);
+    setReasonText(trimmedReason);
+    setSkipped(skippedReason);
 
+    try {
+      await submitFinalChoice(currentDilemma, choice);
+      navigate("/stats");
+    } catch (err) {
+      const apiErr = err as ApiError;
+      setError(
+        apiErr.type === "network"
+          ? t("reason.error.network")
+          : t("reason.error.generic", { message: apiErr.message })
+      );
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleSubmit = () => {
     const trimmed = value.trim();
     const reasonText = trimmed.length > 0 ? trimmed : null;
-
-    setReasonText(reasonText);
-    setSkipped(false);
-
-    // Фиксируем финальное решение в backend
-    void submitFinalChoice(currentDilemma, choice);
-
-    setTimeout(() => {
-      navigate("/stats");
-    }, 300);
+    void submitFinal(reasonText, false);
   };
 
   const handleSkip = () => {
-    if (isSubmitting) return;
-    setIsSubmitting(true);
-
-    setReasonText(null);
-    setSkipped(true);
-
-    // Даже при пропуске текста фиксируем финальное решение в backend
-    void submitFinalChoice(currentDilemma, choice);
-
-    setTimeout(() => {
-      navigate("/stats");
-    }, 300);
+    void submitFinal(null, true);
   };
 
   const choiceLabel = choice === "a" ? "א" : "ב";
@@ -89,6 +88,19 @@ export function ReasonPage() {
           disabled={isSubmitting}
           className="mb-6 h-32 w-full resize-none rounded-2xl border border-gray-200 bg-white/80 p-4 text-gray-800 shadow-sm outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200 disabled:opacity-50"
         />
+
+        {error && (
+          <div className="mb-6 rounded-2xl bg-red-50 p-4 text-center text-red-700">
+            <p className="mb-3">{error}</p>
+            <button
+              type="button"
+              onClick={() => setError(null)}
+              className="rounded-full bg-red-500 px-4 py-2 text-white hover:bg-red-600"
+            >
+              {t("reason.retry")}
+            </button>
+          </div>
+        )}
 
         {/* Кнопки */}
         <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">

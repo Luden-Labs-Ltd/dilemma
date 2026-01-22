@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
 import { fetchDilemmaStats } from "@/shared/lib/api";
+import { formatPercent } from "@/shared/lib/utils";
 import type { DilemmaStats } from "@/shared/types";
 
 export function StatsPage() {
@@ -102,13 +103,13 @@ export function StatsPage() {
                 )}
               </div>
               <span className="font-bold text-gray-800">
-                {stats ? stats.aPercent : 50}%
+                {formatPercent(stats ? stats.aPercent : 50)}%
               </span>
             </div>
             <div className="h-8 w-full overflow-hidden rounded-full bg-gray-200">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${stats ? stats.aPercent : 50}%` }}
+                animate={{ width: `${formatPercent(stats ? stats.aPercent : 50)}%` }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                 className={`h-full rounded-full ${
                   choice === "a" ? "bg-cyan-500" : "bg-cyan-300"
@@ -131,13 +132,13 @@ export function StatsPage() {
                 )}
               </div>
               <span className="font-bold text-gray-800">
-                {stats ? stats.bPercent : 50}%
+                {formatPercent(stats ? stats.bPercent : 50)}%
               </span>
             </div>
             <div className="h-8 w-full overflow-hidden rounded-full bg-gray-200">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${stats ? stats.bPercent : 50}%` }}
+                animate={{ width: `${formatPercent(stats ? stats.bPercent : 50)}%` }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
                 className={`h-full rounded-full ${
                   choice === "b" ? "bg-purple-500" : "bg-purple-300"

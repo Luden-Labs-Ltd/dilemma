@@ -6,6 +6,7 @@ export interface DilemmaListItem {
   title: string;
   description: string;
   participantCount?: number;
+  isCompletedByUser?: boolean;
 }
 
 export interface DilemmaContextType {
