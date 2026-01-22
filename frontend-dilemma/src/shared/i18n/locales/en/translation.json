@@ -10,7 +10,14 @@
   },
   "dilemmaSelection": {
     "title": "Values Under Test",
-    "subtitle": "Choose a topic to face the dilemma:"
+    "subtitle": "Choose a topic to face the dilemma:",
+    "loading": "Loading dilemmas...",
+    "retry": "Try again",
+    "noDilemmas": "No dilemmas available",
+    "error": {
+      "network": "Could not load dilemmas. Please check your connection.",
+      "generic": "Failed to load dilemmas: {{message}}"
+    }
   },
   "scenario": {
     "continue": "Continue"
@@ -30,7 +37,12 @@
     "skip": "Skip video"
   },
   "choice": {
-    "subtitle": "Choose one of the options below"
+    "subtitle": "Choose one of the options below",
+    "retry": "Try again",
+    "error": {
+      "network": "Could not submit your choice. Please check your connection.",
+      "generic": "An error occurred: {{message}}"
+    }
   },
   "reason": {
     "title": "Why did you choose this option?",
@@ -48,7 +60,9 @@
     "optionA": "Option A",
     "optionB": "Option B",
     "yourChoice": "Your choice",
-    "next": "Next"
+    "next": "Next",
+    "error": "Failed to load statistics.",
+    "loading": "Loading statistics..."
   },
   "extra": {
     "title": "Learn more about this dilemma",

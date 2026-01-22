@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
-import { submitReason } from "@/shared/lib/api";
+import { submitFinalChoice } from "@/shared/lib/api";
 
 export function ReasonPage() {
   const { t } = useTranslation();
@@ -29,8 +29,8 @@ export function ReasonPage() {
     setReasonText(reasonText);
     setSkipped(false);
 
-    // Сохраняем в "backend"
-    submitReason(currentDilemma, choice, reasonText, false);
+    // Фиксируем финальное решение в backend
+    void submitFinalChoice(currentDilemma, choice);
 
     setTimeout(() => {
       navigate("/stats");
@@ -44,8 +44,8 @@ export function ReasonPage() {
     setReasonText(null);
     setSkipped(true);
 
-    // Сохраняем в "backend"
-    submitReason(currentDilemma, choice, null, true);
+    // Даже при пропуске текста фиксируем финальное решение в backend
+    void submitFinalChoice(currentDilemma, choice);
 
     setTimeout(() => {
       navigate("/stats");

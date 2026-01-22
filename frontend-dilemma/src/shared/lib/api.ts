@@ -1,23 +1,76 @@
 import type { DilemmaType, Choice, DilemmaStats } from "../types";
+import { getClientUuid } from "./clientUuid";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
 
+export interface ApiError {
+  type: "network" | "http" | "parse";
+  status?: number;
+  message: string;
+  originalError?: unknown;
+}
+
 async function request<T>(input: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${API_BASE_URL}${input}`, {
-    headers: {
+  try {
+    // Объединяем заголовки правильно: сначала Content-Type, потом из init
+    const headers: Record<string, string> = {
       "Content-Type": "application/json",
-      ...init?.headers,
-    },
-    ...init,
-  });
+    };
+    
+    if (init?.headers) {
+      if (init.headers instanceof Headers) {
+        init.headers.forEach((value, key) => {
+          headers[key] = value;
+        });
+      } else if (Array.isArray(init.headers)) {
+        init.headers.forEach(([key, value]) => {
+          headers[key] = value;
+        });
+      } else {
+        Object.assign(headers, init.headers);
+      }
+    }
 
-  if (!response.ok) {
-    // Можно расширить обработку ошибок под дизайн фронта
-    throw new Error(`API error: ${response.status}`);
+    const response = await fetch(`${API_BASE_URL}${input}`, {
+      ...init,
+      headers,
+    });
+
+    if (!response.ok) {
+      // Попытка извлечь сообщения об ошибках валидации от NestJS
+      let errorMessage = `API error: ${response.status} ${response.statusText}`;
+      try {
+        const errorData = await response.json();
+        if (errorData.message && Array.isArray(errorData.message)) {
+          errorMessage = errorData.message.join(", ");
+        } else if (errorData.message && typeof errorData.message === "string") {
+          errorMessage = errorData.message;
+        }
+      } catch {
+        // Игнорируем ошибки парсинга JSON ошибки
+      }
+
+      const error: ApiError = {
+        type: "http",
+        status: response.status,
+        message: errorMessage,
+      };
+      throw error;
+    }
+
+    return (await response.json()) as T;
+  } catch (err) {
+    if (err && typeof err === "object" && "type" in err) {
+      throw err;
+    }
+    const error: ApiError = {
+      type: "network",
+      message: err instanceof Error ? err.message : "Network error occurred",
+      originalError: err,
+    };
+    throw error;
   }
-
-  return (await response.json()) as T;
 }
 
 type BackendDilemma = {
@@ -30,45 +83,30 @@ type BackendDilemma = {
   option_b_description: string;
 };
 
-type BackendStatsPath = {
-  name: "AA" | "AB" | "BB" | "BA";
-  count: number;
-  percentage: number;
-  description: string;
+// Реальная структура ответа от /statistics/paths/:name
+type BackendPathStatsResponse = {
+  AA: number;
+  AB: number;
+  BA: number;
+  BB: number;
+  totalCompleted: number;
 };
 
-type BackendStatsResponse = {
-  dilemma: BackendDilemma;
-  total_participants: number;
-  stats: {
-    AA: number;
-    AB: number;
-    BB: number;
-    BA: number;
-  };
-  paths: BackendStatsPath[];
-  change_rate: number;
-  avg_time_to_decide: number;
+type BackendFeedbackResponse = {
+  decisionId: number;
+  feedback: string;
 };
 
 type BackendDecisionResponse = {
-  // структура может меняться, поэтому тип гибкий
-  status: string;
+  decisionId: number;
+  initialChoice: "A" | "B";
+  finalChoice: "A" | "B";
+  changedMind: boolean;
+  path: "AA" | "AB" | "BB" | "BA";
+  timeToDecide: number;
 };
 
 const USER_UUID_HEADER = "X-User-UUID";
-
-function getUserUuid(): string {
-  const STORAGE_KEY = "dilemma-user-uuid";
-  let uuid = localStorage.getItem(STORAGE_KEY);
-
-  if (!uuid) {
-    uuid = crypto.randomUUID();
-    localStorage.setItem(STORAGE_KEY, uuid);
-  }
-
-  return uuid;
-}
 
 export async function fetchDilemmas(): Promise<BackendDilemma[]> {
   return request<BackendDilemma[]>("/dilemmas");
@@ -83,17 +121,26 @@ export async function fetchDilemmaDetails(
 export async function submitInitialChoice(
   dilemmaName: DilemmaType,
   choice: Choice
-): Promise<BackendDecisionResponse> {
-  const userUuid = getUserUuid();
+): Promise<BackendFeedbackResponse> {
+  const userUuid = getClientUuid();
 
-  return request<BackendDecisionResponse>("/decisions/initial", {
+  if (!dilemmaName || typeof dilemmaName !== "string") {
+    throw new Error("dilemmaName must be a non-empty string");
+  }
+
+  const choiceValue = choice === "a" ? "A" : "B";
+  if (choiceValue !== "A" && choiceValue !== "B") {
+    throw new Error("choice must be 'a' or 'b'");
+  }
+
+  return request<BackendFeedbackResponse>("/decisions/initial", {
     method: "POST",
     headers: {
       [USER_UUID_HEADER]: userUuid,
     },
     body: JSON.stringify({
-      dilemma_name: dilemmaName,
-      choice: choice === "a" ? "A" : "B",
+      dilemmaName: String(dilemmaName),
+      choice: choiceValue,
     }),
   });
 }
@@ -102,7 +149,16 @@ export async function submitFinalChoice(
   dilemmaName: DilemmaType,
   choice: Choice
 ): Promise<BackendDecisionResponse> {
-  const userUuid = getUserUuid();
+  const userUuid = getClientUuid();
+
+  if (!dilemmaName || typeof dilemmaName !== "string") {
+    throw new Error("dilemmaName must be a non-empty string");
+  }
+
+  const choiceValue = choice === "a" ? "A" : "B";
+  if (choiceValue !== "A" && choiceValue !== "B") {
+    throw new Error("choice must be 'a' or 'b'");
+  }
 
   return request<BackendDecisionResponse>("/decisions/final", {
     method: "POST",
@@ -110,8 +166,8 @@ export async function submitFinalChoice(
       [USER_UUID_HEADER]: userUuid,
     },
     body: JSON.stringify({
-      dilemma_name: dilemmaName,
-      choice: choice === "a" ? "A" : "B",
+      dilemmaName: String(dilemmaName),
+      choice: choiceValue,
     }),
   });
 }
@@ -119,16 +175,16 @@ export async function submitFinalChoice(
 export async function fetchDilemmaStats(
   dilemmaName: DilemmaType
 ): Promise<DilemmaStats> {
-  const data = await request<BackendStatsResponse>(
-    `/statistics/dilemma/${dilemmaName}`
+  const data = await request<BackendPathStatsResponse>(
+    `/statistics/paths/${dilemmaName}`
   );
 
-  const total =
-    data.stats.AA + data.stats.AB + data.stats.BB + data.stats.BA;
+  // Бэкенд возвращает статистику путей напрямую
+  const total = data.totalCompleted || (data.AA + data.AB + data.BB + data.BA);
 
   // Маппим в существующую структуру фронта
-  const aCount = data.stats.AA + data.stats.AB;
-  const bCount = data.stats.BB + data.stats.BA;
+  const aCount = data.AA + data.AB;
+  const bCount = data.BB + data.BA;
 
   const aPercent = total > 0 ? Math.round((aCount / total) * 100) : 50;
   const bPercent = total > 0 ? Math.round((bCount / total) * 100) : 50;

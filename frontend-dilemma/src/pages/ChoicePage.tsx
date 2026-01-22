@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
-import { submitChoice } from "@/shared/lib/api";
+import { submitInitialChoice, type ApiError } from "@/shared/lib/api";
 import type { Choice } from "@/shared/types";
 
 export function ChoicePage() {
@@ -14,28 +14,44 @@ export function ChoicePage() {
   const dilemma = useDilemmaData(currentDilemma);
   const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   if (!currentDilemma || !dilemma) {
     navigate("/");
     return null;
   }
 
-  const handleChoice = (choice: Choice) => {
+  const handleChoice = async (choice: Choice) => {
     if (isSubmitting) return;
 
     setSelectedChoice(choice);
     setIsSubmitting(true);
+    setError(null);
+    setFeedback(null);
 
-    // Сохраняем выбор в контекст
-    setChoice(choice);
+    try {
+      // Сохраняем выбор в контекст
+      setChoice(choice);
 
-    // Отправляем в "backend"
-    submitChoice(currentDilemma, choice);
+      // Отправляем initial choice в backend и получаем фидбэк
+      const response = await submitInitialChoice(currentDilemma, choice);
+      setFeedback(response.feedback);
 
-    // Переход с анимацией
-    setTimeout(() => {
-      navigate("/reason");
-    }, 400);
+      // Переход с анимацией после получения фидбэка
+      setTimeout(() => {
+        navigate("/reason");
+      }, 1500);
+    } catch (err) {
+      const apiError = err as ApiError;
+      setError(
+        apiError.type === "network"
+          ? t("choice.error.network")
+          : t("choice.error.generic", { message: apiError.message })
+      );
+      setIsSubmitting(false);
+      setSelectedChoice(null);
+    }
   };
 
   return (
@@ -52,6 +68,38 @@ export function ChoicePage() {
         </h1>
         <p className="text-gray-600">{t("choice.subtitle")}</p>
       </motion.div>
+
+      {/* Фидбэк от сервера */}
+      {feedback && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 max-w-2xl rounded-2xl bg-cyan-50 p-6 text-center text-gray-800"
+        >
+          <p className="text-lg">{feedback}</p>
+        </motion.div>
+      )}
+
+      {/* Сообщение об ошибке */}
+      {error && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 max-w-2xl rounded-2xl bg-red-50 p-6 text-center text-red-800"
+        >
+          <p className="mb-3 text-lg">{error}</p>
+          <button
+            onClick={() => {
+              setError(null);
+              setIsSubmitting(false);
+              setSelectedChoice(null);
+            }}
+            className="rounded-full bg-red-500 px-6 py-2 text-white hover:bg-red-600"
+          >
+            {t("choice.retry") || "Повторить"}
+          </button>
+        </motion.div>
+      )}
 
       {/* Варианты */}
       <div className="flex flex-wrap justify-center gap-8">

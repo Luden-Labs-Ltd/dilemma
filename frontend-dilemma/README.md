@@ -1,4 +1,24 @@
-# React + TypeScript + Vite
+# Frontend Dilemma (React + TypeScript + Vite)
+
+Этот frontend‑проект отображает дилеммы и связывается с backend‑API системы дилем.
+
+## Конфигурация API (`VITE_API_BASE_URL`)
+
+Фронтенд читает базовый URL API из переменной окружения `VITE_API_BASE_URL`:
+
+- Для локальной разработки:
+  - `VITE_API_BASE_URL=http://localhost:3000/api`
+- Для продакшена (Railway):
+  - `VITE_API_BASE_URL=https://dilemma-production-0f6b.up.railway.app/api`
+
+Создайте локальный файл окружения (например, `.env.local`) в корне `frontend-dilemma` и задайте нужное значение `VITE_API_BASE_URL` в соответствии с окружением.
+
+Подробнее сценарий поднятия backend + frontend и проверки интеграции описан в  
+[`specs/001-connect-backend/quickstart.md`](../../specs/001-connect-backend/quickstart.md) в корне монорепозитория.
+
+---
+
+## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
