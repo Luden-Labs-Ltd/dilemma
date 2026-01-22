@@ -1,0 +1,30 @@
+# dilemma Development Guidelines
+
+Auto-generated from all feature plans. Last updated: 2026-01-21
+
+## Active Technologies
+
+- Frontend — TypeScript ~5.9 + React 19; Backend — TypeScript ^5.7 + NestJS 11 + Frontend — React, React Router, Vite, i18next; Backend — NestJS, TypeORM, PostgreSQL, @nestjs/swagger (001-connect-backend)
+
+## Project Structure
+
+```text
+backend/
+frontend/
+tests/
+```
+
+## Commands
+
+npm test && npm run lint
+
+## Code Style
+
+Frontend — TypeScript ~5.9 + React 19; Backend — TypeScript ^5.7 + NestJS 11: Follow standard conventions
+
+## Recent Changes
+
+- 001-connect-backend: Added Frontend — TypeScript ~5.9 + React 19; Backend — TypeScript ^5.7 + NestJS 11 + Frontend — React, React Router, Vite, i18next; Backend — NestJS, TypeORM, PostgreSQL, @nestjs/swagger
+
+<!-- MANUAL ADDITIONS START -->
+<!-- MANUAL ADDITIONS END -->

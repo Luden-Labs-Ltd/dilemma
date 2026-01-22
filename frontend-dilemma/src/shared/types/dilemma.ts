@@ -1,5 +1,5 @@
 // Типы для дилемм и ответов пользователей
-export type DilemmaType = "professional" | "state" | "medical";
+export type DilemmaType = string;
 
 export type Choice = "a" | "b";
 

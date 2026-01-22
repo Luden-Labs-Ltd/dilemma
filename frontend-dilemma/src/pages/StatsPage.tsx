@@ -1,10 +1,11 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
-import { getStats } from "@/shared/lib/api";
-import { useMemo } from "react";
+import { fetchDilemmaStats } from "@/shared/lib/api";
+import type { DilemmaStats } from "@/shared/types";
 
 export function StatsPage() {
   const { t } = useTranslation();
@@ -12,13 +13,47 @@ export function StatsPage() {
   const { currentDilemma, choice } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
 
-  // Вычисляем статистику синхронно
-  const stats = useMemo(() => {
+  const [stats, setStats] = useState<DilemmaStats | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
     if (!currentDilemma) {
-      return { aPercent: 50, bPercent: 50, total: 0 };
+      return;
     }
-    return getStats(currentDilemma);
-  }, [currentDilemma]);
+
+    let cancelled = false;
+    setIsLoading(true);
+    setError(null);
+
+    fetchDilemmaStats(currentDilemma)
+      .then((data) => {
+        if (cancelled) return;
+        setStats(data);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        // В случае ошибки показываем дефолтные 50/50 и сообщение
+        setStats({
+          dilemmaId: currentDilemma,
+          total: 0,
+          aCount: 0,
+          bCount: 0,
+          aPercent: 50,
+          bPercent: 50,
+        });
+        setError(t("stats.error"));
+      })
+      .finally(() => {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      });
+
+  return () => {
+      cancelled = true;
+    };
+  }, [currentDilemma, t]);
 
   if (!currentDilemma || !choice || !dilemma) {
     navigate("/");
@@ -38,9 +73,17 @@ export function StatsPage() {
           <h1 className="text-3xl font-bold text-gray-800">
             {t("stats.title")}
           </h1>
-          <p className="mt-2 text-gray-600">
-            {t("stats.totalResponses", { count: stats.total })}
-          </p>
+          {stats && (
+            <p className="mt-2 text-gray-600">
+              {t("stats.totalResponses", { count: stats.total })}
+            </p>
+          )}
+          {isLoading && (
+            <p className="mt-2 text-gray-500">{t("stats.loading")}</p>
+          )}
+          {error && (
+            <p className="mt-2 text-sm text-red-500">{error}</p>
+          )}
         </div>
 
         {/* Горизонтальные бары */}
@@ -58,12 +101,14 @@ export function StatsPage() {
                   </span>
                 )}
               </div>
-              <span className="font-bold text-gray-800">{stats.aPercent}%</span>
+              <span className="font-bold text-gray-800">
+                {stats ? stats.aPercent : 50}%
+              </span>
             </div>
             <div className="h-8 w-full overflow-hidden rounded-full bg-gray-200">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${stats.aPercent}%` }}
+                animate={{ width: `${stats ? stats.aPercent : 50}%` }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                 className={`h-full rounded-full ${
                   choice === "a" ? "bg-cyan-500" : "bg-cyan-300"
@@ -85,12 +130,14 @@ export function StatsPage() {
                   </span>
                 )}
               </div>
-              <span className="font-bold text-gray-800">{stats.bPercent}%</span>
+              <span className="font-bold text-gray-800">
+                {stats ? stats.bPercent : 50}%
+              </span>
             </div>
             <div className="h-8 w-full overflow-hidden rounded-full bg-gray-200">
               <motion.div
                 initial={{ width: 0 }}
-                animate={{ width: `${stats.bPercent}%` }}
+                animate={{ width: `${stats ? stats.bPercent : 50}%` }}
                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.4 }}
                 className={`h-full rounded-full ${
                   choice === "b" ? "bg-purple-500" : "bg-purple-300"
