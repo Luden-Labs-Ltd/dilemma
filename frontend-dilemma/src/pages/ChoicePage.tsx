@@ -96,7 +96,7 @@ export function ChoicePage() {
             }}
             className="rounded-full bg-red-500 px-6 py-2 text-white hover:bg-red-600"
           >
-            {t("choice.retry") || "Повторить"}
+            {t("choice.retry")}
           </button>
         </motion.div>
       )}

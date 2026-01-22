@@ -45,7 +45,7 @@ export function DilemmaSelectionPage() {
       {/* Карточки дилемм */}
       {isLoadingDilemmas && (
         <div className="text-center text-gray-600">
-          {t("dilemmaSelection.loading") || "Загрузка дилем..."}
+          {t("dilemmaSelection.loading")}
         </div>
       )}
       {dilemmasError && (
@@ -55,7 +55,7 @@ export function DilemmaSelectionPage() {
             onClick={() => void refreshDilemmas()}
             className="rounded-full bg-cyan-500 px-6 py-2 text-white hover:bg-cyan-600"
           >
-            {t("dilemmaSelection.retry") || "Повторить"}
+            {t("dilemmaSelection.retry")}
           </button>
         </div>
       )}
@@ -63,7 +63,7 @@ export function DilemmaSelectionPage() {
         <div className="flex flex-wrap justify-center gap-6">
           {dilemmas.length === 0 ? (
             <p className="text-gray-600">
-              {t("dilemmaSelection.noDilemmas") || "Нет доступных дилем"}
+              {t("dilemmaSelection.noDilemmas")}
             </p>
           ) : (
             dilemmas.map((dilemma, index) => (
@@ -92,7 +92,7 @@ export function DilemmaSelectionPage() {
                     {dilemma.isCompletedByUser && (
                       <span
                         className="shrink-0 rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-medium"
-                        title={t("dilemmaSelection.completed") ?? "Completed"}
+                        title={t("dilemmaSelection.completed")}
                       >
                         ✓
                       </span>

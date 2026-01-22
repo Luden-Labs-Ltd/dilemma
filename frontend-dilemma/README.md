@@ -18,6 +18,12 @@
 
 ---
 
+## i18n
+
+Локали `en` и `he` в `src/shared/i18n/locales/`. Часть ключей (`common.*`, `scenario.*`, `statistics.*`, `sources.*`, `finalVote.*`, `finalStatistics.*`, `insights.*`) зарезервирована под будущие экраны и пока не используется в коде.
+
+---
+
 ## Known Issues
 
 Сводка по результатам прогона сценария из `specs/001-connect-backend/quickstart.md`:
