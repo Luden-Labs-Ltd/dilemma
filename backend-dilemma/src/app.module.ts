@@ -21,7 +21,7 @@ import { UserDecision } from './modules/decisions/entities/user-decision.entity'
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        // url: configService.get<string>('DATABASE_URL'),
+        url: configService.get<string>('DATABASE_URL'),
         host: configService.get<string>('DATABASE_HOST'),
         port: configService.get<number>('DATABASE_PORT'),
         username: configService.get<string>('DATABASE_USER'),
