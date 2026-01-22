@@ -17,7 +17,7 @@ async function request<T>(input: string, init?: RequestInit): Promise<T> {
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
     };
-    
+
     if (init?.headers) {
       if (init.headers instanceof Headers) {
         init.headers.forEach((value, key) => {
@@ -280,5 +280,29 @@ export async function getInsightData(
     stats,
     interpretation,
   };
+}
+
+/** POST /api/feedback/analyze — AI counter-arguments for user's choice. */
+export async function fetchFeedbackAnalyze(
+  dilemmaName: DilemmaType,
+  choice: Choice,
+  reasoning?: string
+): Promise<string[]> {
+  const userUuid = getClientUuid();
+  const choiceValue = choice === "a" ? "A" : "B";
+
+  const payload: { dilemmaName: string; choice: "A" | "B"; reasoning?: string } =
+    { dilemmaName: String(dilemmaName), choice: choiceValue };
+  if (reasoning != null && reasoning.trim() !== "") {
+    payload.reasoning = reasoning.trim();
+  }
+
+  const res = await request<{ counterArguments: string[] }>("/feedback/analyze", {
+    method: "POST",
+    headers: { [USER_UUID_HEADER]: userUuid },
+    body: JSON.stringify(payload),
+  });
+
+  return res.counterArguments ?? [];
 }
 

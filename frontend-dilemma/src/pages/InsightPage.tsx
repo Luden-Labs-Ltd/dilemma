@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Lightbulb, MessageSquare, BarChart3 } from "lucide-react";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
-import { getInsightData } from "@/shared/lib/api";
+import { getInsightData, fetchFeedbackAnalyze } from "@/shared/lib/api";
 import { formatPercent } from "@/shared/lib/utils";
 
 type InsightData = Awaited<ReturnType<typeof getInsightData>>;
@@ -19,6 +19,10 @@ export function InsightPage() {
   const [insightData, setInsightData] = useState<InsightData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [counterArguments, setCounterArguments] = useState<string[] | null>(null);
+  const [aiFeedbackLoading, setAiFeedbackLoading] = useState(false);
+  const [aiFeedbackError, setAiFeedbackError] = useState<string | null>(null);
+  const [aiRetryTrigger, setAiRetryTrigger] = useState(0);
 
   const fetchInsight = useCallback(async () => {
     if (!currentDilemma || !choice) return;
@@ -34,9 +38,33 @@ export function InsightPage() {
     }
   }, [currentDilemma, choice, reasonText, t]);
 
+  const fetchAiFeedback = useCallback(async () => {
+    if (!currentDilemma || !choice) return;
+    setAiFeedbackLoading(true);
+    setAiFeedbackError(null);
+    setCounterArguments(null);
+    try {
+      const args = await fetchFeedbackAnalyze(
+        currentDilemma,
+        choice,
+        reasonText ?? undefined
+      );
+      setCounterArguments(args);
+    } catch {
+      setAiFeedbackError(t("insight.aiFeedback.error"));
+    } finally {
+      setAiFeedbackLoading(false);
+    }
+  }, [currentDilemma, choice, reasonText, t]);
+
   useEffect(() => {
     void fetchInsight();
   }, [fetchInsight]);
+
+  useEffect(() => {
+    if (!insightData || !currentDilemma || !choice) return;
+    void fetchAiFeedback();
+  }, [insightData, currentDilemma, choice, aiRetryTrigger, fetchAiFeedback]);
 
   if (!currentDilemma || !choice || !dilemma) {
     navigate("/");
@@ -186,7 +214,7 @@ export function InsightPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mb-8 rounded-2xl border-2 border-cyan-200 bg-white p-6 shadow-[0_0_20px_rgba(34,211,238,0.2)]"
+          className="mb-6 rounded-2xl border-2 border-cyan-200 bg-white p-6 shadow-[0_0_20px_rgba(34,211,238,0.2)]"
         >
           <div className="mb-3 flex items-center gap-2">
             <Lightbulb className="h-5 w-5 text-cyan-600" />
@@ -197,6 +225,49 @@ export function InsightPage() {
           <p className="leading-relaxed text-gray-700">
             {data.interpretation}
           </p>
+        </motion.div>
+
+        {/* Блок: AI-контраргументы */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.45 }}
+          className="mb-8 rounded-2xl bg-amber-50 p-6"
+        >
+          <div className="mb-3 flex items-center gap-2">
+            <MessageSquare className="h-5 w-5 text-amber-600" />
+            <h3 className="font-bold text-gray-800">
+              {t("insight.aiFeedback.title")}
+            </h3>
+          </div>
+          {aiFeedbackLoading && (
+            <p className="text-amber-700">{t("insight.aiFeedback.loading")}</p>
+          )}
+          {aiFeedbackError && !aiFeedbackLoading && (
+            <div className="flex flex-col gap-2">
+              <p className="text-red-600">{aiFeedbackError}</p>
+              <button
+                type="button"
+                onClick={() => setAiRetryTrigger((n) => n + 1)}
+                className="w-fit rounded-full bg-amber-500 px-4 py-2 text-white hover:bg-amber-600"
+              >
+                {t("insight.aiFeedback.retry")}
+              </button>
+            </div>
+          )}
+          {!aiFeedbackLoading && !aiFeedbackError && counterArguments !== null && (
+            <>
+              {counterArguments.length === 0 ? (
+                <p className="text-gray-600">{t("insight.aiFeedback.empty")}</p>
+              ) : (
+                <ul className="list-inside list-disc space-y-2 text-gray-700">
+                  {counterArguments.map((arg, i) => (
+                    <li key={i}>{arg}</li>
+                  ))}
+                </ul>
+              )}
+            </>
+          )}
         </motion.div>
 
         {/* Кнопка завершения */}
