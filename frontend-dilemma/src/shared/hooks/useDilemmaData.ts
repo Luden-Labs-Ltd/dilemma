@@ -32,13 +32,3 @@ export function useDilemmaData(dilemmaId: DilemmaType | null) {
   };
 }
 
-export function useDilemmaList() {
-  const { t } = useTranslation();
-
-  const dilemmaIds: DilemmaType[] = ["medical", "professional", "state"];
-
-  return dilemmaIds.map((id) => ({
-    id,
-    title: t(`dilemmas.${id}.title`),
-  }));
-}

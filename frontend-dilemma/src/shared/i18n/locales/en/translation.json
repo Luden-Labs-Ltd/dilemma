@@ -14,6 +14,7 @@
     "loading": "Loading dilemmas...",
     "retry": "Try again",
     "noDilemmas": "No dilemmas available",
+    "completed": "Completed",
     "error": {
       "network": "Could not load dilemmas. Please check your connection.",
       "generic": "Failed to load dilemmas: {{message}}"
@@ -52,7 +53,12 @@
     "label": "Explain your choice (optional)",
     "placeholder": "Write here why you chose this option...",
     "skip": "Skip",
-    "submit": "Submit"
+    "submit": "Submit",
+    "error": {
+      "network": "Could not save your final choice. Please check your connection.",
+      "generic": "Could not save: {{message}}"
+    },
+    "retry": "Try again"
   },
   "stats": {
     "title": "What did others answer?",
@@ -81,7 +87,10 @@
     "optionA": "Option A",
     "optionB": "Option B",
     "interpretation": "What this says about your choice",
-    "finish": "Back to dilemmas"
+    "finish": "Back to dilemmas",
+    "loading": "Loading insight...",
+    "error": "Could not load insight. Please try again.",
+    "retry": "Try again"
   },
   "finalVote": {
     "title": "Vote again",

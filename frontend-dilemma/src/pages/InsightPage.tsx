@@ -1,11 +1,14 @@
 import { motion } from "framer-motion";
+import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Lightbulb, MessageSquare, BarChart3 } from "lucide-react";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
 import { getInsightData } from "@/shared/lib/api";
-import { useMemo } from "react";
+import { formatPercent } from "@/shared/lib/utils";
+
+type InsightData = Awaited<ReturnType<typeof getInsightData>>;
 
 export function InsightPage() {
   const { t } = useTranslation();
@@ -13,16 +16,57 @@ export function InsightPage() {
   const { currentDilemma, choice, reasonText, skipped, reset } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
 
-  // Вычисляем данные синхронно
-  const insightData = useMemo(() => {
-    if (!currentDilemma || !choice) return null;
-    return getInsightData(currentDilemma, choice, reasonText);
-  }, [currentDilemma, choice, reasonText]);
+  const [insightData, setInsightData] = useState<InsightData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!currentDilemma || !choice || !dilemma || !insightData) {
+  const fetchInsight = useCallback(async () => {
+    if (!currentDilemma || !choice) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const data = await getInsightData(currentDilemma, choice, reasonText);
+      setInsightData(data);
+    } catch {
+      setError(t("insight.error"));
+    } finally {
+      setIsLoading(false);
+    }
+  }, [currentDilemma, choice, reasonText, t]);
+
+  useEffect(() => {
+    void fetchInsight();
+  }, [fetchInsight]);
+
+  if (!currentDilemma || !choice || !dilemma) {
     navigate("/");
     return null;
   }
+
+  if (isLoading && !insightData) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <p className="text-gray-600">{t("insight.loading")}</p>
+      </div>
+    );
+  }
+
+  if (error && !insightData) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <p className="text-red-600">{error}</p>
+        <button
+          type="button"
+          onClick={() => void fetchInsight()}
+          className="rounded-full bg-cyan-500 px-6 py-2 text-white hover:bg-cyan-600"
+        >
+          {t("insight.retry")}
+        </button>
+      </div>
+    );
+  }
+
+  const data = insightData!;
 
   const handleFinish = () => {
     reset();
@@ -64,7 +108,7 @@ export function InsightPage() {
             <h3 className="font-bold text-gray-800">{t("insight.yourChoice")}</h3>
           </div>
           <p className="text-lg text-cyan-700">
-            {t("insight.option")} {insightData.choiceLabel}
+            {t("insight.option")} {data.choiceLabel}
           </p>
         </motion.div>
 
@@ -108,12 +152,12 @@ export function InsightPage() {
             <div>
               <div className="mb-1 flex justify-between text-sm">
                 <span>{t("insight.optionA")}</span>
-                <span className="font-bold">{insightData.stats.aPercent}%</span>
+                <span className="font-bold">{formatPercent(data.stats.aPercent)}%</span>
               </div>
               <div className="h-4 w-full overflow-hidden rounded-full bg-gray-200">
                 <motion.div
                   initial={{ width: 0 }}
-                  animate={{ width: `${insightData.stats.aPercent}%` }}
+                  animate={{ width: `${formatPercent(data.stats.aPercent)}%` }}
                   transition={{ duration: 0.8, delay: 0.5 }}
                   className="h-full rounded-full bg-cyan-500"
                 />
@@ -123,12 +167,12 @@ export function InsightPage() {
             <div>
               <div className="mb-1 flex justify-between text-sm">
                 <span>{t("insight.optionB")}</span>
-                <span className="font-bold">{insightData.stats.bPercent}%</span>
+                <span className="font-bold">{formatPercent(data.stats.bPercent)}%</span>
               </div>
               <div className="h-4 w-full overflow-hidden rounded-full bg-gray-200">
                 <motion.div
                   initial={{ width: 0 }}
-                  animate={{ width: `${insightData.stats.bPercent}%` }}
+                  animate={{ width: `${formatPercent(data.stats.bPercent)}%` }}
                   transition={{ duration: 0.8, delay: 0.7 }}
                   className="h-full rounded-full bg-purple-500"
                 />
@@ -151,7 +195,7 @@ export function InsightPage() {
             </h3>
           </div>
           <p className="leading-relaxed text-gray-700">
-            {insightData.interpretation}
+            {data.interpretation}
           </p>
         </motion.div>
 

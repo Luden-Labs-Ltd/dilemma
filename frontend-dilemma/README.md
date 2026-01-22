@@ -18,6 +18,16 @@
 
 ---
 
+## Known Issues
+
+Сводка по результатам прогона сценария из `specs/001-connect-backend/quickstart.md`:
+
+- **`GET /api/decisions/my`** — эндпоинт в backend не реализован. Фронт вызывает его для истории решений; при 404 возвращается пустой массив. Признак «пройдено» (`isCompletedByUser`) и загрузка истории заработают после появления эндпоинта на backend.
+- **Статистика** — используется `GET /api/statistics/paths/:name` (фактический контракт backend). В задачах упоминался `/api/statistics/dilemma/:name`; при необходимости выравнивать наименования в спеках/задачах.
+- **Восстановление флоу после перезагрузки** — состояние текущей дилемы и выбора сохраняется в `sessionStorage` и восстанавливается при перезагрузке. Полная загрузка «пройденных» дилем с backend по-прежнему зависит от `GET /api/decisions/my`.
+
+---
+
 ## React + TypeScript + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.

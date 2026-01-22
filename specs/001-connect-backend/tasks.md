@@ -53,7 +53,7 @@
 - [x] T012 [US1] Обновить страницу первоначального выбора `frontend-dilemma/src/pages/ChoicePage.tsx`, чтобы она отправляла initial choice через `submitInitialChoice` и отображала фидбэк‑текст из ответа сервера с обработкой ошибок
 - [x] T013 [P] [US1] Добавить функцию `submitFinalChoice` в `frontend-dilemma/src/shared/lib/api.ts` для вызова `/api/decisions/final`
 - [x] T014 [US1] Обновить страницу финального решения `frontend-dilemma/src/pages/ReasonPage.tsx`, чтобы она отправляла final choice через `submitFinalChoice` и после успешного ответа обновляла состояние дилемы
-- [ ] T015 [US1] Обеспечить, чтобы после перезагрузки страницы информация о пройденной дилеме и принятых решениях загружалась с backend‑API (минимум для текущей дилеммы)
+- [x] T015 [US1] Обеспечить, чтобы после перезагрузки страницы информация о пройденной дилеме и принятых решениях загружалась с backend‑API (минимум для текущей дилеммы)
 
 **Checkpoint**: Одна полная дилема проходит end‑to‑end на живом API, это минимальный MVP.
 
@@ -67,13 +67,13 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [P] [US2] Добавить функцию `fetchMyDecisions` в `frontend-dilemma/src/shared/lib/api.ts` для вызова `/api/decisions/my`
-- [ ] T017 [US2] Добавить/расширить хук `useDilemmaData` в `frontend-dilemma/src/shared/hooks/useDilemmaData.ts`, чтобы он умел загружать историю решений пользователя через `fetchMyDecisions`
-- [ ] T018 [P] [US2] Реализовать маппинг истории решений в признак `isCompletedByUser` для каждой дилемы в контексте `frontend-dilemma/src/app/context/DilemmaContext.ts`
-- [ ] T019 [US2] Обновить UI списка дилем в `frontend-dilemma/src/pages/DilemmaSelectionPage.tsx`, чтобы отображать, какие дилемы уже пройдены/на какой стадии находится пользователь
+- [x] T016 [P] [US2] Добавить функцию `fetchMyDecisions` в `frontend-dilemma/src/shared/lib/api.ts` для вызова `/api/decisions/my`
+- [x] T017 [US2] Добавить/расширить хук `useDilemmaData` в `frontend-dilemma/src/shared/hooks/useDilemmaData.ts`, чтобы он умел загружать историю решений пользователя через `fetchMyDecisions`
+- [x] T018 [P] [US2] Реализовать маппинг истории решений в признак `isCompletedByUser` для каждой дилемы в контексте `frontend-dilemma/src/app/context/DilemmaContext.ts`
+- [x] T019 [US2] Обновить UI списка дилем в `frontend-dilemma/src/pages/DilemmaSelectionPage.tsx`, чтобы отображать, какие дилемы уже пройдены/на какой стадии находится пользователь
 - [x] T020 [P] [US2] Добавить функцию `fetchDilemmaStats` в `frontend-dilemma/src/shared/lib/api.ts` для вызова `/api/statistics/dilemma/{name}`
 - [x] T021 [US2] Обновить страницу статистики `frontend-dilemma/src/pages/StatsPage.tsx`, чтобы она загружала и отображала статистику по текущей дилеме с backend‑API вместо локальных заглушек (с обработкой загрузки и ошибок)
-- [ ] T022 [US2] Убедиться, что при монтировании основных страниц (выбор дилем, статистика, инсайты) фронтенд всегда рефрешит данные с сервера, а не полагается на устаревшее локальное состояние
+- [x] T022 [US2] Убедиться, что при монтировании основных страниц (выбор дилем, статистика, инсайты) фронтенд всегда рефрешит данные с сервера, а не полагается на устаревшее локальное состояние
 
 **Checkpoint**: История и статистика полностью берутся с сервера, UI соответствует серверным данным даже после повторных заходов.
 
@@ -87,11 +87,11 @@
 
 ### Implementation for User Story 3
 
-- [ ] T023 [P] [US3] Расширить централизованную обработку ошибок в `frontend-dilemma/src/shared/lib/api.ts`, чтобы возвращать типизированный объект ошибки (код/тип/сообщение для i18n)
-- [ ] T024 [US3] Обновить `frontend-dilemma/src/shared/hooks/useDilemmaData.ts`, чтобы он сохранял ошибки загрузки списка дилем и позволял триггерить повторный запрос
-- [ ] T025 [P] [US3] Обновить `frontend-dilemma/src/pages/DilemmaSelectionPage.tsx`, чтобы она отображала локализованные сообщения об ошибке при падении `/api/dilemmas` и кнопку "повторить"
-- [ ] T026 [P] [US3] Обновить `frontend-dilemma/src/pages/ChoicePage.tsx`, чтобы при ошибках initial choice показывались понятные сообщения и была возможность отправить выбор повторно
-- [ ] T027 [US3] Обновить страницы финального решения/инсайтов (`frontend-dilemma/src/pages/ReasonPage.tsx`, `InsightPage.tsx`), чтобы при ошибках final choice или статистики UI вёл себя предсказуемо (информативные сообщения, повторные попытки, отсутствие "подвешенного" состояния)
+- [x] T023 [P] [US3] Расширить централизованную обработку ошибок в `frontend-dilemma/src/shared/lib/api.ts`, чтобы возвращать типизированный объект ошибки (код/тип/сообщение для i18n)
+- [x] T024 [US3] Обновить `frontend-dilemma/src/shared/hooks/useDilemmaData.ts`, чтобы он сохранял ошибки загрузки списка дилем и позволял триггерить повторный запрос
+- [x] T025 [P] [US3] Обновить `frontend-dilemma/src/pages/DilemmaSelectionPage.tsx`, чтобы она отображала локализованные сообщения об ошибке при падении `/api/dilemmas` и кнопку "повторить"
+- [x] T026 [P] [US3] Обновить `frontend-dilemma/src/pages/ChoicePage.tsx`, чтобы при ошибках initial choice показывались понятные сообщения и была возможность отправить выбор повторно
+- [x] T027 [US3] Обновить страницы финального решения/инсайтов (`frontend-dilemma/src/pages/ReasonPage.tsx`, `InsightPage.tsx`), чтобы при ошибках final choice или статистики UI вёл себя предсказуемо (информативные сообщения, повторные попытки, отсутствие "подвешенного" состояния)
 
 **Checkpoint**: Основные сценарии деградации (нет списка дилем, ошибка initial/final choice, проблемы со статистикой) обрабатываются контролируемо и не "ломают" приложение.
 
@@ -101,10 +101,10 @@
 
 **Purpose**: Улучшения, которые затрагивают несколько user stories.
 
-- [ ] T028 [P] Перепроверить все тексты ошибок и уведомлений в `frontend-dilemma/src/shared/i18n/locales/*/translation.json` на предмет консистентности и понятности
-- [ ] T029 Пройтись по основным страницам (`frontend-dilemma/src/pages/*.tsx`) и удалить оставшиеся зависимости от локальных заглушечных данных, если таковые ещё остались
-- [ ] T030 [P] Обновить `frontend-dilemma/src/shared/lib/utils.ts` (если используется) для форматирования статистики/процентов так, чтобы это совпадало с ожиданиями UI и серверными данными
-- [ ] T031 Запустить сценарий из `specs/001-connect-backend/quickstart.md` целиком и задокументировать найденные отличия/баги в отдельном разделе `Known Issues` в `frontend-dilemma/README.md`
+- [x] T028 [P] Перепроверить все тексты ошибок и уведомлений в `frontend-dilemma/src/shared/i18n/locales/*/translation.json` на предмет консистентности и понятности
+- [x] T029 Пройтись по основным страницам (`frontend-dilemma/src/pages/*.tsx`) и удалить оставшиеся зависимости от локальных заглушечных данных, если таковые ещё остались
+- [x] T030 [P] Обновить `frontend-dilemma/src/shared/lib/utils.ts` (если используется) для форматирования статистики/процентов так, чтобы это совпадало с ожиданиями UI и серверными данными
+- [x] T031 Запустить сценарий из `specs/001-connect-backend/quickstart.md` целиком и задокументировать найденные отличия/баги в отдельном разделе `Known Issues` в `frontend-dilemma/README.md`
 
 ---
 

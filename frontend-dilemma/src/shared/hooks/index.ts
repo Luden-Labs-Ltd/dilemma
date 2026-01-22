@@ -1,4 +1,5 @@
 export { useLanguage } from "./useLanguage";
 export type { Language } from "./useLanguage";
-export { useDilemmaData, useDilemmaList } from "./useDilemmaData";
+export { useDilemmaData } from "./useDilemmaData";
 export { useClientUuid } from "./useClientUuid";
+export { useMyDecisions } from "./useMyDecisions";
