@@ -5,6 +5,7 @@ import { UsersModule } from './modules/users/users.module';
 import { DilemmasModule } from './modules/dilemmas/dilemmas.module';
 import { DecisionsModule } from './modules/decisions/decisions.module';
 import { StatisticsModule } from './modules/statistics/statistics.module';
+import { FeedbackModule } from './modules/feedback/feedback.module';
 import { User } from './modules/users/entities/user.entity';
 import { Dilemma } from './modules/dilemmas/entities/dilemma.entity';
 import { UserDecision } from './modules/decisions/entities/user-decision.entity';
@@ -20,7 +21,7 @@ import { UserDecision } from './modules/decisions/entities/user-decision.entity'
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
         type: 'postgres',
-        url: configService.get<string>('DATABASE_URL'),
+        // url: configService.get<string>('DATABASE_URL'),
         host: configService.get<string>('DATABASE_HOST'),
         port: configService.get<number>('DATABASE_PORT'),
         username: configService.get<string>('DATABASE_USER'),
@@ -36,6 +37,7 @@ import { UserDecision } from './modules/decisions/entities/user-decision.entity'
     DilemmasModule,
     DecisionsModule,
     StatisticsModule,
+    FeedbackModule,
   ],
 })
 export class AppModule {}

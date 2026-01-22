@@ -36,6 +36,10 @@ DB_DATABASE=dilemma_db
 # Application
 PORT=3000
 NODE_ENV=development
+
+# OpenAI (for AI Feedback module)
+OPENAI_API_KEY=sk-...
+OPENAI_ASSISTANT_ID=ass_...
 ```
 
 ## Запуск

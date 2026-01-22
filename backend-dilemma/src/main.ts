@@ -30,6 +30,7 @@ async function bootstrap() {
     .addTag('dilemmas')
     .addTag('decisions')
     .addTag('statistics')
+    .addTag('feedback')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api/docs', app, document);

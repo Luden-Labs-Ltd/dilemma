@@ -1,0 +1,216 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AI Feedback API",
+    "version": "1.0.0",
+    "description": "API endpoint for getting AI feedback on dilemma choices"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api",
+      "description": "Development server"
+    }
+  ],
+  "paths": {
+    "/feedback/analyze": {
+      "post": {
+        "tags": ["feedback"],
+        "summary": "Get AI feedback on dilemma choice",
+        "description": "Sends user's dilemma choice and reasoning to AI assistant and returns array of counter-arguments explaining why the choice might be wrong",
+        "operationId": "analyzeFeedback",
+        "parameters": [
+          {
+            "name": "X-User-UUID",
+            "in": "header",
+            "required": true,
+            "description": "User UUID for identification",
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              },
+              "examples": {
+                "withReasoning": {
+                  "summary": "Request with reasoning",
+                  "value": {
+                    "dilemmaName": "dilemma1",
+                    "choice": "A",
+                    "reasoning": "Мне нужны деньги сейчас, поэтому я оставлю кошелек себе"
+                  }
+                },
+                "withoutReasoning": {
+                  "summary": "Request without reasoning",
+                  "value": {
+                    "dilemmaName": "dilemma1",
+                    "choice": "B"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully received AI feedback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                },
+                "example": {
+                  "counterArguments": [
+                    "Это решение игнорирует морально-этическую сторону вопроса: найденное следует возвращать, чтобы поступать справедливо.",
+                    "Оставить кошелёк может привести к чувству вины или нежелательным последствиям, если владелец обнаружит потерю.",
+                    "Аргумент о неосведомлённости о владельце не оправдывает присвоение чужого имущества."
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalidChoice": {
+                    "summary": "Invalid choice",
+                    "value": {
+                      "statusCode": 400,
+                      "message": "choice must be one of the following values: A, B",
+                      "error": "Bad Request"
+                    }
+                  },
+                  "reasoningTooLong": {
+                    "summary": "Reasoning too long",
+                    "value": {
+                      "statusCode": 400,
+                      "message": "reasoning must be shorter than or equal to 5000 characters",
+                      "error": "Bad Request"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dilemma not found or inactive",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 404,
+                  "message": "Dilemma 'dilemma1' not found or inactive",
+                  "error": "Not Found"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "OpenAI API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 500,
+                  "message": "Failed to get AI feedback. Please try again later.",
+                  "error": "Internal Server Error"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Request timeout",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 504,
+                  "message": "AI service did not respond in time. Please try again.",
+                  "error": "Gateway Timeout"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "FeedbackRequest": {
+        "type": "object",
+        "required": ["dilemmaName", "choice"],
+        "properties": {
+          "dilemmaName": {
+            "type": "string",
+            "description": "Name of the dilemma",
+            "example": "dilemma1"
+          },
+          "choice": {
+            "type": "string",
+            "enum": ["A", "B"],
+            "description": "User's choice (A or B)",
+            "example": "A"
+          },
+          "reasoning": {
+            "type": "string",
+            "description": "User's reasoning for the choice (optional, max 5000 characters)",
+            "maxLength": 5000,
+            "example": "Мне нужны деньги сейчас, поэтому я оставлю кошелек себе"
+          }
+        }
+      },
+      "FeedbackResponse": {
+        "type": "object",
+        "required": ["counterArguments"],
+        "properties": {
+          "counterArguments": {
+            "type": "array",
+            "description": "Array of counter-arguments explaining why the choice might be wrong",
+            "items": {
+              "type": "string"
+            },
+            "example": [
+              "Это решение игнорирует морально-этическую сторону вопроса: найденное следует возвращать, чтобы поступать справедливо.",
+              "Оставить кошелёк может привести к чувству вины или нежелательным последствиям, если владелец обнаружит потерю."
+            ]
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "description": "HTTP status code"
+          },
+          "message": {
+            "type": "string",
+            "description": "Error message"
+          },
+          "error": {
+            "type": "string",
+            "description": "Error type"
+          }
+        }
+      }
+    }
+  }
+}
