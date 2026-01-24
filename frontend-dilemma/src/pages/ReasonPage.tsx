@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
 import { submitFinalChoice, type ApiError } from "@/shared/lib/api";
+import bgImage from "./bg1 1.png";
 
 export function ReasonPage() {
   const { t } = useTranslation();
@@ -47,50 +48,57 @@ export function ReasonPage() {
     void submitFinal(reasonText, false);
   };
 
-  const handleSkip = () => {
-    void submitFinal(null, true);
-  };
-
-  const choiceLabel = choice === "a" ? "א" : "ב";
-
   return (
-    <div className="relative flex min-h-screen items-center justify-center px-4">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="w-full max-w-2xl rounded-3xl bg-white/90 p-8 shadow-2xl backdrop-blur-sm"
-      >
-        {/* Заголовок */}
-        <div className="mb-6 text-center">
-          <h1 className="mb-2 text-2xl font-bold text-gray-800">
+    <div className="relative flex min-h-screen flex-col bg-[#011627] px-4 py-12">
+      <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center">
+        {/* Вопрос */}
+        <motion.div
+          initial={{ opacity: 0, y: -30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-8 text-center"
+        >
+          <h1 className="text-2xl font-bold text-white">
             {t("reason.title")}
           </h1>
-          <p className="text-sm text-gray-600">{t("reason.subtitle")}</p>
-        </div>
+        </motion.div>
 
-        {/* Блок с выбором пользователя */}
-        <div className="mb-4 rounded-2xl bg-cyan-50 p-4 text-center">
-          <p className="text-sm text-gray-600">{t("reason.yourChoice")}</p>
-          <p className="text-lg font-bold text-cyan-600">
-            {t("reason.option")} {choiceLabel}
-          </p>
-        </div>
-
-        {/* Textarea */}
-        <label className="mb-2 block text-sm font-medium text-gray-700">
-          {t("reason.label")}
-        </label>
-        <textarea
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={t("reason.placeholder") ?? ""}
-          disabled={isSubmitting}
-          className="mb-6 h-32 w-full resize-none rounded-2xl border border-gray-200 bg-white/80 p-4 text-gray-800 shadow-sm outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-200 disabled:opacity-50"
-        />
+        {/* Textarea с футуристической рамкой */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9, y: 20 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          className="mb-8"
+        >
+          <div
+            className="relative min-h-[271px] md:min-h-[371px] max-w-[1026px] overflow-hidden"
+            style={{
+              backgroundImage: `url(${bgImage})`,
+              backgroundSize: "contain",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            <motion.textarea
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              value={value}
+              onChange={(e) => setValue(e.target.value)}
+              placeholder={t("reason.placeholder") ?? ""}
+              disabled={isSubmitting}
+              className="my-[30px] absolute inset-0 z-10 resize-none bg-transparent text-base text-white placeholder:text-[#00d4ff]/60 outline-none disabled:opacity-50 py-[100px] px-[50px] md:py-[40px] md:px-[40px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+            />
+          </div>
+        </motion.div>
 
         {error && (
-          <div className="mb-6 rounded-2xl bg-red-50 p-4 text-center text-red-700">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.3 }}
+            className="mb-6 rounded-2xl bg-red-50 p-4 text-center text-red-700"
+          >
             <p className="mb-3">{error}</p>
             <button
               type="button"
@@ -99,31 +107,31 @@ export function ReasonPage() {
             >
               {t("reason.retry")}
             </button>
-          </div>
+          </motion.div>
         )}
 
-        {/* Кнопки */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:justify-between">
-          <button
-            type="button"
-            onClick={handleSkip}
-            disabled={isSubmitting}
-            className="w-full rounded-full border border-gray-300 px-6 py-3 font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50 disabled:opacity-50 sm:w-auto"
-          >
-            {t("reason.skip")}
-          </button>
+        {/* Кнопка Continue */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          className="flex justify-center"
+        >
           <motion.button
             type="button"
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="w-full rounded-full bg-cyan-500 px-6 py-3 font-bold text-white shadow-lg transition hover:bg-cyan-600 hover:shadow-xl disabled:opacity-50 sm:w-auto"
+            className="w-[222px] h-[60px] text-black rounded-lg bg-[#BFFFFF] px-12 py-4 text-lg font-bold transition disabled:opacity-50"
+            style={{
+              boxShadow: "0 0 20px rgba(0, 212, 255, 0.6), 0 4px 12px rgba(0, 212, 255, 0.4)",
+            }}
           >
             {t("reason.submit")}
           </motion.button>
-        </div>
-      </motion.div>
+        </motion.div>
+      </div>
     </div>
   );
 }
