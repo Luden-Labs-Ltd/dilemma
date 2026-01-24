@@ -22,7 +22,7 @@ export function DilemmaSelectionPage() {
 
   const handleSelectDilemma = (dilemmaName: string) => {
     setCurrentDilemma(dilemmaName as DilemmaType);
-    navigate("/video");
+    navigate("/presentation");
   };
 
   return (

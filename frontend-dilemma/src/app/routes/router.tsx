@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   DilemmaSelectionPage,
   VideoPage,
+  PresentationPage,
   ChoicePage,
   ReasonPage,
   StatsPage,
@@ -21,6 +22,10 @@ export const router = createBrowserRouter([
       {
         path: "/video",
         element: <VideoPage />,
+      },
+      {
+        path: "/presentation",
+        element: <PresentationPage />,
       },
       {
         path: "/choice",

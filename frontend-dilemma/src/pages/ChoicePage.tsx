@@ -6,6 +6,7 @@ import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
 import { submitInitialChoice, type ApiError } from "@/shared/lib/api";
 import type { Choice } from "@/shared/types";
+import slide11 from "@/shared/assets/slides/medical/slide-11.png";
 
 export function ChoicePage() {
   const { t } = useTranslation();
@@ -54,27 +55,95 @@ export function ChoicePage() {
     }
   };
 
+  const leftOption = dilemma.options[0];
+  const rightOption = dilemma.options[1];
+
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center px-4">
-      {/* Заголовок */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
-        className="mb-12 text-center"
-      >
-        <h1 className="mb-3 text-3xl font-bold text-gray-800">
-          {dilemma.questionText}
-        </h1>
-        <p className="text-gray-600">{t("choice.subtitle")}</p>
-      </motion.div>
+    <div className="relative h-screen w-screen overflow-hidden bg-[#0b1d2b]">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div className="relative w-[92vw] max-w-[1280px] aspect-video">
+          <img
+            src={slide11}
+            alt=""
+            className="absolute inset-0 h-full w-full object-contain"
+          />
+
+          <div className="absolute left-1/2 top-[6%] z-10 w-[80%] -translate-x-1/2 text-center text-[#E6F8F9]">
+            <span className="text-[clamp(20px,2.6vw,34px)] font-black leading-tight">
+              {dilemma.questionText}
+            </span>
+          </div>
+
+          <div className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]">
+            {leftOption && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                whileHover={!selectedChoice ? { scale: 1.01 } : {}}
+                whileTap={!selectedChoice ? { scale: 0.99 } : {}}
+                onClick={() => handleChoice(leftOption.id)}
+                disabled={isSubmitting}
+                aria-label={leftOption.label}
+                className={`group relative h-full w-full rounded-[28px] outline-none transition-shadow duration-200 hover:shadow-[0_0_40px_rgba(90,210,255,0.35)] focus-visible:shadow-[0_0_40px_rgba(90,210,255,0.45)] ${
+                  isSubmitting ? "cursor-not-allowed" : ""
+                }`}
+              >
+                <span className="sr-only">{leftOption.label}</span>
+                <div
+                  className={`absolute inset-0 rounded-[28px] ring-2 ${
+                    selectedChoice === leftOption.id
+                      ? "ring-cyan-300/80"
+                      : "ring-cyan-300/40 group-hover:ring-cyan-300/70"
+                  }`}
+                />
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white">
+                  <span className="text-[clamp(20px,2.4vw,30px)] font-bold leading-tight whitespace-pre-line">
+                    {leftOption.label}
+                  </span>
+                </div>
+              </motion.button>
+            )}
+
+            {rightOption && (
+              <motion.button
+                initial={{ opacity: 0, scale: 0.98 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                whileHover={!selectedChoice ? { scale: 1.01 } : {}}
+                whileTap={!selectedChoice ? { scale: 0.99 } : {}}
+                onClick={() => handleChoice(rightOption.id)}
+                disabled={isSubmitting}
+                aria-label={rightOption.label}
+                className={`group relative h-full w-full rounded-[28px] outline-none transition-shadow duration-200 hover:shadow-[0_0_40px_rgba(255,120,120,0.35)] focus-visible:shadow-[0_0_40px_rgba(255,120,120,0.45)] ${
+                  isSubmitting ? "cursor-not-allowed" : ""
+                }`}
+              >
+                <span className="sr-only">{rightOption.label}</span>
+                <div
+                  className={`absolute inset-0 rounded-[28px] ring-2 ${
+                    selectedChoice === rightOption.id
+                      ? "ring-red-300/80"
+                      : "ring-red-300/40 group-hover:ring-red-300/70"
+                  }`}
+                />
+                <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white">
+                  <span className="text-[clamp(20px,2.4vw,30px)] font-bold leading-tight whitespace-pre-line">
+                    {rightOption.label}
+                  </span>
+                </div>
+              </motion.button>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Фидбэк от сервера */}
       {feedback && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 max-w-2xl rounded-2xl bg-cyan-50 p-6 text-center text-gray-800"
+          className="absolute bottom-8 left-1/2 w-[92vw] max-w-2xl -translate-x-1/2 rounded-2xl bg-cyan-50 p-6 text-center text-gray-800"
         >
           <p className="text-lg">{feedback}</p>
         </motion.div>
@@ -85,7 +154,7 @@ export function ChoicePage() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mb-6 max-w-2xl rounded-2xl bg-red-50 p-6 text-center text-red-800"
+          className="absolute bottom-8 left-1/2 w-[92vw] max-w-2xl -translate-x-1/2 rounded-2xl bg-red-50 p-6 text-center text-red-800"
         >
           <p className="mb-3 text-lg">{error}</p>
           <button
@@ -100,79 +169,6 @@ export function ChoicePage() {
           </button>
         </motion.div>
       )}
-
-      {/* Варианты */}
-      <div className="flex flex-wrap justify-center gap-8">
-        {dilemma.options.map((option, index) => {
-          const isSelected = selectedChoice === option.id;
-          const isOther = selectedChoice && selectedChoice !== option.id;
-
-          return (
-            <motion.button
-              key={option.id}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{
-                opacity: isOther ? 0.5 : 1,
-                scale: isSelected ? 1.05 : 1,
-              }}
-              transition={{ duration: 0.5, delay: index * 0.15 }}
-              whileHover={!selectedChoice ? { scale: 1.05 } : {}}
-              whileTap={!selectedChoice ? { scale: 0.98 } : {}}
-              onClick={() => handleChoice(option.id)}
-              disabled={isSubmitting}
-              className={`group relative h-[450px] w-[340px] overflow-hidden rounded-3xl bg-white shadow-xl transition-all ${
-                isSelected
-                  ? "ring-4 ring-cyan-500 shadow-cyan-200"
-                  : "hover:shadow-2xl"
-              } ${isSubmitting && !isSelected ? "cursor-not-allowed" : ""}`}
-            >
-              {/* Изображение placeholder */}
-              <div className="flex h-full w-full items-center justify-center bg-linear-to-br from-cyan-50 via-purple-50 to-blue-50">
-                <div className="text-8xl opacity-20">
-                  {option.id === "a" ? "🅰️" : "🅱️"}
-                </div>
-              </div>
-
-              {/* Название опции */}
-              <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/70 to-transparent p-6 text-white">
-                <h3 className="text-2xl font-bold">{option.label}</h3>
-              </div>
-
-              {/* Hover / Selection эффект */}
-              <div
-                className={`absolute inset-0 transition-opacity ${
-                  isSelected
-                    ? "bg-cyan-500/20 opacity-100"
-                    : "bg-white opacity-0 group-hover:opacity-20"
-                }`}
-              />
-
-              {/* Галочка при выборе */}
-              {isSelected && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  className="absolute right-4 top-4 flex h-12 w-12 items-center justify-center rounded-full bg-cyan-500 text-white shadow-lg"
-                >
-                  <svg
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={3}
-                      d="M5 13l4 4L19 7"
-                    />
-                  </svg>
-                </motion.div>
-              )}
-            </motion.button>
-          );
-        })}
-      </div>
     </div>
   );
 }
