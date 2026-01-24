@@ -13,9 +13,13 @@ export interface ApiError {
 
 async function request<T>(input: string, init?: RequestInit): Promise<T> {
   try {
+    // Получаем язык из localStorage
+    const currentLanguage = localStorage.getItem("language") || "he";
+    
     // Объединяем заголовки правильно: сначала Content-Type, потом из init
     const headers: Record<string, string> = {
       "Content-Type": "application/json",
+      "Accept-Language": currentLanguage,
     };
 
     if (init?.headers) {

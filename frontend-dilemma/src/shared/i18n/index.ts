@@ -6,7 +6,7 @@ import he from "./locales/he/translation.json";
 
 export const RTL_LANGUAGES = ["he", "ar"];
 
-const savedLanguage = localStorage.getItem("language") || "en";
+const savedLanguage = localStorage.getItem("language") || "he";
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -14,7 +14,7 @@ i18n.use(initReactI18next).init({
     he: { translation: he },
   },
   lng: savedLanguage,
-  fallbackLng: "en",
+  fallbackLng: "he",
   supportedLngs: ["en", "he"],
   interpolation: {
     escapeValue: false,
@@ -29,7 +29,7 @@ i18n.on("languageChanged", (lng) => {
 });
 
 // Инициализация при загрузке
-const initialLang = i18n.language || "en";
+const initialLang = i18n.language || "he";
 document.documentElement.dir = RTL_LANGUAGES.includes(initialLang)
   ? "rtl"
   : "ltr";

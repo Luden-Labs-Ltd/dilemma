@@ -7,6 +7,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { I18nService } from 'nestjs-i18n';
 import OpenAI from 'openai';
 import { DilemmasService } from '../dilemmas/dilemmas.service';
 import { Dilemma } from '../dilemmas/entities/dilemma.entity';
@@ -23,6 +24,7 @@ export class FeedbackService {
   constructor(
     private readonly configService: ConfigService,
     private readonly dilemmasService: DilemmasService,
+    private readonly i18n: I18nService,
   ) {
     const apiKey = this.configService.get<string>('OPENAI_API_KEY');
     const assistantId = this.configService.get<string>('OPENAI_ASSISTANT_ID');
@@ -43,6 +45,7 @@ export class FeedbackService {
 
   async getFeedback(
     request: FeedbackRequestDto,
+    lang = 'he',
   ): Promise<FeedbackResponseDto> {
     // Validate dilemma exists and is active
     const dilemma = await this.dilemmasService.findEntityByName(
@@ -56,7 +59,7 @@ export class FeedbackService {
     }
 
     // Build prompt
-    const prompt = this.buildPrompt(dilemma, request.choice, request.reasoning);
+    const prompt = await this.buildPrompt(dilemma, request.choice, request.reasoning, lang);
 
     try {
       // Create thread
@@ -137,32 +140,68 @@ export class FeedbackService {
     }
   }
 
-  private buildPrompt(
+  private async buildPrompt(
     dilemma: Dilemma,
     choice: 'A' | 'B',
     reasoning?: string,
-  ): string {
-    const choiceTitle =
-      choice === 'A' ? dilemma.option_a_title : dilemma.option_b_title;
-    const choiceDescription =
-      choice === 'A'
-        ? dilemma.option_a_description
-        : dilemma.option_b_description;
+    lang = 'he',
+  ): Promise<string> {
+    const dilemmaName = dilemma.name;
+    const choiceTitle = await this.i18n.translate(
+      `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_title`,
+      { lang },
+    );
+    const choiceDescription = await this.i18n.translate(
+      `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_description`,
+      { lang },
+    );
+    const title = await this.i18n.translate(`dilemmas.${dilemmaName}.title`, { lang });
+    const description = await this.i18n.translate(`dilemmas.${dilemmaName}.description`, { lang });
+    const optionATitle = await this.i18n.translate(`dilemmas.${dilemmaName}.option_a_title`, { lang });
+    const optionADesc = await this.i18n.translate(`dilemmas.${dilemmaName}.option_a_description`, { lang });
+    const optionBTitle = await this.i18n.translate(`dilemmas.${dilemmaName}.option_b_title`, { lang });
+    const optionBDesc = await this.i18n.translate(`dilemmas.${dilemmaName}.option_b_description`, { lang });
 
-    let prompt = `Дилемма: ${dilemma.title}
-Описание: ${dilemma.description}
+    const promptLabels = {
+      he: {
+        dilemma: 'דילמה',
+        description: 'תיאור',
+        option: 'אפשרות',
+        userAnswer: 'תשובת המשתמש',
+        userThoughts: 'מחשבות המשתמש',
+      },
+      en: {
+        dilemma: 'Dilemma',
+        description: 'Description',
+        option: 'Option',
+        userAnswer: 'User Answer',
+        userThoughts: 'User Thoughts',
+      },
+      ru: {
+        dilemma: 'Дилемма',
+        description: 'Описание',
+        option: 'Вариант',
+        userAnswer: 'Ответ пользователя',
+        userThoughts: 'Размышления пользователя',
+      },
+    };
 
-Вариант A: ${dilemma.option_a_title}
-${dilemma.option_a_description}
+    const labels = promptLabels[lang as keyof typeof promptLabels] || promptLabels.he;
 
-Вариант B: ${dilemma.option_b_title}
-${dilemma.option_b_description}
+    let prompt = `${labels.dilemma}: ${title}
+${labels.description}: ${description}
 
-Ответ пользователя: ${choice} (${choiceTitle})
+${labels.option} A: ${optionATitle}
+${optionADesc}
+
+${labels.option} B: ${optionBTitle}
+${optionBDesc}
+
+${labels.userAnswer}: ${choice} (${choiceTitle})
 ${choiceDescription}`;
 
     if (reasoning && reasoning.trim().length > 0) {
-      prompt += `\n\nРазмышления пользователя: ${reasoning}`;
+      prompt += `\n\n${labels.userThoughts}: ${reasoning}`;
     }
 
     return prompt;

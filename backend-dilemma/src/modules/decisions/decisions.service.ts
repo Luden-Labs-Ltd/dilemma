@@ -8,6 +8,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { I18nService } from 'nestjs-i18n';
 import { UserDecision, Choice } from './entities/user-decision.entity';
 import { UsersService } from '../users/users.service';
 import { DilemmasService } from '../dilemmas/dilemmas.service';
@@ -22,12 +23,14 @@ export class DecisionsService {
     private readonly usersService: UsersService,
     @Inject(forwardRef(() => DilemmasService))
     private readonly dilemmasService: DilemmasService,
+    private readonly i18n: I18nService,
   ) {}
 
   async createInitialChoice(
     clientUuid: string,
     dilemmaName: string,
     choice: Choice,
+    lang = 'he',
   ): Promise<FeedbackResponseDto> {
     // Get or create user
     const user = await this.usersService.findOrCreateByClientUuid(clientUuid);
@@ -61,9 +64,9 @@ export class DecisionsService {
 
     const savedDecision = await this.decisionRepository.save(decision);
 
-    // Return feedback
-    const feedback =
-      choice === Choice.A ? dilemma.feedback_a : dilemma.feedback_b;
+    // Return feedback with translation
+    const feedbackKey = choice === Choice.A ? 'feedback_a' : 'feedback_b';
+    const feedback = await this.i18n.translate(`dilemmas.${dilemmaName}.${feedbackKey}`, { lang });
 
     return {
       decisionId: savedDecision.id,

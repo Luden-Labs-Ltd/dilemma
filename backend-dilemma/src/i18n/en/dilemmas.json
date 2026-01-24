@@ -1,0 +1,34 @@
+{
+  "dilemmas": {
+    "trolley-problem": {
+      "title": "The Trolley Problem",
+      "description": "A trolley is speeding down the tracks. Five people are on the path and cannot get off the tracks. You are standing next to a lever that can switch the trolley to another track, where one person is standing.",
+      "option_a_title": "Switch the Trolley",
+      "option_a_description": "Save five people at the cost of one. Utilitarian approach: maximize the overall good.",
+      "option_b_title": "Don't Switch the Trolley",
+      "option_b_description": "Don't intervene and let events proceed naturally. Deontological approach: don't cause harm directly.",
+      "feedback_a": "You chose the utilitarian approach. By saving five lives at the cost of one, you maximized the overall good. However, this decision raises the question: is it permissible to kill an innocent person to save others?",
+      "feedback_b": "You chose the deontological approach. By refusing to cause direct harm, you followed a moral principle. However, this means you allowed a greater number of people to die."
+    },
+    "privacy-vs-security": {
+      "title": "Privacy vs Security",
+      "description": "The government proposes a total surveillance system that can prevent 90% of terrorist attacks, but requires complete loss of citizens' privacy.",
+      "option_a_title": "Accept the Surveillance System",
+      "option_a_description": "Sacrifice privacy for security. Protect society from threats at the cost of personal freedom.",
+      "option_b_title": "Reject the Surveillance System",
+      "option_b_description": "Preserve privacy and freedom. Accept the risk of terrorist attacks to protect fundamental human rights.",
+      "feedback_a": "You chose security over privacy. This decision could save many lives, but creates a precedent for total control. Where is the line between protection and oppression?",
+      "feedback_b": "You chose privacy over security. You protected fundamental human rights, but accepted the risk that some attacks may occur. Freedom always has a price."
+    },
+    "ai-autonomy": {
+      "title": "AI Autonomy",
+      "description": "Artificial intelligence has reached a level where it can make better decisions than humans in critical situations. Should AI be given full autonomy in managing vital systems?",
+      "option_a_title": "Grant Autonomy to AI",
+      "option_a_description": "Entrust AI with decision-making in critical situations. Use AI's superiority to maximize efficiency and safety.",
+      "option_b_title": "Maintain Human Control",
+      "option_b_description": "Leave the final decision to humans. Preserve human judgment and responsibility, even if it's less efficient.",
+      "feedback_a": "You chose AI autonomy. This could lead to more efficient decisions and save lives, but raises questions about human control and responsibility. Who will be to blame if the AI makes a mistake?",
+      "feedback_b": "You chose human control. You preserved human judgment and responsibility, but accepted the risk of less optimal decisions. Sometimes human values are more important than efficiency."
+    }
+  }
+}

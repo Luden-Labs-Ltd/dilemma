@@ -3,9 +3,10 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Param
+  Param,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { I18nLang } from 'nestjs-i18n';
 import { UserUuid } from '../../common/decorators/user-uuid.decorator';
 import { DilemmasService } from './dilemmas.service';
 import { DilemmaDetailsDto } from './dto/dilemma-details.dto';
@@ -18,14 +19,19 @@ export class DilemmasController {
 
   @Get()
   @ApiOperation({ summary: 'Get list of active dilemmas' })
+  @ApiHeader({
+    name: 'Accept-Language',
+    required: false,
+    description: 'Language preference (he, en, ru)',
+  })
   @ApiResponse({
     status: 200,
     description: 'List of dilemmas',
     type: [DilemmaListItemDto],
   })
   @HttpCode(HttpStatus.OK)
-  async findAll(): Promise<DilemmaListItemDto[]> {
-    return this.dilemmasService.findAll();
+  async findAll(@I18nLang() lang: string): Promise<DilemmaListItemDto[]> {
+    return this.dilemmasService.findAll(lang);
   }
 
   @Get(':name')
@@ -34,6 +40,11 @@ export class DilemmasController {
     name: 'X-User-UUID',
     required: false,
     description: 'User UUID (optional)',
+  })
+  @ApiHeader({
+    name: 'Accept-Language',
+    required: false,
+    description: 'Language preference (he, en, ru)',
   })
   @ApiResponse({
     status: 200,
@@ -45,7 +56,8 @@ export class DilemmasController {
   async findOne(
     @Param('name') name: string,
     @UserUuid() clientUuid?: string,
+    @I18nLang() lang?: string,
   ): Promise<DilemmaDetailsDto> {
-    return this.dilemmasService.findOneByName(name, clientUuid);
+    return this.dilemmasService.findOneByName(name, clientUuid, lang);
   }
 }

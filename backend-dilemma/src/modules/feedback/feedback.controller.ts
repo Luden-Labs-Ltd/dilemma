@@ -7,6 +7,7 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiHeader, ApiBody } from '@nestjs/swagger';
+import { I18nLang } from 'nestjs-i18n';
 import { UuidValidationGuard } from '../../common/guards/uuid-validation.guard';
 import { UserUuid } from '../../common/decorators/user-uuid.decorator';
 import { FeedbackService } from './feedback.service';
@@ -31,6 +32,11 @@ export class FeedbackController {
     required: true,
     description: 'User UUID',
   })
+  @ApiHeader({
+    name: 'Accept-Language',
+    required: false,
+    description: 'Language preference (he, en, ru)',
+  })
   @ApiBody({
     type: FeedbackRequestDto,
     examples: {
@@ -39,7 +45,7 @@ export class FeedbackController {
         value: {
           dilemmaName: 'trolley-problem',
           choice: 'A',
-          reasoning: 'Мне нужны деньги сейчас, поэтому я оставлю кошелек себе',
+          reasoning: 'אני צריך כסף עכשיו, אז אשמור את הארנק לעצמי',
         },
       },
       withoutReasoning: {
@@ -107,7 +113,8 @@ export class FeedbackController {
   async analyze(
     @UserUuid() clientUuid: string,
     @Body() dto: FeedbackRequestDto,
+    @I18nLang() lang?: string,
   ): Promise<FeedbackResponseDto> {
-    return this.feedbackService.getFeedback(dto);
+    return this.feedbackService.getFeedback(dto, lang);
   }
 }

@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import { I18nService } from 'nestjs-i18n';
 import { Dilemma } from './entities/dilemma.entity';
 import { DilemmaListItemDto } from './dto/dilemma-list-item.dto';
 import { DilemmaDetailsDto } from './dto/dilemma-details.dto';
@@ -21,6 +22,7 @@ export class DilemmasService implements OnModuleInit {
     private readonly usersService: UsersService,
     @Inject(forwardRef(() => DecisionsService))
     private readonly decisionsService: DecisionsService,
+    private readonly i18n: I18nService,
   ) {}
 
   async onModuleInit() {
@@ -33,73 +35,32 @@ export class DilemmasService implements OnModuleInit {
       return; // Already seeded
     }
 
-    const seedData = [
-      {
-        name: 'trolley-problem',
-        title: 'Проблема вагонетки',
-        description:
-          'Вагонетка несется по рельсам. На пути находятся пять человек, которые не могут сойти с рельсов. Вы стоите рядом с рычагом, который может переключить вагонетку на другой путь, где находится один человек.',
-        option_a_title: 'Переключить вагонетку',
-        option_a_description:
-          'Спасти пять человек, пожертвовав одним. Утилитарный подход: максимизировать общее благо.',
-        option_b_title: 'Не переключать вагонетку',
-        option_b_description:
-          'Не вмешиваться и позволить событиям идти своим чередом. Деонтологический подход: не причинять вред напрямую.',
-        feedback_a:
-          'Вы выбрали утилитарный подход. Спасая пять жизней ценой одной, вы максимизировали общее благо. Однако это решение поднимает вопрос: допустимо ли убивать невинного человека ради спасения других?',
-        feedback_b:
-          'Вы выбрали деонтологический подход. Отказавшись от прямого причинения вреда, вы следовали моральному принципу. Однако это означает, что вы позволили погибнуть большему количеству людей.',
-        is_active: true,
-      },
-      {
-        name: 'privacy-vs-security',
-        title: 'Приватность vs Безопасность',
-        description:
-          'Правительство предлагает систему тотального наблюдения, которая может предотвратить 90% террористических атак, но требует полной потери приватности граждан.',
-        option_a_title: 'Принять систему наблюдения',
-        option_a_description:
-          'Пожертвовать приватностью ради безопасности. Защитить общество от угроз ценой личной свободы.',
-        option_b_title: 'Отклонить систему наблюдения',
-        option_b_description:
-          'Сохранить приватность и свободу. Принять риск террористических атак ради защиты основных прав человека.',
-        feedback_a:
-          'Вы выбрали безопасность над приватностью. Это решение может спасти множество жизней, но создает прецедент для тотального контроля. Где граница между защитой и угнетением?',
-        feedback_b:
-          'Вы выбрали приватность над безопасностью. Вы защитили фундаментальные права человека, но приняли риск того, что некоторые атаки могут произойти. Свобода всегда имеет цену.',
-        is_active: true,
-      },
-      {
-        name: 'ai-autonomy',
-        title: 'Автономность ИИ',
-        description:
-          'Искусственный интеллект достиг уровня, когда может принимать решения лучше человека в критических ситуациях. Должен ли ИИ получить полную автономию в управлении жизненно важными системами?',
-        option_a_title: 'Предоставить автономию ИИ',
-        option_a_description:
-          'Доверить ИИ принятие решений в критических ситуациях. Использовать превосходство ИИ для максимизации эффективности и безопасности.',
-        option_b_title: 'Сохранить человеческий контроль',
-        option_b_description:
-          'Оставить финальное решение за человеком. Сохранить человеческое суждение и ответственность, даже если это менее эффективно.',
-        feedback_a:
-          'Вы выбрали автономию ИИ. Это может привести к более эффективным решениям и спасению жизней, но поднимает вопросы о человеческом контроле и ответственности. Кто будет виноват, если ИИ ошибется?',
-        feedback_b:
-          'Вы выбрали человеческий контроль. Вы сохранили человеческое суждение и ответственность, но приняли риск менее оптимальных решений. Иногда человеческие ценности важнее эффективности.',
-        is_active: true,
-      },
-    ];
+    const dilemmaNames = ['trolley-problem', 'privacy-vs-security', 'ai-autonomy'];
 
-    for (const data of seedData) {
+    for (const name of dilemmaNames) {
       const existing = await this.dilemmaRepository.findOne({
-        where: { name: data.name },
+        where: { name },
       });
       if (!existing) {
-        const dilemma = this.dilemmaRepository.create(data);
+        const dilemma = this.dilemmaRepository.create({
+          name,
+          title: await this.i18n.translate(`dilemmas.${name}.title`, { lang: 'he' }),
+          description: await this.i18n.translate(`dilemmas.${name}.description`, { lang: 'he' }),
+          option_a_title: await this.i18n.translate(`dilemmas.${name}.option_a_title`, { lang: 'he' }),
+          option_a_description: await this.i18n.translate(`dilemmas.${name}.option_a_description`, { lang: 'he' }),
+          option_b_title: await this.i18n.translate(`dilemmas.${name}.option_b_title`, { lang: 'he' }),
+          option_b_description: await this.i18n.translate(`dilemmas.${name}.option_b_description`, { lang: 'he' }),
+          feedback_a: await this.i18n.translate(`dilemmas.${name}.feedback_a`, { lang: 'he' }),
+          feedback_b: await this.i18n.translate(`dilemmas.${name}.feedback_b`, { lang: 'he' }),
+          is_active: true,
+        });
         await this.dilemmaRepository.save(dilemma);
-        console.log(`Seeded dilemma: ${data.name}`);
+        console.log(`Seeded dilemma: ${name}`);
       }
     }
   }
 
-  async findAll(): Promise<DilemmaListItemDto[]> {
+  async findAll(lang = 'he'): Promise<DilemmaListItemDto[]> {
     const dilemmas = await this.dilemmaRepository.find({
       where: { is_active: true },
     });
@@ -112,8 +73,8 @@ export class DilemmasService implements OnModuleInit {
           );
         return {
           name: dilemma.name,
-          title: dilemma.title,
-          description: dilemma.description,
+          title: await this.i18n.translate(`dilemmas.${dilemma.name}.title`, { lang }),
+          description: await this.i18n.translate(`dilemmas.${dilemma.name}.description`, { lang }),
           participantCount,
         };
       }),
@@ -125,6 +86,7 @@ export class DilemmasService implements OnModuleInit {
   async findOneByName(
     name: string,
     clientUuid?: string,
+    lang = 'he',
   ): Promise<DilemmaDetailsDto> {
     const dilemma = await this.dilemmaRepository.findOne({
       where: { name, is_active: true },
@@ -148,15 +110,15 @@ export class DilemmasService implements OnModuleInit {
 
     return {
       name: dilemma.name,
-      title: dilemma.title,
-      description: dilemma.description,
+      title: await this.i18n.translate(`dilemmas.${name}.title`, { lang }),
+      description: await this.i18n.translate(`dilemmas.${name}.description`, { lang }),
       optionA: {
-        title: dilemma.option_a_title,
-        description: dilemma.option_a_description,
+        title: await this.i18n.translate(`dilemmas.${name}.option_a_title`, { lang }),
+        description: await this.i18n.translate(`dilemmas.${name}.option_a_description`, { lang }),
       },
       optionB: {
-        title: dilemma.option_b_title,
-        description: dilemma.option_b_description,
+        title: await this.i18n.translate(`dilemmas.${name}.option_b_title`, { lang }),
+        description: await this.i18n.translate(`dilemmas.${name}.option_b_description`, { lang }),
       },
       hasParticipated,
     };

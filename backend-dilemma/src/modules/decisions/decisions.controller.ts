@@ -10,8 +10,9 @@ import {
   ApiHeader,
   ApiOperation,
   ApiResponse,
-  ApiTags
+  ApiTags,
 } from '@nestjs/swagger';
+import { I18nLang } from 'nestjs-i18n';
 import { UserUuid } from '../../common/decorators/user-uuid.decorator';
 import { UuidValidationGuard } from '../../common/guards/uuid-validation.guard';
 import { DecisionsService } from './decisions.service';
@@ -34,6 +35,11 @@ export class DecisionsController {
     required: true,
     description: 'User UUID',
   })
+  @ApiHeader({
+    name: 'Accept-Language',
+    required: false,
+    description: 'Language preference (he, en, ru)',
+  })
   @ApiResponse({
     status: 201,
     description: 'Initial choice created',
@@ -46,11 +52,13 @@ export class DecisionsController {
   async createInitialChoice(
     @UserUuid() clientUuid: string,
     @Body() dto: InitialChoiceDto,
+    @I18nLang() lang?: string,
   ): Promise<FeedbackResponseDto> {
     return this.decisionsService.createInitialChoice(
       clientUuid,
       dto.dilemmaName,
       dto.choice as Choice,
+      lang,
     );
   }
 

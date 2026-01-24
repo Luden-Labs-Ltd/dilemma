@@ -1,6 +1,13 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import {
+  I18nModule,
+  AcceptLanguageResolver,
+  HeaderResolver,
+  QueryResolver,
+} from 'nestjs-i18n';
+import * as path from 'path';
 import { UsersModule } from './modules/users/users.module';
 import { DilemmasModule } from './modules/dilemmas/dilemmas.module';
 import { DecisionsModule } from './modules/decisions/decisions.module';
@@ -15,6 +22,18 @@ import { UserDecision } from './modules/decisions/entities/user-decision.entity'
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: `.env.${process.env.NODE_ENV || 'development'}`,
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'he',
+      loaderOptions: {
+        path: path.join(__dirname, '/i18n/'),
+        watch: true,
+      },
+      resolvers: [
+        { use: QueryResolver, options: ['lang'] },
+        AcceptLanguageResolver,
+        new HeaderResolver(['x-language']),
+      ],
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
