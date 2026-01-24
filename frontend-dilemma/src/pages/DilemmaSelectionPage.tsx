@@ -1,12 +1,21 @@
 import { motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import type { DilemmaType } from "../shared/types";
+import dilemmaOption1 from "../shared/assets/dilemmas/dilemma-option-1.png";
+import dilemmaOption2 from "../shared/assets/dilemmas/dilemma-option-2.png";
+import dilemmaOption3 from "../shared/assets/dilemmas/dilemma-option-3.png";
+
+// Маппинг изображений для карточек дилемм
+// dilemma-option-3 - первая дилемма (AI врач)
+// dilemma-option-1 - вторая дилемма (ворота с выбором пути)
+// dilemma-option-2 - третья дилемма (толпа людей)
+const DILEMMA_IMAGES = [dilemmaOption3, dilemmaOption1, dilemmaOption2];
 
 export function DilemmaSelectionPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const {
     dilemmas,
@@ -25,32 +34,42 @@ export function DilemmaSelectionPage() {
     navigate("/presentation");
   };
 
+  // Получаем первые 3 дилеммы для отображения
+  const displayedDilemmas = useMemo(
+    () => dilemmas.slice(0, 3),
+    [dilemmas]
+  );
+
+  // Определяем направление текста на основе текущего языка
+  const textDirection = i18n.language === "he" ? "rtl" : "ltr";
+
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center px-4">
+    <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-12">
       {/* Заголовок */}
       <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="mb-8 text-center"
-      >
-        <h1 className="mb-2 text-4xl font-bold text-gray-800">
-          {t("dilemmaSelection.title")}
-        </h1>
-        <p className="text-lg text-gray-600">
-          {t("dilemmaSelection.subtitle")}
-        </p>
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 text-center"
+          dir={textDirection}
+        >
+          <h1 className="mb-4 text-[100px] font-black leading-[1.28em] text-[#E6F8F9]">
+            {t("dilemmaSelection.title")}
+          </h1>
+          <p className="text-[40px] font-medium leading-[1.4em] text-white">
+            {t("dilemmaSelection.subtitle")}
+          </p>
       </motion.div>
 
       {/* Карточки дилемм */}
       {isLoadingDilemmas && (
-        <div className="text-center text-gray-600">
+        <div className="text-center text-[40px] text-white">
           {t("dilemmaSelection.loading")}
         </div>
       )}
       {dilemmasError && (
         <div className="mb-4 text-center">
-          <p className="mb-2 text-red-600">{dilemmasError}</p>
+          <p className="mb-2 text-[24px] text-red-300">{dilemmasError}</p>
           <button
             onClick={() => void refreshDilemmas()}
             className="rounded-full bg-cyan-500 px-6 py-2 text-white hover:bg-cyan-600"
@@ -60,50 +79,71 @@ export function DilemmaSelectionPage() {
         </div>
       )}
       {!isLoadingDilemmas && !dilemmasError && (
-        <div className="flex flex-wrap justify-center gap-6">
-          {dilemmas.length === 0 ? (
-            <p className="text-gray-600">
+        <div className="flex flex-nowrap justify-center gap-[2.5%]">
+          {displayedDilemmas.length === 0 ? (
+            <p className="text-[24px] text-white">
               {t("dilemmaSelection.noDilemmas")}
             </p>
           ) : (
-            dilemmas.map((dilemma, index) => (
-              <motion.button
-                key={dilemma.name}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => handleSelectDilemma(dilemma.name)}
-                className="group relative h-[400px] w-[280px] overflow-hidden rounded-3xl bg-white shadow-lg transition-all hover:shadow-2xl"
-              >
-                {/* Изображение */}
-                <div className="h-full w-full bg-gradient-to-b from-cyan-100 to-cyan-200">
-                  {/* Placeholder для изображения */}
-                  <div className="flex h-3/4 items-center justify-center">
-                    <div className="text-6xl opacity-30">📷</div>
-                  </div>
-                </div>
+            displayedDilemmas.map((dilemma, index) => {
+              const imageSrc = DILEMMA_IMAGES[index] || DILEMMA_IMAGES[0];
+              const isMiddleCard = index === 1;
 
-                {/* Название */}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-6 text-white">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-xl font-bold">{dilemma.title}</h3>
-                    {dilemma.isCompletedByUser && (
-                      <span
-                        className="shrink-0 rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-medium"
-                        title={t("dilemmaSelection.completed")}
-                      >
-                        ✓
-                      </span>
+              return (
+                <motion.button
+                  key={dilemma.name}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => handleSelectDilemma(dilemma.name)}
+                  className="group relative h-[730px] w-[404px] overflow-hidden rounded-[4px] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all hover:shadow-[0px_8px_8px_0px_rgba(0,0,0,0.35)]"
+                  style={{
+                    border: "12px solid #FFFDFD",
+                  }}
+                >
+                  {/* Изображение */}
+                  <div className="relative h-full w-full">
+                    <img
+                      src={imageSrc}
+                      alt={dilemma.title}
+                      className="h-full w-full object-cover"
+                    />
+                    {/* Градиент для центральной карточки */}
+                    {isMiddleCard && (
+                      <div
+                        className="absolute inset-0"
+                        style={{
+                          background:
+                            "linear-gradient(180deg, rgba(0, 0, 0, 0) 63%, rgba(0, 0, 0, 1) 100%)",
+                        }}
+                      />
                     )}
                   </div>
-                </div>
 
-                {/* Hover эффект - осветление */}
-                <div className="absolute inset-0 bg-white opacity-0 transition-opacity group-hover:opacity-20" />
-              </motion.button>
-            ))
+                  {/* Название внизу */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <div className="flex items-center justify-end gap-2" dir={textDirection}>
+                      {dilemma.isCompletedByUser && (
+                        <span
+                          className="shrink-0 rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-medium"
+                          title={t("dilemmaSelection.completed")}
+                        >
+                          ✓
+                        </span>
+                      )}
+                      <h3 className="text-right text-[40px] font-black leading-[1.46875em] text-white">
+                        {dilemma.title}
+                      </h3>
+                    </div>
+                  </div>
+
+                  {/* Hover эффект */}
+                  <div className="absolute inset-0 bg-white opacity-0 transition-opacity group-hover:opacity-10" />
+                </motion.button>
+              );
+            })
           )}
         </div>
       )}
