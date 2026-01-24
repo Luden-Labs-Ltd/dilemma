@@ -35,7 +35,7 @@ export class DilemmasService implements OnModuleInit {
       return; // Already seeded
     }
 
-    const dilemmaNames = ['trolley-problem', 'privacy-vs-security', 'ai-autonomy'];
+    const dilemmaNames = ['medical', 'professional', 'state'];
 
     for (const name of dilemmaNames) {
       const existing = await this.dilemmaRepository.findOne({

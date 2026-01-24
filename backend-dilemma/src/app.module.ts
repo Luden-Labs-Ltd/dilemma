@@ -34,6 +34,7 @@ import { UserDecision } from './modules/decisions/entities/user-decision.entity'
         AcceptLanguageResolver,
         new HeaderResolver(['x-language']),
       ],
+      typesOutputPath: path.join(__dirname, '../src/generated/i18n.generated.ts'),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],

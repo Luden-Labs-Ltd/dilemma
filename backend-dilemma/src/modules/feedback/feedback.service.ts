@@ -169,6 +169,7 @@ export class FeedbackService {
         option: 'אפשרות',
         userAnswer: 'תשובת המשתמש',
         userThoughts: 'מחשבות המשתמש',
+        responseInstruction: 'אנא ענה בעברית בלבד. התשובה חייבת להיות בעברית.',
       },
       en: {
         dilemma: 'Dilemma',
@@ -176,6 +177,7 @@ export class FeedbackService {
         option: 'Option',
         userAnswer: 'User Answer',
         userThoughts: 'User Thoughts',
+        responseInstruction: 'Please respond in English only. The response must be in English.',
       },
       ru: {
         dilemma: 'Дилемма',
@@ -183,12 +185,15 @@ export class FeedbackService {
         option: 'Вариант',
         userAnswer: 'Ответ пользователя',
         userThoughts: 'Размышления пользователя',
+        responseInstruction: 'Пожалуйста, отвечайте только на русском языке. Ответ должен быть на русском.',
       },
     };
 
     const labels = promptLabels[lang as keyof typeof promptLabels] || promptLabels.he;
 
-    let prompt = `${labels.dilemma}: ${title}
+    let prompt = `${labels.responseInstruction}
+
+${labels.dilemma}: ${title}
 ${labels.description}: ${description}
 
 ${labels.option} A: ${optionATitle}

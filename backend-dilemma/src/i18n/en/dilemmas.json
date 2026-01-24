@@ -1,34 +1,32 @@
 {
-  "dilemmas": {
-    "trolley-problem": {
-      "title": "The Trolley Problem",
-      "description": "A trolley is speeding down the tracks. Five people are on the path and cannot get off the tracks. You are standing next to a lever that can switch the trolley to another track, where one person is standing.",
-      "option_a_title": "Switch the Trolley",
-      "option_a_description": "Save five people at the cost of one. Utilitarian approach: maximize the overall good.",
-      "option_b_title": "Don't Switch the Trolley",
-      "option_b_description": "Don't intervene and let events proceed naturally. Deontological approach: don't cause harm directly.",
-      "feedback_a": "You chose the utilitarian approach. By saving five lives at the cost of one, you maximized the overall good. However, this decision raises the question: is it permissible to kill an innocent person to save others?",
-      "feedback_b": "You chose the deontological approach. By refusing to cause direct harm, you followed a moral principle. However, this means you allowed a greater number of people to die."
+  "medical": {
+      "title": "Medical Ethics",
+      "description": "A resident doctor faces a complex dilemma. Two patients need urgent care, but only one resource is available. The first patient is an elderly person with relatively low recovery chances, but he is a father to a large family. The second patient is young with high chances of full recovery, but has no family.",
+      "option_a_title": "Treat the Elderly Patient",
+      "option_a_description": "Prioritize the family father. Consider the family and social impact of the decision.",
+      "option_b_title": "Treat the Young Patient",
+      "option_b_description": "Prioritize the patient with higher recovery chances. Maximize the likelihood of successful treatment.",
+      "feedback_a": "You chose to prioritize the family father. This decision considers the impact on family and community, but raises questions about medical decision-making criteria.",
+      "feedback_b": "You chose to prioritize the patient with higher recovery chances. This decision is based on medical considerations, but raises questions about the value of life and social impact."
     },
-    "privacy-vs-security": {
-      "title": "Privacy vs Security",
-      "description": "The government proposes a total surveillance system that can prevent 90% of terrorist attacks, but requires complete loss of citizens' privacy.",
-      "option_a_title": "Accept the Surveillance System",
-      "option_a_description": "Sacrifice privacy for security. Protect society from threats at the cost of personal freedom.",
-      "option_b_title": "Reject the Surveillance System",
-      "option_b_description": "Preserve privacy and freedom. Accept the risk of terrorist attacks to protect fundamental human rights.",
-      "feedback_a": "You chose security over privacy. This decision could save many lives, but creates a precedent for total control. Where is the line between protection and oppression?",
-      "feedback_b": "You chose privacy over security. You protected fundamental human rights, but accepted the risk that some attacks may occur. Freedom always has a price."
+    "professional": {
+      "title": "Professional Ethics",
+      "description": "You work at a leading tech company and discover that the product you're developing contains a severe security bug. Reporting the bug will delay the launch by months and cost your employer millions of dollars. Your manager asks you to continue with the project and fix the bug in the next version.",
+      "option_a_title": "Report the Bug",
+      "option_a_description": "Stop the launch and fix the issue. Put user safety above business interests.",
+      "option_b_title": "Continue with Project",
+      "option_b_description": "Launch the product and fix the bug in the next version. Maintain loyalty to employer and schedule.",
+      "feedback_a": "You chose to report the bug. This decision demonstrates professional responsibility, but could harm your employer and colleagues.",
+      "feedback_b": "You chose to continue with the project. This decision maintains loyalty to your employer, but could endanger users and professional reputation."
     },
-    "ai-autonomy": {
-      "title": "AI Autonomy",
-      "description": "Artificial intelligence has reached a level where it can make better decisions than humans in critical situations. Should AI be given full autonomy in managing vital systems?",
-      "option_a_title": "Grant Autonomy to AI",
-      "option_a_description": "Entrust AI with decision-making in critical situations. Use AI's superiority to maximize efficiency and safety.",
-      "option_b_title": "Maintain Human Control",
-      "option_b_description": "Leave the final decision to humans. Preserve human judgment and responsibility, even if it's less efficient.",
-      "feedback_a": "You chose AI autonomy. This could lead to more efficient decisions and save lives, but raises questions about human control and responsibility. Who will be to blame if the AI makes a mistake?",
-      "feedback_b": "You chose human control. You preserved human judgment and responsibility, but accepted the risk of less optimal decisions. Sometimes human values are more important than efficiency."
+    "state": {
+      "title": "State and Jewish Society",
+      "description": "You manage public resources in a mixed city. There is a limited budget to build a new public facility. One community demands a synagogue, a second community demands a secular school, and a third community demands a community center for everyone.",
+      "option_a_title": "Build Religious Institution",
+      "option_a_description": "Prioritize the synagogue. Recognize the importance of Jewish identity and religious needs.",
+      "option_b_title": "Build Shared Institution",
+      "option_b_description": "Build a community center or school. Prioritize an institution that serves the entire community.",
+      "feedback_a": "You chose to build a religious institution. This decision respects Jewish identity, but could create tension with other groups.",
+      "feedback_b": "You chose to build a shared institution. This decision promotes equality and unity, but could ignore specific needs of communities."
     }
-  }
 }

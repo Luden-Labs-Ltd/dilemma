@@ -43,15 +43,15 @@ export class FeedbackController {
       withReasoning: {
         summary: 'Request with reasoning',
         value: {
-          dilemmaName: 'trolley-problem',
+          dilemmaName: 'medical',
           choice: 'A',
-          reasoning: 'אני צריך כסף עכשיו, אז אשמור את הארנק לעצמי',
+          reasoning: 'אני חושב שצריך לתת עדיפות למשפחה ולהשפעה החברתית',
         },
       },
       withoutReasoning: {
         summary: 'Request without reasoning',
         value: {
-          dilemmaName: 'trolley-problem',
+          dilemmaName: 'professional',
           choice: 'B',
         },
       },
