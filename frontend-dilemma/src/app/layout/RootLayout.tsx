@@ -1,5 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { LanguageSwitcher } from "@/shared/ui/LanguageSwitcher";
+import backgroundGradient from "@/shared/assets/background-gradient.png";
 
 export function RootLayout() {
   const location = useLocation();
@@ -9,11 +10,11 @@ export function RootLayout() {
     <div
       className="relative min-h-screen bg-cover bg-center"
       style={{
-        backgroundImage: "url('/src/shared/assets/background-gradient.png')",
+        backgroundImage: `url(${backgroundGradient})`,
       }}
     >
       {!isPresentationPage && (
-        <header className="flex justify-end px-4 pt-4">
+        <header className="absolute top-0 left-0 right-0 z-20 flex justify-end px-4 pt-4 bg-transparent">
           <LanguageSwitcher />
         </header>
       )}
