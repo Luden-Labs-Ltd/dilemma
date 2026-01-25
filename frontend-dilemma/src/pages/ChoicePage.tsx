@@ -62,7 +62,6 @@ export function ChoicePage() {
   const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [feedback, setFeedback] = useState<string | null>(null);
   const [hoveredOption, setHoveredOption] = useState<"left" | "right" | null>(null);
 
   const isRTL = i18n.language === "he";
@@ -95,17 +94,15 @@ export function ChoicePage() {
     setSelectedChoice(choice);
     setIsSubmitting(true);
     setError(null);
-    setFeedback(null);
 
     try {
       // Сохраняем выбор в контекст
       setChoice(choice);
 
-      // Отправляем initial choice в backend и получаем фидбэк
-      const response = await submitInitialChoice(currentDilemma, choice);
-      setFeedback(response.feedback);
+      // Отправляем initial choice в backend
+      await submitInitialChoice(currentDilemma, choice);
 
-      // Переход с анимацией после получения фидбэка
+      // Переход с анимацией
       setTimeout(() => {
         navigate("/reason");
       }, 1500);
@@ -259,17 +256,6 @@ export function ChoicePage() {
           </div>
         </div>
       </div>
-
-      {/* Фидбэк от сервера */}
-      {feedback && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="absolute bottom-8 left-1/2 w-[92vw] max-w-2xl -translate-x-1/2 rounded-2xl bg-cyan-50 p-6 text-center text-gray-800"
-        >
-          <p className="text-lg">{feedback}</p>
-        </motion.div>
-      )}
 
       {/* Сообщение об ошибке */}
       {error && (
