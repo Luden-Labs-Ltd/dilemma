@@ -5,13 +5,11 @@ import { useDilemma } from "../app/context";
 import { PresentationSlide } from "@/shared/components/PresentationSlide";
 import { PRESENTATIONS, DILEMMA_NAME_MAP } from "@/shared/config/presentations";
 import type { PresentationConfig } from "@/shared/types/presentation";
-import slide11 from "@/shared/assets/slides/medical/slide-11.png";
 
 export function PresentationPage() {
   const navigate = useNavigate();
   const { currentDilemma } = useDilemma();
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
-  const [showChoiceButtons, setShowChoiceButtons] = useState(false);
   // Для слайдов 3, 4, 5 (индексы 2, 3, 4) - отслеживаем, какие должны быть видны одновременно
   const [stackedSlides, setStackedSlides] = useState<Set<number>>(new Set());
 
@@ -19,7 +17,6 @@ export function PresentationPage() {
   const presentationKey = currentDilemma ? (DILEMMA_NAME_MAP[currentDilemma] || currentDilemma) : undefined;
   const presentation = presentationKey ? (PRESENTATIONS[presentationKey] as PresentationConfig | undefined) : undefined;
   const slides = presentation?.slides;
-  const choiceButtons = presentation?.choiceButtons;
 
   // Все хуки должны быть вызваны до условных возвратов
   useEffect(() => {
@@ -38,9 +35,9 @@ export function PresentationPage() {
   useEffect(() => {
     if (!slides) return;
     
-    // Если все слайды показаны, показываем кнопки выбора
+    // Если все слайды показаны, переходим к выбору
     if (currentSlideIndex >= slides.length) {
-      setShowChoiceButtons(true);
+      navigate("/choice");
     }
     
     // Для слайдов 3, 4, 5 (индексы 2, 3, 4) - добавляем в стек при переходе
@@ -52,7 +49,7 @@ export function PresentationPage() {
     if (currentSlideIndex === 1) {
       setStackedSlides(new Set());
     }
-  }, [currentSlideIndex, slides]);
+  }, [currentSlideIndex, slides, navigate]);
 
   // Условные возвраты после всех хуков
   if (!currentDilemma || !presentation || !slides) {
@@ -66,62 +63,10 @@ export function PresentationPage() {
     if (nextIndex < slides.length) {
       setCurrentSlideIndex(nextIndex);
     } else {
-      // Все слайды показаны - показываем кнопки выбора
-      setCurrentSlideIndex(slides.length); // Устанавливаем индекс за пределами массива
-      setShowChoiceButtons(true);
+      // Все слайды показаны - переходим к выбору
+      navigate("/choice");
     }
   };
-
-  const handleChoice = (_choice: "a" | "b") => {
-    // Сохраняем выбор и переходим к следующему шагу
-    // TODO: интегрировать с контекстом
-    navigate("/choice");
-  };
-
-  // Показываем кнопки выбора, если все слайды завершены
-  // Также проверяем, если currentSlideIndex >= slides.length (все слайды показаны)
-  if ((showChoiceButtons || currentSlideIndex >= slides.length) && choiceButtons) {
-    return (
-      <div className="relative h-screen w-screen overflow-hidden bg-[#0b1d2b]">
-        <img
-          src={slide11}
-          alt=""
-          className="absolute inset-0 h-full w-full object-contain"
-        />
-
-        {/* Зоны клика поверх панелей */}
-        <div className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]">
-          <motion.button
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            onClick={() => handleChoice("a")}
-            aria-label={choiceButtons.optionA.label}
-            className="group relative h-full w-full rounded-[28px] outline-none transition-shadow duration-200 hover:shadow-[0_0_40px_rgba(90,210,255,0.35)] focus-visible:shadow-[0_0_40px_rgba(90,210,255,0.45)]"
-          >
-            <span className="sr-only">{choiceButtons.optionA.label}</span>
-            <div className="absolute inset-0 rounded-[28px] ring-2 ring-cyan-300/40 group-hover:ring-cyan-300/70" />
-          </motion.button>
-
-          <motion.button
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4, delay: 0.2 }}
-            whileHover={{ scale: 1.01 }}
-            whileTap={{ scale: 0.99 }}
-            onClick={() => handleChoice("b")}
-            aria-label={choiceButtons.optionB.label}
-            className="group relative h-full w-full rounded-[28px] outline-none transition-shadow duration-200 hover:shadow-[0_0_40px_rgba(255,120,120,0.35)] focus-visible:shadow-[0_0_40px_rgba(255,120,120,0.45)]"
-          >
-            <span className="sr-only">{choiceButtons.optionB.label}</span>
-            <div className="absolute inset-0 rounded-[28px] ring-2 ring-red-300/40 group-hover:ring-red-300/70" />
-          </motion.button>
-        </div>
-      </div>
-    );
-  }
 
 
   // Определяем, какие слайды должны быть видны
@@ -164,10 +109,10 @@ export function PresentationPage() {
         </div>
       ))}
       
-      {/* Если нет видимых слайдов, показываем заглушку */}
-      {visibleSlides.length === 0 && (
+      {/* Если нет видимых слайдов, переходим к выбору */}
+      {visibleSlides.length === 0 && currentSlideIndex >= slides.length && (
         <div className="flex h-screen w-screen items-center justify-center bg-gray-900 text-white">
-          <p>Loading choice buttons...</p>
+          <p>Redirecting to choice...</p>
         </div>
       )}
     </div>
