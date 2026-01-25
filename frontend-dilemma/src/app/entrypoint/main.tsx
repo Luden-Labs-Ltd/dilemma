@@ -5,11 +5,14 @@ import "@/shared/i18n";
 import "../styles/index.css";
 import { router } from "@/app/routes";
 import { DilemmaProvider } from "../context";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <DilemmaProvider>
-      <RouterProvider router={router} />
-    </DilemmaProvider>
+    <ErrorBoundary>
+      <DilemmaProvider>
+        <RouterProvider router={router} />
+      </DilemmaProvider>
+    </ErrorBoundary>
   </StrictMode>,
 );

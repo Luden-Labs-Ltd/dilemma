@@ -379,7 +379,7 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
                   }
                 : {
                     ...(slide.middleLayerImage.mixBlendMode && {
-                      mixBlendMode: slide.middleLayerImage.mixBlendMode as any,
+                      mixBlendMode: slide.middleLayerImage.mixBlendMode as GlobalCompositeOperation,
                     }),
                     // Дополнительные фильтры для разных режимов смешивания
                     ...(slide.middleLayerImage.mixBlendMode === "screen" && {
