@@ -14,7 +14,10 @@ export function RootLayout() {
       }}
     >
       {!isPresentationPage && (
-        <header className="absolute top-0 left-0 right-0 z-20 flex justify-end px-4 pt-4 bg-transparent">
+        <header
+          dir="ltr"
+          className="absolute top-0 left-0 right-0 z-20 flex justify-end px-4 pt-4 bg-transparent"
+        >
           <LanguageSwitcher />
         </header>
       )}

@@ -119,6 +119,14 @@
     "changedToA": "You changed your opinion after seeing the sources. This shows openness to new information and the ability to reassess your positions - an important trait for personal growth."
   },
   "dilemmas": {
+    "privacy-vs-security": {
+      "title": "Education or Programming",
+      "subtitle": "Education Dilemma"
+    },
+    "ai-autonomy": {
+      "title": "Rescue or Illusion",
+      "subtitle": "AI Dilemma"
+    },
     "trolley-problem": {
       "title": "Strategic Silence",
       "subtitle": "Military Dilemma",

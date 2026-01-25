@@ -110,7 +110,7 @@ export function DilemmaSelectionPage() {
                   <div className="relative h-full w-full">
                     <img
                       src={imageSrc}
-                      alt={dilemma.title}
+                      alt={t(`dilemmas.${dilemma.name}.title`)}
                       className="h-full w-full object-cover"
                     />
                     {/* Градиент для центральной карточки */}
@@ -137,7 +137,7 @@ export function DilemmaSelectionPage() {
                         </span>
                       )}
                       <h3 className="text-right text-[40px] font-black leading-[1.46875em] text-white">
-                        {dilemma.title}
+                        {t(`dilemmas.${dilemma.name}.title`)}
                       </h3>
                     </div>
                   </div>
