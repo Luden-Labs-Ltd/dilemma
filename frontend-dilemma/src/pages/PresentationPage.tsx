@@ -1,10 +1,10 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { PresentationSlide } from "@/shared/components/PresentationSlide";
 import { PRESENTATIONS, DILEMMA_NAME_MAP } from "@/shared/config/presentations";
-import type { PresentationConfig, SlideContent } from "@/shared/types/presentation";
+import type { PresentationConfig, SlideContent, AudioCue } from "@/shared/types/presentation";
 
 export function PresentationPage() {
   const navigate = useNavigate();
@@ -13,6 +13,41 @@ export function PresentationPage() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   // Для слайдов 3, 4, 5 (индексы 2, 3, 4) - отслеживаем, какие должны быть видны одновременно
   const [stackedSlides, setStackedSlides] = useState<Set<number>>(new Set());
+  const audioRegistry = useRef<Map<string, { audio: HTMLAudioElement; stopOnSlideChange: boolean }>>(new Map());
+  const slideTimers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const clearSlideTimers = () => {
+    slideTimers.current.forEach((timer) => clearTimeout(timer));
+    slideTimers.current = [];
+  };
+
+  const stopAudioByKey = (key: string) => {
+    const entry = audioRegistry.current.get(key);
+    if (!entry) return;
+    entry.audio.pause();
+    entry.audio.currentTime = 0;
+    audioRegistry.current.delete(key);
+  };
+
+  const dbToGain = (db?: number) => {
+    if (db === undefined) return 1;
+    return Math.max(0, Math.min(1, Math.pow(10, db / 20)));
+  };
+
+  const getTypewriterEndMs = (slide: SlideContent) => {
+    const blocks = slide.textBlocks || [];
+    let maxEnd = -1;
+
+    blocks.forEach((block) => {
+      if (!block.typewriter || !block.text) return;
+      const delay = block.delay ?? 0;
+      const speed = block.typewriterSpeed ?? 50;
+      const duration = block.text.length * speed;
+      maxEnd = Math.max(maxEnd, delay + duration);
+    });
+
+    return maxEnd > -1 ? maxEnd : undefined;
+  };
 
   // Маппинг имени дилемы из API к ключу презентации
   const presentationKey = currentDilemma ? (DILEMMA_NAME_MAP[currentDilemma] || currentDilemma) : undefined;
@@ -209,6 +244,65 @@ export function PresentationPage() {
       setStackedSlides(new Set());
     }
   }, [currentSlideIndex, slides, navigate]);
+
+  useEffect(() => {
+    if (!slides) return;
+
+    const slide = slides[currentSlideIndex];
+
+    clearSlideTimers();
+
+    audioRegistry.current.forEach((entry, key) => {
+      if (entry.stopOnSlideChange) {
+        stopAudioByKey(key);
+      }
+    });
+
+    slide.audioCues?.forEach((cue: AudioCue, index) => {
+      const key = cue.id ?? `slide-${currentSlideIndex}-${index}`;
+      if (audioRegistry.current.has(key)) return;
+
+      const audio = new Audio(cue.src);
+      audio.loop = !!cue.loop;
+      audio.volume = dbToGain(cue.volumeDb);
+
+      audioRegistry.current.set(key, {
+        audio,
+        stopOnSlideChange: cue.stopOnSlideChange !== false,
+      });
+
+      const startDelay = cue.startOffset ?? 0;
+      const startTimer = setTimeout(() => {
+        audio.currentTime = 0;
+        audio.play().catch(() => undefined);
+      }, startDelay);
+      slideTimers.current.push(startTimer);
+
+      const typewriterEnd = cue.stopAtTypewriterEnd ? getTypewriterEndMs(slide) : undefined;
+      const stopAfter = cue.stopOffset ?? typewriterEnd;
+      if (stopAfter !== undefined) {
+        const stopTimer = setTimeout(() => {
+          stopAudioByKey(key);
+        }, stopAfter);
+        slideTimers.current.push(stopTimer);
+      }
+    });
+
+    return () => {
+      clearSlideTimers();
+    };
+  }, [currentSlideIndex, slides]);
+
+  useEffect(() => {
+    return () => {
+      clearSlideTimers();
+      audioRegistry.current.forEach((entry) => {
+        entry.audio.pause();
+        entry.audio.currentTime = 0;
+      });
+      audioRegistry.current.clear();
+    };
+  }, []);
 
   // Условные возвраты после всех хуков
   if (!currentDilemma || !presentation || !slides) {

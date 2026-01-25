@@ -13,6 +13,10 @@ import slide9 from "../assets/slides/medical/slide-9.png?format=webp";
 import slide10 from "../assets/slides/medical/slide-10.png?format=webp";
 import slide11 from "../assets/slides/medical/slide-11.png?format=webp";
 import iconSvg from "../assets/icons/icon.svg";
+import bgmEvasionMain from "../assets/music/BGM_Evasion_Main.mp3";
+import sfxImpactDisaster from "../assets/music/SFX_Impact_Disaster.mp3";
+import sfxAlarmLoop from "../assets/music/SFX_Alarm_Loop.mp3";
+import uiAiProcessing from "../assets/music/UI_AI_Processing.mp3";
 // Остальные слайды будут использованы позже
 // import slide3 from "../assets/slides/medical/slide-3.png?format=webp";
 // import slide4 from "../assets/slides/medical/slide-4.png?format=webp";
@@ -34,6 +38,15 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         uiElements: {
           centerGlow: true,
         },
+        audioCues: [
+          {
+            id: "bgm-main",
+            src: bgmEvasionMain,
+            volumeDb: -20,
+            loop: true,
+            stopOnSlideChange: false,
+          },
+        ],
         // Первый слайд: начальный текст "שתיקה אסטרטגית" который fade out, затем появляется "אתה מפקד ב-8200"
         initialText: {
           text: "שתיקה אסטרטגית",
@@ -117,6 +130,15 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         backgroundImage: slide9,
         backgroundBlur: 0,
         hideBackgroundOverlay: true, // Без темного фона
+        audioCues: [
+          {
+            src: sfxAlarmLoop,
+            volumeDb: -12,
+            loop: true,
+            startOffset: 0,
+            stopOnSlideChange: true,
+          },
+        ],
         // Overlay изображение с эффектом мигания (slide-10)
         overlayImage: {
           image: slide10,
@@ -202,6 +224,21 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         backgroundImage: slide4,
         backgroundBlur: 0, // Начинаем без блюра
         hideBackgroundOverlay: true,
+        audioCues: [
+          {
+            src: sfxImpactDisaster,
+            volumeDb: -3,
+            startOffset: 0,
+            stopOnSlideChange: true,
+          },
+          {
+            src: uiAiProcessing,
+            volumeDb: -6,
+            loop: true,
+            startOffset: 8000,
+            stopAtTypewriterEnd: true,
+          },
+        ],
         // Анимированный блюр: сначала показываем слайд, затем блюрим
         animatedBlur: {
           startBlur: 0, // Начальное размытие (без блюра)
@@ -275,6 +312,15 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         backgroundImage: backgroundGradient,
         backgroundBlur: 0,
         hideBackgroundOverlay: true,
+        audioCues: [
+          {
+            src: uiAiProcessing,
+            volumeDb: -6,
+            loop: true,
+            startOffset: 0,
+            stopAtTypewriterEnd: true,
+          },
+        ],
         textBlocks: [
           {
             text: "הבינה המלאכותית מציגה לך משוואה קרה:",

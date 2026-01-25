@@ -69,6 +69,28 @@ export interface SlideContent {
   
   // Длительность показа слайда (мс)
   duration?: number;
+
+  // Аудио-события на слайде
+  audioCues?: AudioCue[];
+}
+
+export interface AudioCue {
+  // Уникальный идентификатор трека (для продолжения между слайдами)
+  id?: string;
+  // Источник аудио
+  src: string;
+  // Громкость в dB (например, -6)
+  volumeDb?: number;
+  // Задержка старта (мс от начала слайда)
+  startOffset?: number;
+  // Зациклить
+  loop?: boolean;
+  // Останавливать при смене слайда (по умолчанию true)
+  stopOnSlideChange?: boolean;
+  // Остановить через N мс от начала слайда
+  stopOffset?: number;
+  // Остановить после завершения typewriter-анимаций на слайде
+  stopAtTypewriterEnd?: boolean;
 }
 
 export interface TextBlock {
