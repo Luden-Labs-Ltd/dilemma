@@ -61,10 +61,10 @@
     "retry": "Try again"
   },
   "stats": {
-    "title": "What did others answer?",
+    "title": "How did others respond?",
     "totalResponses": "Total responses: {{count}}",
-    "optionA": "Option A",
-    "optionB": "Option B",
+    "optionA": "Listened to the machine",
+    "optionB": "Revealed the truth",
     "yourChoice": "Your choice",
     "next": "Next",
     "error": "Failed to load statistics.",
@@ -119,15 +119,66 @@
     "changedToA": "You changed your opinion after seeing the sources. This shows openness to new information and the ability to reassess your positions - an important trait for personal growth."
   },
   "dilemmas": {
+    "trolley-problem": {
+      "title": "Strategic Silence",
+      "subtitle": "Military Dilemma",
+      "questionText": "What is your command?",
+      "description": "You are a commander in Unit 8200. The Prophet system predicts a mass disaster in 48 hours. AI simulations show that if you publish a warning, panic will kill more people than the disaster itself.",
+      "reflectionText": "Point to consider: Do you listen to the machine's mathematics which saves lives, or act according to human morality which demands truth?",
+      "options": {
+        "a": "ADOPT MACHINE RECOMMENDATION\nSilence to Save Lives",
+        "b": "BROADCAST ALERT\nTruth at Any Cost"
+      },
+      "sources": {
+        "1": {
+          "title": "Sanctity of Life",
+          "subtitle": "Source",
+          "content": "The principle of sanctity of life teaches us that every human life has infinite value."
+        },
+        "2": {
+          "title": "Distance from Falsehood",
+          "subtitle": "Source",
+          "content": "Ethics requires complete honesty with the public. Decisions must be transparent."
+        },
+        "3": {
+          "title": "First Do No Harm",
+          "subtitle": "Source",
+          "content": "The principle instructs us to first ensure we do not cause harm."
+        },
+        "4": {
+          "title": "One Life Against Another",
+          "subtitle": "Source",
+          "content": "Can one life be prioritized over another? Various opinions exist."
+        }
+      }
+    },
     "medical": {
       "title": "Medical Ethics",
       "subtitle": "Medical Dilemma",
+      "strategicSilence": "Strategic Silence",
+      "commander8200": "You are a commander in Unit 8200",
+      "prophetSystemLine1": "The \"Prophet\" system predicts a mass disaster",
+      "prophetSystemLine2": "In 48 hours.",
+      "aiSimulations": "Artificial intelligence runs simulations of audience reactions.",
+      "conclusionUnequivocal": "The conclusion is unequivocal:",
+      "ifYouPublishWarning": "If you publish a warning",
+      "panicMoreLethal": "The panic will be more lethal than the disaster itself.",
+      "ifYouStaySilent": "If you stay silent, 1,000 people will die.",
+      "ifYouWarn": "If you warn them, 5,000 people will die on the roads.",
+      "machineRecommends": "The machine recommends:",
+      "aiColdEquation": "The artificial intelligence presents you with a cold equation:",
+      "toSave4000": "To save 4,000 people, you must lie to the public and allow",
+      "1000DieWithoutKnowing": "1,000 people to die without knowing what harmed them.",
+      "doYouListenToMachine": "Do you listen to the machine's mathematics",
+      "whichSavesLives": "which saves human lives, or do you act according to human morality",
+      "whichDemandsTruth": "which demands to tell the truth, even if the price in blood will be higher?",
+      "whatIsYourCommand": "What is your command?",
       "description": "A resident doctor faces a complex dilemma. Two patients need urgent care, but only one resource is available. The first patient is an elderly person with relatively low recovery chances, but he is a father to a large family. The second patient is young with high chances of full recovery, but has no family. As a doctor, you must decide: Will you prioritize the patient with better chances, or the father of the family?",
-      "questionText": "What would you do - would you choose option A or option B?",
+      "questionText": "What is your command?",
       "reflectionText": "Point to consider: The consideration here is between chance of success and family impact. Do we prefer the higher chance of success, or do we also weigh the family and social factors of the patient?",
       "options": {
-        "a": "Option A",
-        "b": "Option B"
+        "a": "ADOPT MACHINE RECOMMENDATION\nSilence to Save Lives",
+        "b": "BROADCAST ALERT\nTruth at Any Cost"
       },
       "sources": {
         "1": {

@@ -89,9 +89,20 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         },
         textBlocks: [
           {
-            text: 'מערכת "נביא" חוזה אסון המוני\nבעוד 48 שעות.',
+            text: 'מערכת "נביא" חוזה אסון המוני',
             position: "center",
             delay: 3000, // Начинается вместе с блюром
+            duration: 5000,
+            style: "header",
+            animation: "slideRTL", // Справа налево
+            typewriter: true, // Эффект печатания
+            typewriterSpeed: 50, // Скорость печатания (мс на символ)
+            fontSize: 80,
+          },
+          {
+            text: "בעוד 48 שעות.",
+            position: "center",
+            delay: 6000, // Появляется после первой строки
             duration: 5000,
             style: "header",
             animation: "slideRTL", // Справа налево
@@ -200,9 +211,22 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         },
         textBlocks: [
           {
+            text: "The machine recommends:",
+            position: "center",
+            delay: 3500, // Появляется после блюра (2 сек задержка + 1 сек блюр + 0.5 сек)
+            duration: 2500, // Показывается 2.5 секунды, потом исчезает
+            style: "default",
+            animation: "fade",
+            typewriter: true,
+            typewriterSpeed: 50,
+            fontSize: 40,
+            fontWeight: 400,
+            color: "#E6F8F9",
+          },
+          {
             text: "שתיקה אסטרטגית",
             position: "center",
-            delay: 3500, // Появляется после начала блюра (2 сек задержка + 1 сек блюр + 0.5 сек)
+            delay: 5000, // Появляется после "The machine recommends:" (3500 + 1500)
             // Не указываем duration, чтобы текст оставался видимым
             style: "header",
             animation: "slideRTL", // Справа налево
@@ -215,7 +239,7 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
           {
             text: "אם תשתוק ימותו 1,000 איש.",
             position: "center",
-            delay: 6000, // После первого текста
+            delay: 8000, // После "שתיקה אסטרטגית" (5000 + 3000)
             // Не указываем duration, чтобы текст оставался видимым
             style: "default",
             animation: "slideRTL",
@@ -228,7 +252,7 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
           {
             text: "אם תזהיר, ימותו 5,000 איש בדרכים.",
             position: "center",
-            delay: 9000, // После второго текста
+            delay: 11000, // После второго текста (8000 + 3000)
             // Не указываем duration, чтобы текст оставался видимым
             style: "default",
             animation: "slideRTL",
@@ -239,7 +263,7 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
             color: "#E6F8F9",
           },
         ],
-        duration: 15000, // Общая длительность слайда
+        duration: 18000, // Общая длительность слайда (увеличена для всех текстов)
       },
       {
         backgroundImage: slide3,
@@ -274,9 +298,9 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
             animation: "slideRTL",
             typewriter: true,
             typewriterSpeed: 50,
-            fontSize: 50,
-            fontWeight: 400,
-            color: "#E6F8F9",
+            fontSize: 60, // 60px из Figma
+            fontWeight: 900, // Black (900) из Figma
+            color: "#E6F8F9", // Цвет из Figma
           },
           {
             text: "ל1,000 איש למות מבלי שידעו מה פגע בהם.",
@@ -287,9 +311,9 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
             animation: "slideRTL",
             typewriter: true,
             typewriterSpeed: 50,
-            fontSize: 50,
-            fontWeight: 400,
-            color: "#E6F8F9",
+            fontSize: 60, // 60px из Figma
+            fontWeight: 900, // Black (900) из Figma
+            color: "#E6F8F9", // Цвет из Figma
           },
           {
             text: "האם אתה נשמע למתמטיקה של המכונה",
@@ -358,16 +382,17 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         backgroundImage: backgroundGradient,
         backgroundBlur: 0,
         hideBackgroundOverlay: true,
-        // Промежуточный слой (slide-11) поверх фона - небольшое изображение
+        // Промежуточный слой (slide-11) поверх фона - большое изображение
         middleLayerImage: {
           image: slide11,
           opacity: 1,
-          size: "small", // Небольшое изображение, не растянутое
-          position: "bottom", // Внизу, чтобы текст был выше
+          size: "large", // Большое изображение (90% ширины, maxWidth: 1200px)
+          position: "center", // По центру (картинка не уезжает вниз на адаптиве)
         },
         textBlocks: [
           {
             text: "מה הפקודה שלך?",
+            anchor: "middleLayerImage", // Привязываем заголовок к картинке с выбором
             position: "top",
             delay: 0,
             // Не указываем duration, чтобы текст оставался видимым
@@ -378,6 +403,7 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
             fontSize: 70,
             fontWeight: 400,
             color: "#E6F8F9",
+            verticalOffset: 0,
           },
         ],
         duration: 5000, // Длительность показа слайда - последний слайд перед выбором

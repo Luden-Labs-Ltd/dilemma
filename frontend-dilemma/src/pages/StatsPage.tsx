@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
@@ -8,6 +8,7 @@ import { fetchDilemmaStats } from "@/shared/lib/api";
 import { formatPercent } from "@/shared/lib/utils";
 import type { DilemmaStats } from "@/shared/types";
 import slideStats from "@/shared/assets/slides/medical/slide-stat.png";
+import decorativeFrame from "@/shared/assets/decorative-frame.png";
 
 export function StatsPage() {
   const { t } = useTranslation();
@@ -18,6 +19,7 @@ export function StatsPage() {
   const [stats, setStats] = useState<DilemmaStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [hoveredOption, setHoveredOption] = useState<"left" | "right" | null>(null);
 
   useEffect(() => {
     if (!currentDilemma) {
@@ -25,8 +27,11 @@ export function StatsPage() {
     }
 
     let cancelled = false;
-    setIsLoading(true);
-    setError(null);
+    Promise.resolve().then(() => {
+      if (cancelled) return;
+      setIsLoading(true);
+      setError(null);
+    });
 
     fetchDilemmaStats(currentDilemma)
       .then((data) => {
@@ -188,27 +193,54 @@ export function StatsPage() {
             className="absolute inset-0 h-full w-full object-contain"
           />
 
-          <div className="absolute left-1/2 top-[6%] z-10 w-[80%] -translate-x-1/2 text-center text-[#E6F8F9]">
-            <span className="text-[clamp(20px,2.6vw,34px)] font-black leading-tight">
-              איך אחרים ענו?
+          <div className="absolute left-1/2 top-[-3%] z-10 w-[80%] -translate-x-1/2 text-center text-[#E6F8F9]">
+            <span className="text-[clamp(16px,2.2vw,34px)] font-black leading-tight">
+              {t("stats.title")}
             </span>
           </div>
 
-          <div className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]">
+          <div
+            className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]"
+            style={{ direction: "ltr" }}
+          >
             <motion.button
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              onClick={() => navigate("/extra")}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className={`group relative h-full w-full rounded-[28px] outline-none transition-shadow duration-200 hover:shadow-[0_0_40px_rgba(90,210,255,0.35)] focus-visible:shadow-[0_0_40px_rgba(90,210,255,0.45)] cursor-pointer`}
+              onClick={() => navigate("/extra")}
+              onMouseEnter={() => setHoveredOption("left")}
+              onMouseLeave={() => setHoveredOption(null)}
+              className="relative h-full w-full rounded-[28px] outline-none cursor-pointer"
             >
-              <span className="sr-only">Option A</span>
-              <div
-                className={`absolute inset-0 rounded-[28px] ring-2 ring-cyan-300/40 group-hover:ring-cyan-300/70`}
-              />
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white">
-                <span className="text-[clamp(20px,2.4vw,30px)] font-bold leading-tight whitespace-pre-line">
-                  {t("stats.optionA")}: <br />
+              <span className="sr-only">{t("stats.optionA")}</span>
+              <AnimatePresence>
+                {hoveredOption === "left" && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.48 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      backgroundImage: `url(${decorativeFrame})`,
+                      backgroundSize: "100% 100%",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                    }}
+                  />
+                )}
+              </AnimatePresence>
+              <div className="absolute inset-0 z-10 px-[10%] text-center">
+                <span
+                  className="absolute left-1/2 top-[12%] -translate-x-1/2 font-['Heebo'] font-medium text-[clamp(14px,3.2vw,72px)] leading-[1.15] max-w-[90%]"
+                  style={{ color: "#B7ECF7" }}
+                >
+                  {t("stats.optionA")}
+                </span>
+                <span
+                  className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 font-['Heebo'] font-black text-[clamp(28px,8vw,150px)] leading-none max-w-full"
+                  style={{ color: "#B7ECF7" }}
+                >
                   {formatPercent(stats ? stats.aPercent : 50)}%
                 </span>
               </div>
@@ -219,16 +251,40 @@ export function StatsPage() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.2 }}
               onClick={() => navigate("/extra")}
-              aria-label="Option B"
-              className={`group relative h-full w-full rounded-[28px] outline-none transition-shadow duration-200 hover:shadow-[0_0_40px_rgba(255,120,120,0.35)] focus-visible:shadow-[0_0_40px_rgba(255,120,120,0.45)] cursor-pointer`}
+              onMouseEnter={() => setHoveredOption("right")}
+              onMouseLeave={() => setHoveredOption(null)}
+              className="relative h-full w-full rounded-[28px] outline-none cursor-pointer"
             >
-              <span className="sr-only">Option B</span>
-              <div
-                className={`absolute inset-0 rounded-[28px] ring-2  ring-red-300/40 group-hover:ring-red-300/70`}
-              />
-              <div className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center text-white">
-                <span className="text-[clamp(20px,2.4vw,30px)] font-bold leading-tight whitespace-pre-line">
-                  {t("stats.optionB")}: <br />
+              <span className="sr-only">{t("stats.optionB")}</span>
+              <AnimatePresence>
+                {hoveredOption === "right" && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 0.48 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="pointer-events-none absolute inset-0"
+                    style={{
+                      backgroundImage: `url(${decorativeFrame})`,
+                      backgroundSize: "100% 100%",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      transform: "scaleX(-1)",
+                    }}
+                  />
+                )}
+              </AnimatePresence>
+              <div className="absolute inset-0 z-10 px-[10%] text-center">
+                <span
+                  className="absolute left-1/2 top-[12%] -translate-x-1/2 font-['Heebo'] font-medium text-[clamp(14px,3.2vw,72px)] leading-[1.15] max-w-[90%]"
+                  style={{ color: "#FCD1CF" }}
+                >
+                  {t("stats.optionB")}
+                </span>
+                <span
+                  className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 font-['Heebo'] font-black text-[clamp(28px,8vw,150px)] leading-none max-w-full"
+                  style={{ color: "#FCD1CF" }}
+                >
                   {formatPercent(stats ? stats.bPercent : 50)}%
                 </span>
               </div>

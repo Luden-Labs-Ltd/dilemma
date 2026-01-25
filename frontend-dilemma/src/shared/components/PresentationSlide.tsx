@@ -348,7 +348,7 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
         
         return (
           <motion.div
-            className={`absolute z-[5] ${isFullSize ? "inset-0" : ""}`}
+            className={`absolute z-5 ${isFullSize ? "inset-0" : ""}`}
             style={{
               ...(isFullSize
                 ? {
@@ -395,15 +395,79 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
             transition={slideAnimProps.transition}
           >
             {!isFullSize && (
-              <img
-                src={slide.middleLayerImage.image}
-                alt=""
-                style={{
-                  width: "100%",
-                  height: "auto",
-                  objectFit: "contain",
-                }}
-              />
+              <div className="relative">
+                {/* Текстовые блоки, привязанные к middleLayerImage (например, заголовок над "кнопками").
+                    Важно: рендерим ABSOLUTE над картинкой, чтобы не влиять на её высоту/позицию. */}
+                <div
+                  className="absolute left-1/2 -translate-x-1/2"
+                  style={{ bottom: "100%", marginBottom: 24 }}
+                >
+                  {slide.textBlocks?.map((block, index) => {
+                    if (block.anchor !== "middleLayerImage") return null;
+                    if (!visibleTextBlocks.has(index) || hiddenTextBlocks.has(index)) return null;
+
+                    const baseFontSize = block.fontSize || 80;
+                    const minSize = Math.max(baseFontSize * 0.125, 10);
+                    const fontSize = `clamp(${minSize}px, 3.5vw, ${baseFontSize}px)`;
+
+                    const animation = block.animation || "fade";
+                    const initialProps =
+                      animation === "slideRTL"
+                        ? { opacity: 0, x: 100 }
+                        : animation === "slideLTR"
+                        ? { opacity: 0, x: -100 }
+                        : { opacity: 0, y: 20 };
+
+                    const animateProps =
+                      animation === "slideRTL" || animation === "slideLTR"
+                        ? { opacity: 1, x: 0 }
+                        : { opacity: 1, y: 0 };
+
+                    const exitProps =
+                      animation === "slideRTL"
+                        ? { opacity: 0, x: -100 }
+                        : animation === "slideLTR"
+                        ? { opacity: 0, x: 100 }
+                        : { opacity: 0, y: -20 };
+
+                    return (
+                      <motion.div
+                        key={`middleLayerText-${index}`}
+                        className="text-center"
+                        style={{
+                          transform: `translateY(${block.verticalOffset || 0}px)`,
+                          fontFamily: "'Heebo', sans-serif",
+                          fontWeight: block.fontWeight ?? 900,
+                          fontSize,
+                          color: block.color ?? "#E6F8F9",
+                          lineHeight: "100%",
+                          letterSpacing: "0%",
+                          textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
+                          whiteSpace: "nowrap",
+                          maxWidth: "95vw",
+                          width: "fit-content",
+                        }}
+                        initial={initialProps}
+                        animate={animateProps}
+                        exit={exitProps}
+                        transition={{ duration: 0.8, ease: "easeOut" }}
+                      >
+                        {block.typewriter ? (typewriterTexts[index] || "") : (block.text || "")}
+                      </motion.div>
+                    );
+                  })}
+                </div>
+
+                <img
+                  src={slide.middleLayerImage.image}
+                  alt=""
+                  style={{
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "contain",
+                  }}
+                />
+              </div>
             )}
           </motion.div>
         );
@@ -492,11 +556,16 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
           style={{
             fontFamily: "'Heebo', sans-serif",
             fontWeight: 900,
-            fontSize: "clamp(2.5rem, 8vw, 5rem)", // Адаптивный размер: от 40px до 80px
+            // Максимально агрессивная адаптивная формула: минимум 0.625rem (10px), предпочтительно 3.5vw, максимум 5rem (80px)
+            // Очень маленький минимальный размер и очень низкий коэффициент vw для максимального масштабирования
+            fontSize: "clamp(0.625rem, 3.5vw, 5rem)", // Адаптивный размер: от 10px до 80px
             color: "#E6F8F9",
             lineHeight: "100%",
             letterSpacing: "0%",
             textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
+            whiteSpace: "nowrap", // Текст в одну строку, без переноса
+            maxWidth: "95vw", // Максимальная ширина для очень длинных строк
+            width: "fit-content", // Ширина по содержимому
           }}
           initial={{ opacity: 1 }}
           animate={{ opacity: showInitialText ? 1 : 0 }}
@@ -512,12 +581,21 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
       {/* Текстовые блоки */}
       <AnimatePresence>
         {slide.textBlocks?.map((block, index) => {
+          // Блоки, привязанные к middleLayerImage, рендерим внутри middleLayerImage
+          if (block.anchor === "middleLayerImage") {
+            return null;
+          }
+
           if (!visibleTextBlocks.has(index) || hiddenTextBlocks.has(index)) {
             return null;
           }
 
           const baseFontSize = block.fontSize || 80;
-          const fontSize = `clamp(${baseFontSize * 0.5}px, ${baseFontSize * 0.1}vw, ${baseFontSize}px)`;
+          // Максимально агрессивная адаптивная формула для всех текстовых блоков
+          // Минимум 12.5% от базового размера (но не меньше 10px), предпочтительно 3.5vw, максимум базовый размер
+          // Очень маленький минимальный размер и очень низкий коэффициент vw для максимального масштабирования
+          const minSize = Math.max(baseFontSize * 0.125, 10); // Минимум 12.5% или 10px, что больше
+          const fontSize = `clamp(${minSize}px, 3.5vw, ${baseFontSize}px)`;
 
           // Определяем анимацию
           const animation = block.animation || "fade";
@@ -540,9 +618,16 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
               ? { opacity: 0, x: 100 } // Уходит вправо
               : { opacity: 0, y: -20 };
 
-          // Вычисляем вертикальное смещение для каждого блока (в столбик)
-          // Первый блок начинается выше центра, каждый следующий ниже
-          const verticalOffset = (index - 2) * 100; // Центрируем вокруг индекса 2 (третий элемент)
+          // Вычисляем вертикальное смещение для каждого блока
+          // Если position === "center" И это единственный блок в слайде - по центру (offset = 0)
+          // Если несколько блоков - они идут в столбик с вертикальным смещением
+          const totalBlocks = slide.textBlocks?.length || 0;
+          const calculatedOffset = (block.position === "center" && totalBlocks === 1)
+            ? 0 
+            : (index - Math.floor((totalBlocks - 1) / 2)) * 100; // Центрируем вокруг середины массива блоков
+          
+          // Добавляем кастомное смещение из конфигурации, если оно есть
+          const verticalOffset = calculatedOffset + (block.verticalOffset || 0);
           
           // Если блок содержит изображение
           if (block.image) {
@@ -587,7 +672,8 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
                 letterSpacing: "0%",
                 textShadow: "0 2px 10px rgba(0, 0, 0, 0.5)",
                 whiteSpace: "nowrap", // Текст в одну строку, без переноса
-                maxWidth: "90vw", // Максимальная ширина для очень длинных строк
+                maxWidth: "95vw", // Максимальная ширина для очень длинных строк
+                width: "fit-content", // Ширина по содержимому
               }}
               initial={initialProps}
               animate={animateProps}

@@ -76,6 +76,8 @@ export interface TextBlock {
   text?: string;
   // Изображение (вместо или вместе с текстом)
   image?: string;
+  // Якорь позиционирования (по умолчанию viewport/экран)
+  anchor?: "viewport" | "middleLayerImage";
   // Позиция
   position?: "top" | "center" | "bottom";
   // Задержка появления (мс от начала слайда)
@@ -98,6 +100,8 @@ export interface TextBlock {
   color?: string; // hex цвет, например "#E6F8F9"
   // Размер изображения (если используется image)
   imageSize?: number; // в px
+  // Вертикальное смещение от расчетной позиции (в px, может быть отрицательным)
+  verticalOffset?: number; // Кастомное смещение для точного позиционирования
 }
 
 export interface PresentationConfig {
