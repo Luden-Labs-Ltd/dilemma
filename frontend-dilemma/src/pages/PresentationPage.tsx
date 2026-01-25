@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { useDilemma } from "../app/context";
 import { PresentationSlide } from "@/shared/components/PresentationSlide";
 import { PRESENTATIONS, DILEMMA_NAME_MAP } from "@/shared/config/presentations";
