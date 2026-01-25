@@ -1,6 +1,6 @@
 import { Outlet, useLocation } from "react-router-dom";
 import { LanguageSwitcher } from "@/shared/ui/LanguageSwitcher";
-import backgroundGradient from "@/shared/assets/background-gradient.png";
+import backgroundGradient from "@/shared/assets/background-gradient.png?format=webp";
 
 export function RootLayout() {
   const location = useLocation();

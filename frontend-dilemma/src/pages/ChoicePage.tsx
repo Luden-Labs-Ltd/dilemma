@@ -6,8 +6,8 @@ import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
 import { submitInitialChoice, type ApiError } from "@/shared/lib/api";
 import type { Choice } from "@/shared/types";
-import slideStats from "@/shared/assets/slides/medical/slide-stat.png";
-import decorativeFrame from "@/shared/assets/decorative-frame.png";
+import slideStats from "@/shared/assets/slides/medical/slide-stat.png?format=webp";
+import decorativeFrame from "@/shared/assets/decorative-frame.png?format=webp";
 
 // Хук для эффекта печатания с поддержкой RTL
 function useTypewriter(

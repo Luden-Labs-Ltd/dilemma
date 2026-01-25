@@ -3,10 +3,11 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
+import { hasPresentationForDilemma } from "../shared/config/presentations";
 import type { DilemmaType } from "../shared/types";
-import dilemmaOption1 from "../shared/assets/dilemmas/dilemma-option-1.png";
-import dilemmaOption2 from "../shared/assets/dilemmas/dilemma-option-2.png";
-import dilemmaOption3 from "../shared/assets/dilemmas/dilemma-option-3.png";
+import dilemmaOption1 from "../shared/assets/dilemmas/dilemma-option-1.png?format=webp";
+import dilemmaOption2 from "../shared/assets/dilemmas/dilemma-option-2.png?format=webp";
+import dilemmaOption3 from "../shared/assets/dilemmas/dilemma-option-3.png?format=webp";
 
 // Маппинг изображений для карточек дилемм
 // dilemma-option-3 - первая дилемма (AI врач)
@@ -88,17 +89,19 @@ export function DilemmaSelectionPage() {
             displayedDilemmas.map((dilemma, index) => {
               const imageSrc = DILEMMA_IMAGES[index] || DILEMMA_IMAGES[0];
               const isMiddleCard = index === 1;
+              const hasPresentation = hasPresentationForDilemma(dilemma.name);
 
               return (
                 <motion.button
                   key={dilemma.name}
+                  type="button"
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
                   whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSelectDilemma(dilemma.name)}
-                  className="group relative h-[730px] w-[404px] overflow-hidden rounded-[4px] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all hover:shadow-[0px_8px_8px_0px_rgba(0,0,0,0.35)]"
+                  whileTap={hasPresentation ? { scale: 0.98 } : {}}
+                  onClick={() => hasPresentation && handleSelectDilemma(dilemma.name)}
+                  className="group relative h-[730px] w-[404px] overflow-hidden rounded-[4px] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all hover:shadow-[0px_8px_8px_0px_rgba(0,0,0,0.35)] cursor-pointer"
                   style={{
                     border: "12px solid #FFFDFD",
                   }}

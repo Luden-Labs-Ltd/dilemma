@@ -2,20 +2,20 @@
 import type { PresentationConfig } from "../types/presentation";
 
 // Импорты изображений слайдов
-import backgroundGradient from "../assets/background-gradient.png";
-import slide2 from "../assets/slides/medical/slide-2.png";
-import slide5 from "../assets/slides/medical/slide-5.png";
-import slide1 from "../assets/slides/medical/slide-1.png";
-import slide3 from "../assets/slides/medical/slide-3.png";
-import slide4 from "../assets/slides/medical/slide-4.png";
-import slide7 from "../assets/slides/medical/slide-7.png";
-import slide9 from "../assets/slides/medical/slide-9.png";
-import slide10 from "../assets/slides/medical/slide-10.png";
-import slide11 from "../assets/slides/medical/slide-11.png";
+import backgroundGradient from "../assets/background-gradient.png?format=webp";
+import slide2 from "../assets/slides/medical/slide-2.png?format=webp";
+import slide5 from "../assets/slides/medical/slide-5.png?format=webp";
+import slide1 from "../assets/slides/medical/slide-1.png?format=webp";
+import slide3 from "../assets/slides/medical/slide-3.png?format=webp";
+import slide4 from "../assets/slides/medical/slide-4.png?format=webp";
+import slide7 from "../assets/slides/medical/slide-7.png?format=webp";
+import slide9 from "../assets/slides/medical/slide-9.png?format=webp";
+import slide10 from "../assets/slides/medical/slide-10.png?format=webp";
+import slide11 from "../assets/slides/medical/slide-11.png?format=webp";
 import iconSvg from "../assets/icons/icon.svg";
 // Остальные слайды будут использованы позже
-// import slide3 from "../assets/slides/medical/slide-3.png";
-// import slide4 from "../assets/slides/medical/slide-4.png";
+// import slide3 from "../assets/slides/medical/slide-3.png?format=webp";
+// import slide4 from "../assets/slides/medical/slide-4.png?format=webp";
 
 // Маппинг имен дилем из API к ключам презентаций
 const DILEMMA_NAME_MAP: Record<string, string> = {
@@ -422,3 +422,10 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
 
 // Экспортируем маппинг для использования в компонентах
 export { DILEMMA_NAME_MAP };
+
+/** Временно: дилемы без презентации не кликабельны, но с hover. */
+export function hasPresentationForDilemma(dilemmaName: string): boolean {
+  const key = DILEMMA_NAME_MAP[dilemmaName] ?? dilemmaName;
+  const config = PRESENTATIONS[key];
+  return !!(config?.slides?.length);
+}

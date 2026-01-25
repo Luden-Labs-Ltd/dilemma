@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
 import { submitFinalChoice, type ApiError } from "@/shared/lib/api";
-import bgImage from "./bg1 1.png";
+import bgImage from "./bg1 1.png?format=webp";
 
 export function ReasonPage() {
   const { t } = useTranslation();

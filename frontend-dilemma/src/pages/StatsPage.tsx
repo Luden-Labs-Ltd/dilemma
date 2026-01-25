@@ -7,8 +7,8 @@ import { useDilemmaData } from "@/shared/hooks";
 import { fetchDilemmaStats } from "@/shared/lib/api";
 import { formatPercent } from "@/shared/lib/utils";
 import type { DilemmaStats } from "@/shared/types";
-import slideStats from "@/shared/assets/slides/medical/slide-stat.png";
-import decorativeFrame from "@/shared/assets/decorative-frame.png";
+import slideStats from "@/shared/assets/slides/medical/slide-stat.png?format=webp";
+import decorativeFrame from "@/shared/assets/decorative-frame.png?format=webp";
 
 export function StatsPage() {
   const { t } = useTranslation();

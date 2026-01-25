@@ -5,8 +5,8 @@ import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
 import { fetchFeedbackAnalyze } from "@/shared/lib/api";
-import slideInsightBackground from "@/shared/assets/insight.png";
-import aiPersone from "./Gemini_Generated_Image_i4v2t5i4v2t5i4v2 1.png";
+import slideInsightBackground from "@/shared/assets/insight.png?format=webp";
+import aiPersone from "./Gemini_Generated_Image_i4v2t5i4v2t5i4v2 1.png?format=webp";
 
 export function InsightPage() {
   const { t } = useTranslation();
