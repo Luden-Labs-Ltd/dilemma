@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
+import type React from "react";
 import type { SlideContent } from "../types/presentation";
 
 interface PresentationSlideProps {
@@ -379,7 +380,7 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
                   }
                 : {
                     ...(slide.middleLayerImage.mixBlendMode && {
-                      mixBlendMode: slide.middleLayerImage.mixBlendMode as GlobalCompositeOperation,
+                      mixBlendMode: slide.middleLayerImage.mixBlendMode as React.CSSProperties["mixBlendMode"],
                     }),
                     // Дополнительные фильтры для разных режимов смешивания
                     ...(slide.middleLayerImage.mixBlendMode === "screen" && {
