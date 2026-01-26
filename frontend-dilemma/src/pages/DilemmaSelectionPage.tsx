@@ -3,7 +3,7 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useLanguage, useRTLAnimation } from "@/shared/hooks";
+import { useRTLAnimation } from "@/shared/hooks";
 import { hasPresentationForDilemma } from "../shared/config/presentations";
 import type { DilemmaType } from "../shared/types";
 import dilemmaOption1 from "../shared/assets/dilemmas/dilemma-option-1.png?format=webp";
@@ -18,7 +18,6 @@ const DILEMMA_IMAGES = [dilemmaOption3, dilemmaOption1, dilemmaOption2];
 
 export function DilemmaSelectionPage() {
   const { t, i18n } = useTranslation();
-  const { isRTL } = useLanguage();
   const headerAnimation = useRTLAnimation({ duration: 0.6 });
   // Создаем анимации для карточек на верхнем уровне (максимум 3 карточки)
   const cardAnimation0 = useRTLAnimation({ duration: 0.5, delay: 0 * 0.1, distance: 200 });

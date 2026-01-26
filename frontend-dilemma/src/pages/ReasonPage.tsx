@@ -3,13 +3,12 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useDilemmaData, useLanguage, useRTLAnimation } from "@/shared/hooks";
+import { useDilemmaData, useRTLAnimation } from "@/shared/hooks";
 import { submitFinalChoice, type ApiError } from "@/shared/lib/api";
 import bgImage from "./bg1 1.png?format=webp";
 
 export function ReasonPage() {
   const { t } = useTranslation();
-  const { isRTL } = useLanguage();
   const titleAnimation = useRTLAnimation({ duration: 0.6 });
   const textareaAnimation = useRTLAnimation({ duration: 0.7, delay: 0.2 });
   const buttonAnimation = useRTLAnimation({ duration: 0.6, delay: 0.4 });

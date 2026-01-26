@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useDilemmaData, useLanguage, useRTLAnimation } from "@/shared/hooks";
+import { useDilemmaData, useRTLAnimation } from "@/shared/hooks";
 import { fetchFeedbackAnalyze, type DilemmaTextData } from "@/shared/lib/api";
 import enTranslations from "@/shared/i18n/locales/en/translation.json";
 import heTranslations from "@/shared/i18n/locales/he/translation.json";
@@ -12,11 +12,10 @@ import aiPersone from "./Gemini_Generated_Image_i4v2t5i4v2t5i4v2 1.png?format=we
 
 export function InsightPage() {
   const { t, i18n } = useTranslation();
-  const { isRTL } = useLanguage();
   const containerAnimation = useRTLAnimation({ duration: 0.5 });
   const contentAnimation = useRTLAnimation({ duration: 0.5, delay: 0.45 });
   const navigate = useNavigate();
-  const { currentDilemma, choice, reasonText, reset } = useDilemma();
+  const { currentDilemma, choice, reasonText } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
 
   const [counterArguments, setCounterArguments] = useState<string[] | null>(null);
@@ -175,11 +174,6 @@ export function InsightPage() {
 
   const handleNext = () => {
     navigate("/stats");
-  };
-
-  const handleFinish = () => {
-    reset();
-    navigate("/");
   };
 
   return (
