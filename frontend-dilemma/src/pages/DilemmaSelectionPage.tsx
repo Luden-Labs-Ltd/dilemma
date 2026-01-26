@@ -3,6 +3,7 @@ import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
+import { useLanguage, useRTLAnimation } from "@/shared/hooks";
 import { hasPresentationForDilemma } from "../shared/config/presentations";
 import type { DilemmaType } from "../shared/types";
 import dilemmaOption1 from "../shared/assets/dilemmas/dilemma-option-1.png?format=webp";
@@ -17,6 +18,14 @@ const DILEMMA_IMAGES = [dilemmaOption3, dilemmaOption1, dilemmaOption2];
 
 export function DilemmaSelectionPage() {
   const { t, i18n } = useTranslation();
+  const { isRTL } = useLanguage();
+  const headerAnimation = useRTLAnimation({ duration: 0.6 });
+  // Создаем анимации для карточек на верхнем уровне (максимум 3 карточки)
+  const cardAnimation0 = useRTLAnimation({ duration: 0.5, delay: 0 * 0.1, distance: 200 });
+  const cardAnimation1 = useRTLAnimation({ duration: 0.5, delay: 1 * 0.1, distance: 100 });
+  const cardAnimation2 = useRTLAnimation({ duration: 0.5, delay: 2 * 0.1, distance: 0 });
+  const cardAnimations = [cardAnimation0, cardAnimation1, cardAnimation2];
+  
   const navigate = useNavigate();
   const {
     dilemmas,
@@ -48,9 +57,15 @@ export function DilemmaSelectionPage() {
     <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-6 sm:py-12">
       {/* Заголовок */}
       <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          {...headerAnimation}
+          initial={{ 
+            ...headerAnimation.initial,
+            y: -20
+          }}
+          animate={{ 
+            ...headerAnimation.animate,
+            y: 0
+          }}
           className="mb-6 sm:mb-12 text-center"
           dir={textDirection}
         >
@@ -89,14 +104,21 @@ export function DilemmaSelectionPage() {
             displayedDilemmas.map((dilemma, index) => {
               const imageSrc = DILEMMA_IMAGES[index] || DILEMMA_IMAGES[0];
               const hasPresentation = hasPresentationForDilemma(dilemma.name);
+              const cardAnimation = cardAnimations[index];
 
               return (
                 <motion.button
                   key={dilemma.name}
                   type="button"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                  {...cardAnimation}
+                  initial={{ 
+                    ...cardAnimation.initial,
+                    scale: 0.9
+                  }}
+                  animate={{ 
+                    ...cardAnimation.animate,
+                    scale: 1
+                  }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={hasPresentation ? { scale: 0.98 } : {}}
                   onClick={() => hasPresentation && handleSelectDilemma(dilemma.name)}

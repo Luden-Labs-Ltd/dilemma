@@ -5,6 +5,8 @@ Auto-generated from all feature plans. Last updated: 2026-01-21
 ## Active Technologies
 - TypeScript 5.7+ (strict mode), NestJS 11.x + NestJS, class-validator, class-transformer, nestjs-i18n, OpenAI SDK (005-enhance-ai-context)
 - N/A (stateless operation, использует существующие данные из i18n) (005-enhance-ai-context)
+- TypeScript ~5.9.3, React 19.2.0 + framer-motion ^12.24.11, react-i18next ^16.5.3, i18next ^25.7.4 (001-rtl-text-animation)
+- N/A (client-side only feature) (001-rtl-text-animation)
 
 - Frontend — TypeScript ~5.9 + React 19; Backend — TypeScript 5.7+ (strict mode) + NestJS 11.x, OpenAI SDK (openai), TypeORM, class-validator, @nestjs/swagger
 
@@ -25,10 +27,10 @@ npm test && npm run lint
 Frontend — TypeScript ~5.9 + React 19; Backend — TypeScript 5.7+ (strict mode) + NestJS 11: Follow standard conventions
 
 ## Recent Changes
+- 001-rtl-text-animation: Added TypeScript ~5.9.3, React 19.2.0 + framer-motion ^12.24.11, react-i18next ^16.5.3, i18next ^25.7.4
 - 005-enhance-ai-context: Added TypeScript 5.7+ (strict mode), NestJS 11.x + NestJS, class-validator, class-transformer, nestjs-i18n, OpenAI SDK
 
 - 003-ai-feedback: Added TypeScript 5.7+ (strict mode) + NestJS 11.x, OpenAI SDK (openai), TypeORM, class-validator, @nestjs/swagger
-- 001-connect-backend: Added Frontend — TypeScript ~5.9 + React 19; Backend — TypeScript ^5.7 + NestJS 11 + Frontend — React, React Router, Vite, i18next; Backend — NestJS, TypeORM, PostgreSQL, @nestjs/swagger
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->

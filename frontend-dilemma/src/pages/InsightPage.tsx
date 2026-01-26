@@ -3,7 +3,7 @@ import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useDilemmaData } from "@/shared/hooks";
+import { useDilemmaData, useLanguage, useRTLAnimation } from "@/shared/hooks";
 import { fetchFeedbackAnalyze, type DilemmaTextData } from "@/shared/lib/api";
 import enTranslations from "@/shared/i18n/locales/en/translation.json";
 import heTranslations from "@/shared/i18n/locales/he/translation.json";
@@ -12,6 +12,9 @@ import aiPersone from "./Gemini_Generated_Image_i4v2t5i4v2t5i4v2 1.png?format=we
 
 export function InsightPage() {
   const { t, i18n } = useTranslation();
+  const { isRTL } = useLanguage();
+  const containerAnimation = useRTLAnimation({ duration: 0.5 });
+  const contentAnimation = useRTLAnimation({ duration: 0.5, delay: 0.45 });
   const navigate = useNavigate();
   const { currentDilemma, choice, reasonText, reset } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
@@ -189,9 +192,19 @@ export function InsightPage() {
       />
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
+        {...containerAnimation}
+        initial={{ 
+          ...containerAnimation.initial,
+          scale: 0.95
+        }}
+        animate={{ 
+          ...containerAnimation.animate,
+          scale: 1
+        }}
+        transition={{ 
+          ...containerAnimation.transition,
+          ease: "easeInOut"
+        }}
         className="relative flex max-h-[90vw] max-w-[95vw] w-full h-full flex-col items-center justify-center overflow-hidden rounded-xl py-8 px-6"
         style={{ backgroundImage: `url(${slideInsightBackground})`, backgroundSize: "contain", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundBlendMode: "multiply" }}
       >
@@ -204,9 +217,15 @@ export function InsightPage() {
 
         {/* Блок: AI-контраргументы */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.45 }}
+          {...contentAnimation}
+          initial={{ 
+            ...contentAnimation.initial,
+            y: 20
+          }}
+          animate={{ 
+            ...contentAnimation.animate,
+            y: 0
+          }}
           className="flex flex-col items-center justify-center text-center max-w-2xl w-full"
         >
           {

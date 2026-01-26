@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useState } from "react";
 import type React from "react";
+import { useLanguage } from "@/shared/hooks";
 import type { SlideContent } from "../types/presentation";
 
 interface PresentationSlideProps {
@@ -9,6 +10,7 @@ interface PresentationSlideProps {
 }
 
 export function PresentationSlide({ slide, onComplete }: PresentationSlideProps) {
+  const { isRTL: isCurrentLanguageRTL } = useLanguage();
   const [visibleTextBlocks, setVisibleTextBlocks] = useState<Set<number>>(new Set());
   const [hiddenTextBlocks, setHiddenTextBlocks] = useState<Set<number>>(new Set());
   const [showInitialText, setShowInitialText] = useState(true);
@@ -157,15 +159,18 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
             let charIndex = 0;
             
             // Для RTL (иврит) печатаем справа налево
-            const isRTL = block.animation === "slideRTL";
+            // Используем текущий язык интерфейса для определения направления
+            // Это соответствует лучшим практикам локализации
+            const isRTL = isCurrentLanguageRTL;
             
             const typewriterTimer = setInterval(() => {
               charIndex++;
               let displayText: string;
               
               if (isRTL) {
-                // Для RTL: берем символы с конца строки
+                // Для RTL: берем символы с конца строки (справа налево)
                 // Например, для "אבג" сначала показываем "ג", потом "גב", потом "גבא"
+                // Это соответствует естественному направлению чтения на иврите
                 displayText = fullText.slice(-charIndex);
               } else {
                 // Для LTR: обычная печать слева направо
@@ -203,15 +208,18 @@ export function PresentationSlide({ slide, onComplete }: PresentationSlideProps)
           let charIndex = 0;
           
           // Для RTL (иврит) печатаем справа налево
-          const isRTL = block.animation === "slideRTL";
+          // Используем текущий язык интерфейса для определения направления
+          // Это соответствует лучшим практикам локализации
+          const isRTL = isCurrentLanguageRTL;
           
           const typewriterTimer = setInterval(() => {
             charIndex++;
             let displayText: string;
             
             if (isRTL) {
-              // Для RTL: берем символы с конца строки
+              // Для RTL: берем символы с конца строки (справа налево)
               // Например, для "אבג" сначала показываем "ג", потом "גב", потом "גבא"
+              // Это соответствует естественному направлению чтения на иврите
               displayText = fullText.slice(-charIndex);
             } else {
               // Для LTR: обычная печать слева направо

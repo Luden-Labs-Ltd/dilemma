@@ -3,11 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { Play, SkipForward } from "lucide-react";
 import { useDilemma } from "../app/context";
-import { useDilemmaData } from "@/shared/hooks";
+import { useDilemmaData, useRTLAnimation } from "@/shared/hooks";
 import { useEffect, useState } from "react";
 
 export function VideoPage() {
   const { t } = useTranslation();
+  const containerAnimation = useRTLAnimation({ duration: 0.5 });
+  const titleAnimation = useRTLAnimation({ duration: 0.4, delay: 0.2 });
+  const videoAnimation = useRTLAnimation({ duration: 0.4, delay: 0.3 });
+  const descriptionAnimation = useRTLAnimation({ duration: 0.4, delay: 0.4 });
   const navigate = useNavigate();
   const { currentDilemma } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
@@ -38,16 +42,32 @@ export function VideoPage() {
   return (
     <div className="relative flex min-h-screen items-center justify-center px-4">
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.5, ease: "easeInOut" }}
+        {...containerAnimation}
+        initial={{ 
+          ...containerAnimation.initial,
+          scale: 0.95
+        }}
+        animate={{ 
+          ...containerAnimation.animate,
+          scale: 1
+        }}
+        transition={{ 
+          ...containerAnimation.transition,
+          ease: "easeInOut"
+        }}
         className="w-full max-w-4xl"
       >
         {/* Заголовок */}
         <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
+          {...titleAnimation}
+          initial={{ 
+            ...titleAnimation.initial,
+            y: -20
+          }}
+          animate={{ 
+            ...titleAnimation.animate,
+            y: 0
+          }}
           className="mb-6 text-center text-3xl font-bold text-gray-800"
         >
           {dilemma.subtitle}
@@ -55,9 +75,15 @@ export function VideoPage() {
 
         {/* Видео-заглушка */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
+          {...videoAnimation}
+          initial={{ 
+            ...videoAnimation.initial,
+            y: 20
+          }}
+          animate={{ 
+            ...videoAnimation.animate,
+            y: 0
+          }}
           className="relative mb-6 aspect-video w-full overflow-hidden rounded-3xl bg-gray-900 shadow-2xl"
         >
           {/* Placeholder для видео */}
@@ -94,9 +120,15 @@ export function VideoPage() {
 
         {/* Описание */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
+          {...descriptionAnimation}
+          initial={{ 
+            ...descriptionAnimation.initial,
+            y: 20
+          }}
+          animate={{ 
+            ...descriptionAnimation.animate,
+            y: 0
+          }}
           className="rounded-2xl bg-white/90 p-6 shadow-lg backdrop-blur-sm"
         >
           <p className="text-center leading-relaxed text-gray-700">

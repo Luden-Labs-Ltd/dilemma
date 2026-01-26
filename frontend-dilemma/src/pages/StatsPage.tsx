@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useDilemmaData } from "@/shared/hooks";
+import { useDilemmaData, useLanguage, useRTLAnimation } from "@/shared/hooks";
 import { fetchDilemmaStats } from "@/shared/lib/api";
 import { formatPercent } from "@/shared/lib/utils";
 import type { DilemmaStats } from "@/shared/types";
@@ -11,6 +11,9 @@ import slideStats from "@/shared/assets/slides/medical/slide-stat.png?format=web
 
 export function StatsPage() {
   const { t, i18n } = useTranslation();
+  const { isRTL } = useLanguage();
+  const animation = useRTLAnimation({ delay: 0.1 });
+  const animation2 = useRTLAnimation({ delay: 0.2 });
   const navigate = useNavigate();
   const { currentDilemma, choice } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
@@ -100,12 +103,18 @@ export function StatsPage() {
 
           <div
             className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]"
-            style={{ direction: "ltr" }}
+            style={{ direction: isRTL ? "rtl" : "ltr" }}
           >
             <motion.div
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.1 }}
+              {...animation}
+              initial={{ 
+                ...animation.initial,
+                scale: 0.98
+              }}
+              animate={{ 
+                ...animation.animate,
+                scale: 1
+              }}
               className="relative h-full w-full rounded-[28px] outline-none"
             >
               <span className="sr-only">{t("stats.optionA")}</span>
@@ -149,9 +158,15 @@ export function StatsPage() {
             </motion.div>
 
             <motion.div
-              initial={{ opacity: 0, scale: 0.98 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.4, delay: 0.2 }}
+              {...animation2}
+              initial={{ 
+                ...animation2.initial,
+                scale: 0.98
+              }}
+              animate={{ 
+                ...animation2.animate,
+                scale: 1
+              }}
               className="relative h-full w-full rounded-[28px] outline-none"
             >
               <span className="sr-only">{t("stats.optionB")}</span>

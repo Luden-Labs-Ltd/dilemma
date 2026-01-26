@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useDilemmaData } from "@/shared/hooks";
+import { useDilemmaData, useRTLAnimation } from "@/shared/hooks";
 import { submitInitialChoice, type ApiError } from "@/shared/lib/api";
 import type { Choice } from "@/shared/types";
 import slideStats from "@/shared/assets/slides/medical/slide-stat.png?format=webp";
@@ -83,6 +83,10 @@ export function ChoicePage() {
   const rightTitle = useTypewriter(rightTexts[0] ?? "", isRTL, 40, rightDelay);
   const rightSubtitle = useTypewriter(rightTexts[1] ?? "", isRTL, 40, rightDelay + (rightTexts[0]?.length ?? 0) * 40 + 200);
 
+  const leftCardAnimation = useRTLAnimation({ duration: 0.4, delay: 0.1 });
+  const rightCardAnimation = useRTLAnimation({ duration: 0.4, delay: 0.2 });
+  const errorAnimation = useRTLAnimation({ duration: 0.4 });
+
   if (!currentDilemma || !dilemma) {
     navigate("/");
     return null;
@@ -143,9 +147,15 @@ export function ChoicePage() {
           >
             {leftOption && (
               <motion.button
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.1 }}
+                {...leftCardAnimation}
+                initial={{ 
+                  ...leftCardAnimation.initial,
+                  scale: 0.98
+                }}
+                animate={{ 
+                  ...leftCardAnimation.animate,
+                  scale: 1
+                }}
                 whileTap={!selectedChoice ? { scale: 0.99 } : {}}
                 onClick={() => handleChoice(leftOption.id)}
                 onMouseEnter={() => setHoveredOption("left")}
@@ -199,9 +209,15 @@ export function ChoicePage() {
 
             {rightOption && (
               <motion.button
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.4, delay: 0.2 }}
+                {...rightCardAnimation}
+                initial={{ 
+                  ...rightCardAnimation.initial,
+                  scale: 0.98
+                }}
+                animate={{ 
+                  ...rightCardAnimation.animate,
+                  scale: 1
+                }}
                 whileTap={!selectedChoice ? { scale: 0.99 } : {}}
                 onClick={() => handleChoice(rightOption.id)}
                 onMouseEnter={() => setHoveredOption("right")}
@@ -260,8 +276,15 @@ export function ChoicePage() {
       {/* Сообщение об ошибке */}
       {error && (
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
+          {...errorAnimation}
+          initial={{ 
+            ...errorAnimation.initial,
+            y: 10
+          }}
+          animate={{ 
+            ...errorAnimation.animate,
+            y: 0
+          }}
           className="absolute bottom-8 left-1/2 w-[92vw] max-w-2xl -translate-x-1/2 rounded-2xl bg-red-50 p-6 text-center text-red-800"
         >
           <p className="mb-3 text-lg">{error}</p>

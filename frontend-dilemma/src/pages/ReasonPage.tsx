@@ -3,12 +3,16 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useDilemmaData } from "@/shared/hooks";
+import { useDilemmaData, useLanguage, useRTLAnimation } from "@/shared/hooks";
 import { submitFinalChoice, type ApiError } from "@/shared/lib/api";
 import bgImage from "./bg1 1.png?format=webp";
 
 export function ReasonPage() {
   const { t } = useTranslation();
+  const { isRTL } = useLanguage();
+  const titleAnimation = useRTLAnimation({ duration: 0.6 });
+  const textareaAnimation = useRTLAnimation({ duration: 0.7, delay: 0.2 });
+  const buttonAnimation = useRTLAnimation({ duration: 0.6, delay: 0.4 });
   const navigate = useNavigate();
   const { currentDilemma, choice, setReasonText, setSkipped } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
@@ -53,9 +57,19 @@ export function ReasonPage() {
       <div className="mx-auto flex w-full max-w-2xl flex-1 flex-col justify-center">
         {/* Вопрос */}
         <motion.div
-          initial={{ opacity: 0, y: -30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          {...titleAnimation}
+          initial={{ 
+            ...titleAnimation.initial,
+            y: -30
+          }}
+          animate={{ 
+            ...titleAnimation.animate,
+            y: 0
+          }}
+          transition={{ 
+            ...titleAnimation.transition,
+            ease: [0.16, 1, 0.3, 1]
+          }}
           className="mb-8 text-center"
         >
           <h1 className="text-2xl font-bold text-white">
@@ -65,9 +79,21 @@ export function ReasonPage() {
 
         {/* Textarea с футуристической рамкой */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.9, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          {...textareaAnimation}
+          initial={{ 
+            ...textareaAnimation.initial,
+            scale: 0.9,
+            y: 20
+          }}
+          animate={{ 
+            ...textareaAnimation.animate,
+            scale: 1,
+            y: 0
+          }}
+          transition={{ 
+            ...textareaAnimation.transition,
+            ease: [0.16, 1, 0.3, 1]
+          }}
           className="mb-8"
         >
           <div
@@ -112,9 +138,19 @@ export function ReasonPage() {
 
         {/* Кнопка Continue */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          {...buttonAnimation}
+          initial={{ 
+            ...buttonAnimation.initial,
+            y: 30
+          }}
+          animate={{ 
+            ...buttonAnimation.animate,
+            y: 0
+          }}
+          transition={{ 
+            ...buttonAnimation.transition,
+            ease: [0.16, 1, 0.3, 1]
+          }}
           className="flex justify-center"
         >
           <motion.button
