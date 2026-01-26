@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
-import { useDilemmaData, useLanguage, useRTLAnimation } from "@/shared/hooks";
+import { useDilemmaData, useRTLAnimation } from "@/shared/hooks";
 import { fetchDilemmaStats } from "@/shared/lib/api";
 import { formatPercent } from "@/shared/lib/utils";
 import type { DilemmaStats } from "@/shared/types";
@@ -11,7 +11,6 @@ import slideStats from "@/shared/assets/slides/medical/slide-stat.png?format=web
 
 export function StatsPage() {
   const { t, i18n } = useTranslation();
-  const { isRTL } = useLanguage();
   const animation = useRTLAnimation({ delay: 0.1 });
   const animation2 = useRTLAnimation({ delay: 0.2 });
   const navigate = useNavigate();
@@ -103,7 +102,7 @@ export function StatsPage() {
 
           <div
             className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]"
-            style={{ direction: isRTL ? "rtl" : "ltr" }}
+            style={{ direction: "ltr" }}
           >
             <motion.div
               {...animation}
