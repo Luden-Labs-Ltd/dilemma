@@ -94,7 +94,7 @@
     "error": "Could not load insight. Please try again.",
     "retry": "Try again",
     "aiFeedback": {
-      "title": "Why your choice might be wrong",
+      "title": "Thank you for your choice",
       "loading": "Loading AI feedback...",
       "error": "Could not load AI feedback.",
       "retry": "Try again",
