@@ -124,6 +124,7 @@ export function DilemmaSelectionPage() {
                   className="group relative h-[450px] w-[90%] max-w-[350px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[360px] 2xl:w-[404px] sm:max-w-[404px] overflow-hidden rounded-[4px] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all hover:shadow-[0px_8px_8px_0px_rgba(0,0,0,0.35)] cursor-pointer"
                   style={{
                     border: "clamp(6px,1.2vw,12px) solid #FFFDFD",
+                    opacity: hasPresentation ? 1 : 0.5,
                   }}
                 >
                   {/* Изображение */}
