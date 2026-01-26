@@ -286,19 +286,47 @@ export async function getInsightData(
   };
 }
 
+export interface DilemmaTextData {
+  title: string;
+  subtitle?: string;
+  questionText?: string;
+  description: string;
+  reflectionText?: string;
+  options: {
+    a: string;
+    b: string;
+  };
+}
+
 /** POST /api/feedback/analyze — AI counter-arguments for user's choice. */
 export async function fetchFeedbackAnalyze(
   dilemmaName: DilemmaType,
   choice: Choice,
-  reasoning?: string
+  reasoning?: string,
+  dilemmaText?: DilemmaTextData,
+  dilemmaTextOriginal?: DilemmaTextData
 ): Promise<string[]> {
   const userUuid = getClientUuid();
   const choiceValue = choice === "a" ? "A" : "B";
 
-  const payload: { dilemmaName: string; choice: "A" | "B"; reasoning?: string } =
-    { dilemmaName: String(dilemmaName), choice: choiceValue };
+  const payload: {
+    dilemmaName: string;
+    choice: "A" | "B";
+    reasoning?: string;
+    dilemmaText?: DilemmaTextData;
+    dilemmaTextOriginal?: DilemmaTextData;
+  } = { dilemmaName: String(dilemmaName), choice: choiceValue };
+  
   if (reasoning != null && reasoning.trim() !== "") {
     payload.reasoning = reasoning.trim();
+  }
+  
+  if (dilemmaText) {
+    payload.dilemmaText = dilemmaText;
+  }
+  
+  if (dilemmaTextOriginal) {
+    payload.dilemmaTextOriginal = dilemmaTextOriginal;
   }
 
   const res = await request<{ counterArguments: string[] }>("/feedback/analyze", {

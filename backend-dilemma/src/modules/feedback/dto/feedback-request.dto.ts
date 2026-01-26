@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsIn, IsOptional, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, IsIn, IsOptional, MaxLength, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { DilemmaTextDto } from './dilemma-text.dto';
 
 export class FeedbackRequestDto {
   @ApiProperty({
@@ -27,4 +29,24 @@ export class FeedbackRequestDto {
   @IsString()
   @MaxLength(5000)
   reasoning?: string;
+
+  @ApiProperty({
+    type: DilemmaTextDto,
+    description: 'Translated dilemma text in user\'s current language (optional)',
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DilemmaTextDto)
+  dilemmaText?: DilemmaTextDto;
+
+  @ApiProperty({
+    type: DilemmaTextDto,
+    description: 'Original English text from translation.json (optional)',
+    required: false,
+  })
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DilemmaTextDto)
+  dilemmaTextOriginal?: DilemmaTextDto;
 }

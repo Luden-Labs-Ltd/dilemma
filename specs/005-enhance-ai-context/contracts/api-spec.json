@@ -1,0 +1,270 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "AI Feedback API - Enhanced Context",
+    "version": "1.0.0",
+    "description": "API для получения AI-фидбэка с поддержкой передачи переводов дилеммы"
+  },
+  "paths": {
+    "/api/feedback/analyze": {
+      "post": {
+        "summary": "Get AI feedback on dilemma choice with enhanced context",
+        "description": "Отправляет выбор пользователя и опционально reasoning в AI. Поддерживает передачу переводов дилеммы для улучшения контекста AI-анализа.",
+        "operationId": "analyzeFeedback",
+        "tags": ["feedback"],
+        "parameters": [
+          {
+            "name": "X-User-UUID",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "User UUID"
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["he", "en", "ru"],
+              "default": "he"
+            },
+            "description": "Language preference (he, en, ru)"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FeedbackRequest"
+              },
+              "examples": {
+                "withTranslations": {
+                  "summary": "Request with translations",
+                  "value": {
+                    "dilemmaName": "trolley-problem",
+                    "choice": "A",
+                    "reasoning": "אני חושב שצריך להקשיב למכונה",
+                    "dilemmaText": {
+                      "title": "שקיפות או יציבות",
+                      "subtitle": "דילמה צבאית",
+                      "questionText": "מה הפקודה שלך?",
+                      "description": "אתה מפקד ב-8200. מערכת נביא חוזה אסון המוני בעוד 48 שעות.",
+                      "reflectionText": "נקודה למחשבה: האם אתה נשמע למתמטיקה של המכונה...",
+                      "options": {
+                        "a": "אימוץ המלצת המכונה\nשתיקה להצלת חיים",
+                        "b": "פרסום אזהרה\nאמת גם במחיר דמים"
+                      }
+                    },
+                    "dilemmaTextOriginal": {
+                      "title": "Strategic Silence",
+                      "subtitle": "Military Dilemma",
+                      "questionText": "What is your command?",
+                      "description": "You are a commander in Unit 8200. The Prophet system predicts a mass disaster in 48 hours.",
+                      "reflectionText": "Point to consider: Do you listen to the machine's mathematics...",
+                      "options": {
+                        "a": "ADOPT MACHINE RECOMMENDATION\nSilence to Save Lives",
+                        "b": "BROADCAST ALERT\nTruth at Any Cost"
+                      }
+                    }
+                  }
+                },
+                "withoutTranslations": {
+                  "summary": "Request without translations (backward compatible)",
+                  "value": {
+                    "dilemmaName": "medical",
+                    "choice": "B",
+                    "reasoning": "I think we should prioritize recovery chances"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully received AI feedback",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FeedbackResponse"
+                },
+                "example": {
+                  "counterArguments": [
+                    "Your decision prioritizes recovery chances, but consider the social impact...",
+                    "Medical ethics requires considering all factors, not just statistics..."
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "example": {
+                  "statusCode": 400,
+                  "message": "Validation failed",
+                  "error": "Bad Request"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Dilemma not found or inactive",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "OpenAI API error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "504": {
+            "description": "Request timeout (AI did not respond in time)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "DilemmaText": {
+        "type": "object",
+        "required": ["title", "description", "options"],
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the dilemma",
+            "example": "Strategic Silence"
+          },
+          "subtitle": {
+            "type": "string",
+            "description": "Subtitle of the dilemma",
+            "example": "Military Dilemma"
+          },
+          "questionText": {
+            "type": "string",
+            "description": "Question text for the dilemma",
+            "example": "What is your command?"
+          },
+          "description": {
+            "type": "string",
+            "description": "Description of the dilemma",
+            "example": "You are a commander in Unit 8200..."
+          },
+          "reflectionText": {
+            "type": "string",
+            "description": "Reflection text for the dilemma",
+            "example": "Point to consider: Do you listen to the machine's mathematics..."
+          },
+          "options": {
+            "type": "object",
+            "required": ["a", "b"],
+            "properties": {
+              "a": {
+                "type": "string",
+                "description": "Option A text",
+                "example": "ADOPT MACHINE RECOMMENDATION\nSilence to Save Lives"
+              },
+              "b": {
+                "type": "string",
+                "description": "Option B text",
+                "example": "BROADCAST ALERT\nTruth at Any Cost"
+              }
+            }
+          }
+        }
+      },
+      "FeedbackRequest": {
+        "type": "object",
+        "required": ["dilemmaName", "choice"],
+        "properties": {
+          "dilemmaName": {
+            "type": "string",
+            "description": "Name of the dilemma",
+            "example": "trolley-problem"
+          },
+          "choice": {
+            "type": "string",
+            "enum": ["A", "B"],
+            "description": "User's choice (A or B)",
+            "example": "A"
+          },
+          "reasoning": {
+            "type": "string",
+            "maxLength": 5000,
+            "description": "User's reasoning for the choice (optional)",
+            "example": "אני חושב שצריך להקשיב למכונה"
+          },
+          "dilemmaText": {
+            "$ref": "#/components/schemas/DilemmaText",
+            "description": "Translated dilemma text in user's current language (optional)"
+          },
+          "dilemmaTextOriginal": {
+            "$ref": "#/components/schemas/DilemmaText",
+            "description": "Original English text from translation.json (optional)"
+          }
+        }
+      },
+      "FeedbackResponse": {
+        "type": "object",
+        "required": ["counterArguments"],
+        "properties": {
+          "counterArguments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of counter-arguments explaining why the choice might be wrong",
+            "example": [
+              "Your decision prioritizes recovery chances, but consider the social impact...",
+              "Medical ethics requires considering all factors, not just statistics..."
+            ]
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "number",
+            "example": 400
+          },
+          "message": {
+            "type": "string",
+            "example": "Validation failed"
+          },
+          "error": {
+            "type": "string",
+            "example": "Bad Request"
+          }
+        }
+      }
+    }
+  }
+}

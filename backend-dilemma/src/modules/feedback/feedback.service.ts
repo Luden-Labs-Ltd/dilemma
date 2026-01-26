@@ -13,6 +13,7 @@ import { DilemmasService } from '../dilemmas/dilemmas.service';
 import { Dilemma } from '../dilemmas/entities/dilemma.entity';
 import { FeedbackRequestDto } from './dto/feedback-request.dto';
 import { FeedbackResponseDto } from './dto/feedback-response.dto';
+import { DilemmaTextDto } from './dto/dilemma-text.dto';
 
 @Injectable()
 export class FeedbackService {
@@ -59,7 +60,30 @@ export class FeedbackService {
     }
 
     // Build prompt
-    const prompt = await this.buildPrompt(dilemma, request.choice, request.reasoning, lang);
+    const prompt = await this.buildPrompt(
+      dilemma,
+      request.choice,
+      request.reasoning,
+      lang,
+      request.dilemmaText,
+      request.dilemmaTextOriginal,
+    );
+
+    // Log usage of enhanced context
+    if (request.dilemmaText) {
+      this.logger.log(
+        `Using client-provided dilemmaText for dilemma: ${request.dilemmaName}`,
+      );
+    } else {
+      this.logger.log(
+        `Using i18n fallback for dilemma: ${request.dilemmaName}`,
+      );
+    }
+    if (request.dilemmaTextOriginal) {
+      this.logger.log(
+        `Including original English text for dilemma: ${request.dilemmaName}`,
+      );
+    }
 
     try {
       // Create thread
@@ -145,23 +169,13 @@ export class FeedbackService {
     choice: 'A' | 'B',
     reasoning?: string,
     lang = 'he',
+    dilemmaText?: DilemmaTextDto,
+    dilemmaTextOriginal?: DilemmaTextDto,
   ): Promise<string> {
     const dilemmaName = dilemma.name;
-    const choiceTitle = await this.i18n.translate(
-      `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_title`,
-      { lang },
-    );
-    const choiceDescription = await this.i18n.translate(
-      `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_description`,
-      { lang },
-    );
-    const title = await this.i18n.translate(`dilemmas.${dilemmaName}.title`, { lang });
-    const description = await this.i18n.translate(`dilemmas.${dilemmaName}.description`, { lang });
-    const optionATitle = await this.i18n.translate(`dilemmas.${dilemmaName}.option_a_title`, { lang });
-    const optionADesc = await this.i18n.translate(`dilemmas.${dilemmaName}.option_a_description`, { lang });
-    const optionBTitle = await this.i18n.translate(`dilemmas.${dilemmaName}.option_b_title`, { lang });
-    const optionBDesc = await this.i18n.translate(`dilemmas.${dilemmaName}.option_b_description`, { lang });
+    const useClientText = !!dilemmaText;
 
+    // Get labels for prompt structure
     const promptLabels = {
       he: {
         dilemma: 'דילמה',
@@ -191,19 +205,78 @@ export class FeedbackService {
 
     const labels = promptLabels[lang as keyof typeof promptLabels] || promptLabels.he;
 
-    let prompt = `${labels.responseInstruction}
+    let prompt = `${labels.responseInstruction}\n\n`;
 
-${labels.dilemma}: ${title}
-${labels.description}: ${description}
+    // Add original English text section if provided
+    if (dilemmaTextOriginal) {
+      prompt += `--- Original English Text ---\n\n`;
+      prompt += `${labels.dilemma}: ${dilemmaTextOriginal.title}\n`;
+      if (dilemmaTextOriginal.subtitle) {
+        prompt += `Subtitle: ${dilemmaTextOriginal.subtitle}\n`;
+      }
+      if (dilemmaTextOriginal.questionText) {
+        prompt += `Question: ${dilemmaTextOriginal.questionText}\n`;
+      }
+      prompt += `${labels.description}: ${dilemmaTextOriginal.description}\n\n`;
+      prompt += `${labels.option} A: ${dilemmaTextOriginal.options.a}\n`;
+      prompt += `${labels.option} B: ${dilemmaTextOriginal.options.b}\n`;
+      if (dilemmaTextOriginal.reflectionText) {
+        prompt += `Reflection: ${dilemmaTextOriginal.reflectionText}\n`;
+      }
+      prompt += `\n--- End Original English Text ---\n\n`;
+    }
 
-${labels.option} A: ${optionATitle}
-${optionADesc}
+    // Add user language text section
+    if (useClientText && dilemmaText) {
+      // Use client-provided text
+      prompt += `${labels.dilemma}: ${dilemmaText.title}\n`;
+      if (dilemmaText.subtitle) {
+        prompt += `Subtitle: ${dilemmaText.subtitle}\n`;
+      }
+      if (dilemmaText.questionText) {
+        prompt += `Question: ${dilemmaText.questionText}\n`;
+      }
+      prompt += `${labels.description}: ${dilemmaText.description}\n\n`;
+      prompt += `${labels.option} A: ${dilemmaText.options.a}\n`;
+      prompt += `${labels.option} B: ${dilemmaText.options.b}\n`;
+      if (dilemmaText.reflectionText) {
+        prompt += `Reflection: ${dilemmaText.reflectionText}\n`;
+      }
 
-${labels.option} B: ${optionBTitle}
-${optionBDesc}
+      // Get choice title/description from i18n (not in dilemmaText)
+      const choiceTitle = await this.i18n.translate(
+        `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_title`,
+        { lang },
+      );
+      const choiceDescription = await this.i18n.translate(
+        `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_description`,
+        { lang },
+      );
 
-${labels.userAnswer}: ${choice} (${choiceTitle})
-${choiceDescription}`;
+      prompt += `\n${labels.userAnswer}: ${choice} (${choiceTitle})\n${choiceDescription}`;
+    } else {
+      // Fallback to existing i18n logic
+      const choiceTitle = await this.i18n.translate(
+        `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_title`,
+        { lang },
+      );
+      const choiceDescription = await this.i18n.translate(
+        `dilemmas.${dilemmaName}.option_${choice.toLowerCase()}_description`,
+        { lang },
+      );
+      const title = await this.i18n.translate(`dilemmas.${dilemmaName}.title`, { lang });
+      const description = await this.i18n.translate(`dilemmas.${dilemmaName}.description`, { lang });
+      const optionATitle = await this.i18n.translate(`dilemmas.${dilemmaName}.option_a_title`, { lang });
+      const optionADesc = await this.i18n.translate(`dilemmas.${dilemmaName}.option_a_description`, { lang });
+      const optionBTitle = await this.i18n.translate(`dilemmas.${dilemmaName}.option_b_title`, { lang });
+      const optionBDesc = await this.i18n.translate(`dilemmas.${dilemmaName}.option_b_description`, { lang });
+
+      prompt += `${labels.dilemma}: ${title}\n`;
+      prompt += `${labels.description}: ${description}\n\n`;
+      prompt += `${labels.option} A: ${optionATitle}\n${optionADesc}\n\n`;
+      prompt += `${labels.option} B: ${optionBTitle}\n${optionBDesc}\n\n`;
+      prompt += `${labels.userAnswer}: ${choice} (${choiceTitle})\n${choiceDescription}`;
+    }
 
     if (reasoning && reasoning.trim().length > 0) {
       prompt += `\n\n${labels.userThoughts}: ${reasoning}`;

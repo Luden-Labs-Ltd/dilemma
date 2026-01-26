@@ -1,15 +1,17 @@
 import { motion } from "framer-motion";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "../app/context";
 import { useDilemmaData } from "@/shared/hooks";
-import { fetchFeedbackAnalyze } from "@/shared/lib/api";
+import { fetchFeedbackAnalyze, type DilemmaTextData } from "@/shared/lib/api";
+import enTranslations from "@/shared/i18n/locales/en/translation.json";
+import heTranslations from "@/shared/i18n/locales/he/translation.json";
 import slideInsightBackground from "@/shared/assets/insight.png?format=webp";
 import aiPersone from "./Gemini_Generated_Image_i4v2t5i4v2t5i4v2 1.png?format=webp";
 
 export function InsightPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { currentDilemma, choice, reasonText, reset } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
@@ -22,6 +24,92 @@ export function InsightPage() {
 
   console.log(counterArguments, "insightData");
 
+  // Extract dilemma text data from translation files
+  const dilemmaTextData = useMemo<{
+    current: DilemmaTextData | undefined;
+    original: DilemmaTextData | undefined;
+  }>(() => {
+    if (!currentDilemma) return { current: undefined, original: undefined };
+
+    const currentLang = i18n.language as "en" | "he";
+    const translations = currentLang === "en" ? enTranslations : heTranslations;
+    const originalTranslations = enTranslations;
+
+    const dilemmaData = translations.dilemmas?.[currentDilemma as keyof typeof translations.dilemmas] as
+      | {
+          title?: string;
+          subtitle?: string;
+          questionText?: string;
+          description?: string;
+          reflectionText?: string;
+          options?: { a?: string; b?: string };
+        }
+      | undefined;
+
+    const originalData = originalTranslations.dilemmas?.[currentDilemma as keyof typeof originalTranslations.dilemmas] as
+      | {
+          title?: string;
+          subtitle?: string;
+          questionText?: string;
+          description?: string;
+          reflectionText?: string;
+          options?: { a?: string; b?: string };
+        }
+      | undefined;
+
+    if (!dilemmaData || !originalData || !dilemmaData.title || !dilemmaData.description) {
+      return { current: undefined, original: undefined };
+    }
+
+    if (!dilemmaData.options?.a || !dilemmaData.options?.b) {
+      return { current: undefined, original: undefined };
+    }
+
+    if (!originalData.title || !originalData.description || !originalData.options?.a || !originalData.options?.b) {
+      return { current: undefined, original: undefined };
+    }
+
+    const current: DilemmaTextData = {
+      title: dilemmaData.title,
+      description: dilemmaData.description,
+      options: {
+        a: dilemmaData.options.a,
+        b: dilemmaData.options.b,
+      },
+    };
+
+    if (dilemmaData.subtitle) {
+      current.subtitle = dilemmaData.subtitle;
+    }
+    if (dilemmaData.questionText) {
+      current.questionText = dilemmaData.questionText;
+    }
+    if (dilemmaData.reflectionText) {
+      current.reflectionText = dilemmaData.reflectionText;
+    }
+
+    const original: DilemmaTextData = {
+      title: originalData.title,
+      description: originalData.description,
+      options: {
+        a: originalData.options.a,
+        b: originalData.options.b,
+      },
+    };
+
+    if (originalData.subtitle) {
+      original.subtitle = originalData.subtitle;
+    }
+    if (originalData.questionText) {
+      original.questionText = originalData.questionText;
+    }
+    if (originalData.reflectionText) {
+      original.reflectionText = originalData.reflectionText;
+    }
+
+    return { current, original };
+  }, [currentDilemma, i18n.language]);
+
   const fetchAiFeedback = useCallback(async () => {
     if (!currentDilemma || !choice) return;
     setAiFeedbackLoading(true);
@@ -30,7 +118,9 @@ export function InsightPage() {
       const args = await fetchFeedbackAnalyze(
         currentDilemma,
         choice,
-        reasonText ?? undefined
+        reasonText ?? undefined,
+        dilemmaTextData.current,
+        dilemmaTextData.original
       );
       setCounterArguments(args);
       setHasFetched(true);
@@ -39,7 +129,7 @@ export function InsightPage() {
     } finally {
       setAiFeedbackLoading(false);
     }
-  }, [currentDilemma, choice, reasonText, t]);
+  }, [currentDilemma, choice, reasonText, dilemmaTextData, t]);
 
   useEffect(() => {
     if (!currentDilemma || !choice || hasFetched) return;

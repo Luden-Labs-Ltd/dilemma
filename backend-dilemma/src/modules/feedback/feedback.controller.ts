@@ -25,7 +25,7 @@ export class FeedbackController {
   @ApiOperation({
     summary: 'Get AI feedback on dilemma choice',
     description:
-      'Sends user\'s dilemma choice and reasoning to AI assistant and returns array of counter-arguments explaining why the choice might be wrong. Reasoning is optional.',
+      'Sends user\'s dilemma choice and reasoning to AI assistant and returns array of counter-arguments explaining why the choice might be wrong. Reasoning is optional. Supports enhanced context by accepting dilemmaText (user\'s language) and dilemmaTextOriginal (English original) for improved AI analysis.',
   })
   @ApiHeader({
     name: 'X-User-UUID',
@@ -40,8 +40,38 @@ export class FeedbackController {
   @ApiBody({
     type: FeedbackRequestDto,
     examples: {
+      withTranslations: {
+        summary: 'Request with translations (enhanced context)',
+        value: {
+          dilemmaName: 'trolley-problem',
+          choice: 'A',
+          reasoning: 'אני חושב שצריך להקשיב למכונה',
+          dilemmaText: {
+            title: 'שקיפות או יציבות',
+            subtitle: 'דילמה צבאית',
+            questionText: 'מה הפקודה שלך?',
+            description: 'אתה מפקד ב-8200',
+            reflectionText: 'נקודה למחשבה',
+            options: {
+              a: 'אימוץ המלצת המכונה',
+              b: 'פרסום אזהרה',
+            },
+          },
+          dilemmaTextOriginal: {
+            title: 'Strategic Silence',
+            subtitle: 'Military Dilemma',
+            questionText: 'What is your command?',
+            description: 'You are a commander in Unit 8200',
+            reflectionText: 'Point to consider',
+            options: {
+              a: 'ADOPT MACHINE RECOMMENDATION',
+              b: 'BROADCAST ALERT',
+            },
+          },
+        },
+      },
       withReasoning: {
-        summary: 'Request with reasoning',
+        summary: 'Request with reasoning (backward compatible)',
         value: {
           dilemmaName: 'medical',
           choice: 'A',
@@ -49,7 +79,7 @@ export class FeedbackController {
         },
       },
       withoutReasoning: {
-        summary: 'Request without reasoning',
+        summary: 'Request without reasoning (backward compatible)',
         value: {
           dilemmaName: 'professional',
           choice: 'B',
