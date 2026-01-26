@@ -104,14 +104,13 @@ export function StatsPage() {
             className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]"
             style={{ direction: "ltr" }}
           >
-            <motion.button
+            <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              onClick={() => navigate("/extra")}
               onMouseEnter={() => setHoveredOption("left")}
               onMouseLeave={() => setHoveredOption(null)}
-              className="relative h-full w-full rounded-[28px] outline-none cursor-pointer"
+              className="relative h-full w-full rounded-[28px] outline-none"
             >
               <span className="sr-only">{t("stats.optionA")}</span>
               <AnimatePresence>
@@ -145,16 +144,15 @@ export function StatsPage() {
                   {formatPercent(stats ? stats.aPercent : 50)}%
                 </span>
               </div>
-            </motion.button>
+            </motion.div>
 
-            <motion.button
+            <motion.div
               initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.2 }}
-              onClick={() => navigate("/extra")}
               onMouseEnter={() => setHoveredOption("right")}
               onMouseLeave={() => setHoveredOption(null)}
-              className="relative h-full w-full rounded-[28px] outline-none cursor-pointer"
+              className="relative h-full w-full rounded-[28px] outline-none"
             >
               <span className="sr-only">{t("stats.optionB")}</span>
               <AnimatePresence>
@@ -189,7 +187,7 @@ export function StatsPage() {
                   {formatPercent(stats ? stats.bPercent : 50)}%
                 </span>
               </div>
-            </motion.button>
+            </motion.div>
           </div>
         </div>
       </div>

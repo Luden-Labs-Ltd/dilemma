@@ -170,6 +170,10 @@ export function InsightPage() {
     );
   }
 
+  const handleNext = () => {
+    navigate("/stats");
+  };
+
   const handleFinish = () => {
     reset();
     navigate("/");
@@ -252,10 +256,10 @@ export function InsightPage() {
         transition={{ delay: 1 }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
-        onClick={handleFinish}
-        className="mx-auto mt-8 mb-4 block rounded-[8px] bg-[#E4FFFF] px-10 py-3 font-bold text-black shadow-lg transition-all hover:bg-cyan-600 hover:shadow-xl flex-shrink-0"
+        onClick={handleNext}
+        className="mx-auto mt-8 mb-4 block rounded-[4px] bg-[#E4FFFF] px-10 py-3 font-bold text-black shadow-lg transition-all hover:bg-[#BAEDF0] hover:shadow-xl shrink-0"
       >
-        {t("insight.finish")}
+        {t("insight.next")}
       </motion.button>
       <style>{`
         .custom-scrollbar {

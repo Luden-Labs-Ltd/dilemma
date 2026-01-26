@@ -30,7 +30,7 @@ export function ReasonPage() {
 
     try {
       await submitFinalChoice(currentDilemma, choice);
-      navigate("/stats");
+      navigate("/insight");
     } catch (err) {
       const apiErr = err as ApiError;
       setError(
@@ -119,16 +119,13 @@ export function ReasonPage() {
         >
           <motion.button
             type="button"
-            whileHover={{ scale: 1.02 }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.98 }}
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="w-[222px] h-[60px] text-black rounded-lg bg-[#BFFFFF] px-12 py-4 text-lg font-bold transition disabled:opacity-50"
-            style={{
-              boxShadow: "0 0 20px rgba(0, 212, 255, 0.6), 0 4px 12px rgba(0, 212, 255, 0.4)",
-            }}
+            className="w-[222px] h-[60px] text-black rounded-[4px] bg-[#E4FFFF] px-12 py-4 text-lg font-bold shadow-lg transition-all hover:bg-[#BAEDF0] hover:shadow-xl disabled:opacity-50"
           >
-            {t("reason.submit")}
+            {t("reason.next")}
           </motion.button>
         </motion.div>
       </div>

@@ -54,6 +54,7 @@
     "placeholder": "Write here why you chose this option...",
     "skip": "Skip",
     "submit": "Submit",
+    "next": "Next",
     "error": {
       "network": "Could not save your final choice. Please check your connection.",
       "generic": "Could not save: {{message}}"
@@ -87,6 +88,7 @@
     "optionA": "Option A",
     "optionB": "Option B",
     "interpretation": "What this says about your choice",
+    "next": "Next",
     "finish": "Back to dilemmas",
     "loading": "Loading insight...",
     "error": "Could not load insight. Please try again.",
