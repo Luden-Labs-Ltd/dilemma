@@ -1,5 +1,5 @@
 import type { DilemmaType, Choice, DilemmaStats } from "../types";
-import { getClientUuid } from "./clientUuid";
+import { getClientUuid, generateNewClientUuid } from "./clientUuid";
 
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL ?? "http://localhost:3000/api";
@@ -162,8 +162,6 @@ export async function submitInitialChoice(
   dilemmaName: DilemmaType,
   choice: Choice
 ): Promise<BackendFeedbackResponse> {
-  const userUuid = getClientUuid();
-
   if (!dilemmaName || typeof dilemmaName !== "string") {
     throw new Error("dilemmaName must be a non-empty string");
   }
@@ -173,24 +171,43 @@ export async function submitInitialChoice(
     throw new Error("choice must be 'a' or 'b'");
   }
 
-  return request<BackendFeedbackResponse>("/decisions/initial", {
-    method: "POST",
-    headers: {
-      [USER_UUID_HEADER]: userUuid,
-    },
-    body: JSON.stringify({
-      dilemmaName: String(dilemmaName),
-      choice: choiceValue,
-    }),
-  });
+  let userUuid = getClientUuid();
+
+  try {
+    return await request<BackendFeedbackResponse>("/decisions/initial", {
+      method: "POST",
+      headers: {
+        [USER_UUID_HEADER]: userUuid,
+      },
+      body: JSON.stringify({
+        dilemmaName: String(dilemmaName),
+        choice: choiceValue,
+      }),
+    });
+  } catch (err) {
+    // Если пользователь уже проголосовал (409 Conflict), генерируем новый UUID и повторяем запрос
+    const apiError = err as ApiError;
+    if (apiError.type === "http" && apiError.status === 409) {
+      userUuid = generateNewClientUuid();
+      return request<BackendFeedbackResponse>("/decisions/initial", {
+        method: "POST",
+        headers: {
+          [USER_UUID_HEADER]: userUuid,
+        },
+        body: JSON.stringify({
+          dilemmaName: String(dilemmaName),
+          choice: choiceValue,
+        }),
+      });
+    }
+    throw err;
+  }
 }
 
 export async function submitFinalChoice(
   dilemmaName: DilemmaType,
   choice: Choice
 ): Promise<BackendDecisionResponse> {
-  const userUuid = getClientUuid();
-
   if (!dilemmaName || typeof dilemmaName !== "string") {
     throw new Error("dilemmaName must be a non-empty string");
   }
@@ -200,16 +217,39 @@ export async function submitFinalChoice(
     throw new Error("choice must be 'a' or 'b'");
   }
 
-  return request<BackendDecisionResponse>("/decisions/final", {
-    method: "POST",
-    headers: {
-      [USER_UUID_HEADER]: userUuid,
-    },
-    body: JSON.stringify({
-      dilemmaName: String(dilemmaName),
-      choice: choiceValue,
-    }),
-  });
+  let userUuid = getClientUuid();
+
+  try {
+    return await request<BackendDecisionResponse>("/decisions/final", {
+      method: "POST",
+      headers: {
+        [USER_UUID_HEADER]: userUuid,
+      },
+      body: JSON.stringify({
+        dilemmaName: String(dilemmaName),
+        choice: choiceValue,
+      }),
+    });
+  } catch (err) {
+    // Если пользователь уже проголосовал (409 Conflict), генерируем новый UUID и повторяем запрос
+    // Примечание: для final choice это может не сработать, если новый UUID не имеет initial choice,
+    // но в этом случае бэкенд вернет 400, и ошибка будет проброшена дальше
+    const apiError = err as ApiError;
+    if (apiError.type === "http" && apiError.status === 409) {
+      userUuid = generateNewClientUuid();
+      return request<BackendDecisionResponse>("/decisions/final", {
+        method: "POST",
+        headers: {
+          [USER_UUID_HEADER]: userUuid,
+        },
+        body: JSON.stringify({
+          dilemmaName: String(dilemmaName),
+          choice: choiceValue,
+        }),
+      });
+    }
+    throw err;
+  }
 }
 
 export async function fetchDilemmaStats(
