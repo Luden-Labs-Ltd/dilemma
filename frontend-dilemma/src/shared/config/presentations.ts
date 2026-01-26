@@ -323,48 +323,9 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
         ],
         textBlocks: [
           {
-            text: "הבינה המלאכותית מציגה לך משוואה קרה:",
-            position: "center",
-            delay: 0,
-            // Не указываем duration, чтобы текст оставался видимым
-            style: "header",
-            animation: "slideRTL", // Справа налево
-            typewriter: true, // Эффект печатания справа налево
-            typewriterSpeed: 50,
-            fontSize: 60,
-            fontWeight: 400,
-            color: "#E6F8F9",
-          },
-          {
-            text: "כדי להציל 4,000 איש עליך לשקר לציבור ולהניח",
-            position: "center",
-            delay: 4000, // После первого текста
-            // Не указываем duration, чтобы текст оставался видимым
-            style: "default",
-            animation: "slideRTL",
-            typewriter: true,
-            typewriterSpeed: 50,
-            fontSize: 60, // 60px из Figma
-            fontWeight: 900, // Black (900) из Figma
-            color: "#E6F8F9", // Цвет из Figma
-          },
-          {
-            text: "ל1,000 איש למות מבלי שידעו מה פגע בהם.",
-            position: "center",
-            delay: 8000, // После второго текста
-            // Не указываем duration, чтобы текст оставался видимым
-            style: "default",
-            animation: "slideRTL",
-            typewriter: true,
-            typewriterSpeed: 50,
-            fontSize: 60, // 60px из Figma
-            fontWeight: 900, // Black (900) из Figma
-            color: "#E6F8F9", // Цвет из Figma
-          },
-          {
             text: "האם אתה נשמע למתמטיקה של המכונה",
             position: "center",
-            delay: 12000, // После третьего текста
+            delay: 0,
             // Не указываем duration, чтобы текст оставался видимым
             style: "default",
             animation: "slideRTL",
@@ -377,7 +338,7 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
           {
             text: "שחוסכת בחיי אדם, או פועל לפי המוסר האנושי",
             position: "center",
-            delay: 16000, // После четвертого текста
+            delay: 4000, // После первого текста
             // Не указываем duration, чтобы текст оставался видимым
             style: "default",
             animation: "slideRTL",
@@ -390,7 +351,7 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
           {
             text: "שדורש לומר את האמת, גם אם המחיר בדם יהיה גבוה יותר?",
             position: "center",
-            delay: 20000, // После пятого текста
+            delay: 8000, // После второго текста
             // Не указываем duration, чтобы текст оставался видимым
             style: "default",
             animation: "slideRTL",
@@ -401,7 +362,7 @@ export const PRESENTATIONS: Record<string, PresentationConfig> = {
             color: "#E6F8F9",
           },
         ],
-        duration: 28000, // Общая длительность слайда (достаточно для появления всех строк)
+        duration: 16000, // Общая длительность слайда (достаточно для появления всех строк)
       },
       {
         backgroundImage: backgroundGradient,

@@ -68,9 +68,6 @@ export function PresentationPage() {
     const ifYouStaySilent = t("dilemmas.medical.ifYouStaySilent");
     const ifYouWarn = t("dilemmas.medical.ifYouWarn");
     const machineRecommends = t("dilemmas.medical.machineRecommends");
-    const aiColdEquation = t("dilemmas.medical.aiColdEquation");
-    const toSave4000 = t("dilemmas.medical.toSave4000");
-    const die1000WithoutKnowing = t("dilemmas.medical.1000DieWithoutKnowing");
     const doYouListenToMachine = t("dilemmas.medical.doYouListenToMachine");
     const whichSavesLives = t("dilemmas.medical.whichSavesLives");
     const whichDemandsTruth = t("dilemmas.medical.whichDemandsTruth");
@@ -162,24 +159,6 @@ export function PresentationPage() {
               text: ifYouWarn,
             };
           }
-          if (block.text === "הבינה המלאכותית מציגה לך משוואה קרה:") {
-            return {
-              ...block,
-              text: aiColdEquation,
-            };
-          }
-          if (block.text === "כדי להציל 4,000 איש עליך לשקר לציבור ולהניח") {
-            return {
-              ...block,
-              text: toSave4000,
-            };
-          }
-          if (block.text === "ל1,000 איש למות מבלי שידעו מה פגע בהם.") {
-            return {
-              ...block,
-              text: die1000WithoutKnowing,
-            };
-          }
           if (block.text === "האם אתה נשמע למתמטיקה של המכונה") {
             return {
               ...block,
@@ -232,16 +211,6 @@ export function PresentationPage() {
     // Если все слайды показаны, переходим к выбору
     if (currentSlideIndex >= slides.length) {
       navigate("/choice");
-    }
-    
-    // Для слайдов 3, 4, 5 (индексы 2, 3, 4) - добавляем в стек при переходе
-    if (currentSlideIndex >= 2 && currentSlideIndex <= 4) {
-      setStackedSlides((prev) => new Set(prev).add(currentSlideIndex));
-    }
-    
-    // Очищаем стек перед слайдами 3, 4, 5 (когда переходим к слайду 2, индекс 1)
-    if (currentSlideIndex === 1) {
-      setStackedSlides(new Set());
     }
   }, [currentSlideIndex, slides, navigate]);
 
@@ -311,6 +280,17 @@ export function PresentationPage() {
 
   const handleSlideComplete = () => {
     const nextIndex = currentSlideIndex + 1;
+    
+    // Обновляем стек слайдов перед изменением индекса
+    // Очищаем стек перед слайдами 3, 4, 5 (когда переходим к слайду 2, индекс 1)
+    if (nextIndex === 1) {
+      setStackedSlides(new Set());
+    }
+    
+    // Для слайдов 3, 4, 5 (индексы 2, 3, 4) - добавляем в стек при переходе
+    if (nextIndex >= 2 && nextIndex <= 4) {
+      setStackedSlides((prev) => new Set(prev).add(nextIndex));
+    }
     
     // Переходим к следующему слайду
     if (nextIndex < slides.length) {
