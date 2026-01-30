@@ -1,8 +1,7 @@
-export { DilemmaSelectionPage } from "./DilemmaSelectionPage";
-export { VideoPage } from "./VideoPage";
-export { PresentationPage } from "./PresentationPage";
-export { ChoicePage } from "./ChoicePage";
-export { ReasonPage } from "./ReasonPage";
-export { StatsPage } from "./StatsPage";
-export { ExtraPage } from "./ExtraPage";
-export { InsightPage } from "./InsightPage";
+export { DilemmaSelectionPage } from "./dilemma-selection/ui/DilemmaSelectionPage";
+export { VideoPage } from "./video/ui/VideoPage";
+export { ChoicePage } from "./choice/ui/ChoicePage";
+export { ReasonPage } from "./reason/ui/ReasonPage";
+export { StatsPage } from "./stats/ui/StatsPage";
+export { ExtraPage } from "./extra/ui/ExtraPage";
+export { InsightPage } from "./insight/ui/InsightPage";

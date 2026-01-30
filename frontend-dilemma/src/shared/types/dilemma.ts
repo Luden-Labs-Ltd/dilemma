@@ -3,8 +3,11 @@ export type DilemmaType = string;
 
 export type Choice = "a" | "b";
 
+/** id опции для отображения; для API третья опция (c) маппится в "b" */
+export type OptionId = "a" | "b" | "c";
+
 export interface DilemmaOption {
-  id: Choice;
+  id: OptionId;
   label: string;
   image: string;
 }
@@ -23,7 +26,7 @@ export interface Dilemma {
   image: string;
   description: string;
   questionText: string;
-  options: [DilemmaOption, DilemmaOption];
+  options: DilemmaOption[];
   sources: Source[];
   reflectionText: string;
 }
