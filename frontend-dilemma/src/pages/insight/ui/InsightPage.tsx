@@ -10,6 +10,7 @@ import { isModernThemeDilemma } from "@/shared/config/dilemma-theme";
 import modernThemeInsightFrame from "@/shared/assets/dilemmas/doctor/insight-frame.png?format=webp";
 import aiPersona from "./assets/ai-persona.png?format=webp";
 import logoImg from "@/shared/assets/logo.png?format=webp";
+import backgroundGradient from "@/shared/assets/background-gradient.png?format=webp";
 
 export function InsightPage() {
   const { t, i18n } = useTranslation();
@@ -75,7 +76,7 @@ export function InsightPage() {
   return (
     <div
       className="flex min-h-screen flex-col items-center justify-center p-2"
-      style={isModernTheme ? { backgroundColor: insightFrameBg } : undefined}
+      style={isModernTheme ? { backgroundColor: insightFrameBg } : { backgroundImage: `url(${backgroundGradient})`, backgroundSize: "cover", backgroundPosition: "center" }}
     >
       <img
         src={logoImg}

@@ -16,6 +16,7 @@ import {
   getModernThemeOverlayOpacity,
 } from "@/shared/config/dilemma-theme";
 import modernThemeChoiceFrame from "@/shared/assets/dilemmas/doctor/choice-frame.png?format=webp";
+import backgroundGradient from "@/shared/assets/background-gradient.png?format=webp";
 
 export function StatsPage() {
   const { t, i18n } = useTranslation();
@@ -111,7 +112,11 @@ export function StatsPage() {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }
-          : undefined
+          : {
+            backgroundImage: `url(${backgroundGradient})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }
       }
     >
       {isModernTheme && (

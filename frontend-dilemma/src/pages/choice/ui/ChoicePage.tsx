@@ -16,6 +16,7 @@ import {
   getModernThemeOverlayOpacity,
 } from "@/shared/config/dilemma-theme";
 import modernThemeChoiceFrame from "@/shared/assets/dilemmas/doctor/choice-frame.png?format=webp";
+import backgroundGradient from "@/shared/assets/background-gradient.png?format=webp";
 
 export function ChoicePage() {
   const { t, i18n } = useTranslation();
@@ -98,7 +99,11 @@ export function ChoicePage() {
               backgroundSize: "cover",
               backgroundPosition: "center",
             }
-          : undefined
+          : {
+            backgroundImage: `url(${backgroundGradient})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }
       }
     >
       {/* Оверлей затемнения фона: ai-autonomy 60%, privacy-vs-security 70% */}

@@ -1,7 +1,7 @@
 /**
  * Дилемы с единым «современным» стилем (рамки, фон): Rescue or Illusion?, Education or Programming?
  */
-export const MODERN_THEME_DILEMMA_IDS = ["commander", "doctor", "teacher"] as const;
+export const MODERN_THEME_DILEMMA_IDS = ["doctor", "teacher"] as const;
 
 export type ModernThemeDilemmaId = (typeof MODERN_THEME_DILEMMA_IDS)[number];
 
@@ -10,7 +10,6 @@ import bgDoctor from "@/shared/assets/dilemmas/doctor/background.png?format=webp
 import bgPrivacyVsSecurity from "@/shared/assets/dilemmas/privacy-vs-security/background.png?format=webp";
 
 const MODERN_THEME_BACKGROUNDS: Record<ModernThemeDilemmaId, string> = {
-  // "commander": bgAiAutonomy,
   "doctor": bgDoctor,
   "teacher": bgPrivacyVsSecurity,
 };
@@ -18,7 +17,6 @@ const MODERN_THEME_BACKGROUNDS: Record<ModernThemeDilemmaId, string> = {
 /** Оверлей затемнения фона: 0.6 = 60%, 0.7 = 70% */
 const MODERN_THEME_OVERLAY_OPACITY: Record<ModernThemeDilemmaId, number> = {
   "doctor": 0.6,
-  "commander": 0.7,
   "teacher": 0.6,
 };
 
