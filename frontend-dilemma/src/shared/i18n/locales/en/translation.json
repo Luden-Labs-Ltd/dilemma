@@ -179,7 +179,7 @@
         }
       }
     },
-    "medical": {
+    "commander": {
       "title": "Medical Ethics",
       "subtitle": "Medical Dilemma",
       "strategicSilence": "Strategic Silence",
@@ -230,7 +230,7 @@
         }
       }
     },
-    "professional": {
+    "doctor": {
       "title": "Professional Ethics",
       "subtitle": "Professional Dilemma",
       "description": "You work at a leading tech company and discover that the product you're developing contains a severe security bug. Reporting the bug will delay the launch by months and cost your employer millions of dollars. Your manager asks you to continue with the project and fix the bug in the next version. You know the bug could endanger users.",
@@ -263,7 +263,7 @@
         }
       }
     },
-    "state": {
+    "teacher": {
       "title": "State and Jewish Society",
       "subtitle": "Social Dilemma",
       "description": "You manage public resources in a mixed city. There is a limited budget to build a new public facility. One community demands a synagogue, a second community demands a secular school, and a third community demands a community center for everyone. Each group claims their needs are more urgent.",

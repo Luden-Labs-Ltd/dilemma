@@ -15,7 +15,7 @@ import {
   getModernThemeBackground,
   getModernThemeOverlayOpacity,
 } from "@/shared/config/dilemma-theme";
-import modernThemeChoiceFrame from "@/shared/assets/dilemmas/ai-autonomy/choice-frame.png?format=webp";
+import modernThemeChoiceFrame from "@/shared/assets/dilemmas/doctor/choice-frame.png?format=webp";
 
 export function StatsPage() {
   const { t, i18n } = useTranslation();
