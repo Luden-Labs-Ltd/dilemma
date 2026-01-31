@@ -26,7 +26,10 @@
       "option_a_description": "Prioritize the synagogue. Recognize the importance of Jewish identity and religious needs.",
       "option_b_title": "Build Shared Institution",
       "option_b_description": "Build a community center or school. Prioritize an institution that serves the entire community.",
+      "option_c_title": "Build Secular School",
+      "option_c_description": "Prioritize the secular school. Focus on education accessible to all regardless of religion.",
       "feedback_a": "You chose to build a religious institution. This decision respects Jewish identity, but could create tension with other groups.",
-      "feedback_b": "You chose to build a shared institution. This decision promotes equality and unity, but could ignore specific needs of communities."
+      "feedback_b": "You chose to build a shared institution. This decision promotes equality and unity, but could ignore specific needs of communities.",
+      "feedback_c": "You chose to build a secular school. This decision prioritizes education for all, but may not satisfy religious or shared-space demands."
     }
 }

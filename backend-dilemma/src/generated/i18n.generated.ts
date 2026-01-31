@@ -33,8 +33,11 @@ export type I18nTranslations = {
             "option_a_description": string;
             "option_b_title": string;
             "option_b_description": string;
+            "option_c_title": string;
+            "option_c_description": string;
             "feedback_a": string;
             "feedback_b": string;
+            "feedback_c": string;
         };
     };
 };

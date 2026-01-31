@@ -1,8 +1,8 @@
 import type { Dilemma } from '../types';
 
 export const DILEMMAS: Record<string, Dilemma> = {
-  medical: {
-    id: 'medical',
+  commander: {
+    id: 'commander',
     title: 'אתיקה רפואית',
     subtitle: 'דילמה רפואית',
     image: '/medical-card.jpg',
@@ -54,8 +54,8 @@ export const DILEMMAS: Record<string, Dilemma> = {
     reflectionText:
       'נקודה למחשבה: השיקול כאן הוא בין סיכוי להצלחה לבין השפעה משפחתית. האם אנחנו מעדיפים את הסיכוי הגבוה יותר להצלחה, או שאנו שוקלים גם את הפקטור המשפחתי והחברתי של המטופל?',
   },
-  professional: {
-    id: 'professional',
+  doctor: {
+    id: 'doctor',
     title: 'אתיקה מקצועית',
     subtitle: 'דילמה מקצועית',
     image: '/professional-card.jpg',
@@ -107,8 +107,8 @@ export const DILEMMAS: Record<string, Dilemma> = {
     reflectionText:
       'נקודה למחשבה: האם אחריות מקצועית עומדת מעל נאמנות למעסיק? מה המחיר של פשרה במצבים כאלה?',
   },
-  state: {
-    id: 'state',
+  teacher: {
+    id: 'teacher',
     title: 'מדינה וחברה יהודית',
     subtitle: 'דילמה חברתית',
     image: '/state-card.jpg',

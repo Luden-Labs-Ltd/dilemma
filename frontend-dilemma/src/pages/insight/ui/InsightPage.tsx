@@ -7,7 +7,7 @@ import { useDilemmaData } from "@/entities/dilemma";
 import { useRTLAnimation } from "@/shared/hooks";
 import slideInsightBackground from "@/shared/assets/dilemmas/common/insight-background.png?format=webp";
 import { isModernThemeDilemma } from "@/shared/config/dilemma-theme";
-import modernThemeInsightFrame from "@/shared/assets/dilemmas/ai-autonomy/insight-frame.png?format=webp";
+import modernThemeInsightFrame from "@/shared/assets/dilemmas/doctor/insight-frame.png?format=webp";
 import aiPersona from "./assets/ai-persona.png?format=webp";
 import logoImg from "@/shared/assets/logo.png?format=webp";
 
@@ -26,7 +26,7 @@ export function InsightPage() {
     const currentLang = i18n.language;
     const isHebrew = currentLang === "he";
     
-    if (choice === "a") {
+    if (choice === "A") {
       if (isHebrew) {
         return [
           "שתיקה אסטרטגית (מתוך רצון להציל חיים רבים יותר)",

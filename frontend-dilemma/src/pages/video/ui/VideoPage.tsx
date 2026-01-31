@@ -15,10 +15,10 @@ const VIDEO_BY_DILEMMA_AND_LANG: Record<
   string,
   { en: string; he: string } | undefined
 > = {
-  "trolley-problem": { en: commanderVideoWebm, he: commanderVideoWebm },
-  medical: { en: commanderVideoWebm, he: commanderVideoWebm },
-  professional: { en: teacherVideoEnWebm, he: teacherVideoHeWebm },
-  state: { en: doctorVideoEnWebm, he: doctorVideoHeWebm },
+  // "trolley-problem": { en: commanderVideoWebm, he: commanderVideoWebm },
+  commander: { en: commanderVideoWebm, he: commanderVideoWebm },
+  doctor: { en:  doctorVideoEnWebm, he:  doctorVideoHeWebm },
+  teacher: { en: teacherVideoEnWebm, he: teacherVideoHeWebm },
 };
 
 export function VideoPage() {
@@ -40,17 +40,21 @@ export function VideoPage() {
   const videoFromName =
     resolvedDilemmaName &&
     VIDEO_BY_DILEMMA_AND_LANG[resolvedDilemmaName]?.[langKey];
-  const videoFromIndex =
-    navState?.selectedDilemmaIndex === 1
-      ? langKey === "he"
-        ? teacherVideoHeWebm
-        : teacherVideoEnWebm
-      : navState?.selectedDilemmaIndex === 2
-        ? langKey === "he"
-          ? doctorVideoHeWebm
-          : doctorVideoEnWebm
-      : undefined;
-  const videoSrc = videoFromName ?? videoFromIndex;
+  // const videoFromIndex =
+  //   resolvedDilemmaName === "teacher"
+  //     ? langKey === "he"
+  //       ? teacherVideoHeWebm
+  //       : teacherVideoEnWebm
+  //     : resolvedDilemmaName === "doctor"
+  //       ? langKey === "he"
+  //         ? doctorVideoHeWebm
+  //         : doctorVideoEnWebm
+  //     : resolvedDilemmaName === "commander"
+  //       ? langKey === "he"
+  //         ? commanderVideoWebm
+  //         : commanderVideoWebm
+  //       : undefined;
+  const videoSrc = videoFromName;
   const shouldShowFullscreenVideo = Boolean(videoSrc);
 
   useEffect(() => {

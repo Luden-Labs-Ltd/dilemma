@@ -14,9 +14,17 @@ import shieldIcon from "@/shared/assets/icons/shield.svg";
 import fallbackIcon from "@/shared/assets/icons/icon.svg";
 import logoImg from "@/shared/assets/logo.png?format=webp";
 
-const DILEMMA_IMAGES = [dilemmaOption3, dilemmaOption1, dilemmaOption2];
+const DILEMMA_IMAGES = {
+  commander: dilemmaOption3,
+  doctor:  dilemmaOption2,
+  teacher: dilemmaOption1,
+};
 /** Иконки по порядку карточек: 0 — shield, 1 — book, 2 — heart */
-const DILEMMA_ICONS_BY_INDEX = [shieldIcon, bookIcon, heartIcon];
+const DILEMMA_ICONS_BY_INDEX = {
+  commander: shieldIcon,
+  doctor: heartIcon,
+  teacher: bookIcon,
+};
 
 export function DilemmaSelectionPage() {
   const { t, i18n } = useTranslation();
@@ -40,12 +48,15 @@ export function DilemmaSelectionPage() {
     void refreshDilemmas();
   }, [refreshDilemmas]);
 
-  const handleSelectDilemma = (dilemmaName: string, index: number) => {
+  const handleSelectDilemma = (dilemmaName: string) => {
     setCurrentDilemma(dilemmaName as DilemmaType);
+
+
+    console.log(dilemmaName, "dilemmaName");
+    
     navigate("/video", {
       state: {
         selectedDilemmaName: dilemmaName,
-        selectedDilemmaIndex: index,
       },
     });
   };
@@ -114,8 +125,10 @@ export function DilemmaSelectionPage() {
             </p>
           ) : (
             displayedDilemmas.map((dilemma, index) => {
-              const imageSrc = DILEMMA_IMAGES[index] || DILEMMA_IMAGES[0];
-              const titleIcon = DILEMMA_ICONS_BY_INDEX[index] ?? fallbackIcon;
+              console.log(dilemma.name);
+              
+              const imageSrc = DILEMMA_IMAGES[dilemma.name as keyof typeof DILEMMA_IMAGES];
+              const titleIcon = DILEMMA_ICONS_BY_INDEX[dilemma.name as keyof typeof DILEMMA_ICONS_BY_INDEX] ?? fallbackIcon;
               const cardAnimation = cardAnimations[index];
 
               return (
@@ -133,7 +146,7 @@ export function DilemmaSelectionPage() {
                   }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={() => handleSelectDilemma(dilemma.name, index)}
+                  onClick={() => handleSelectDilemma(dilemma.name)}
                   className="group relative h-[450px] w-[90%] max-w-[350px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[360px] 2xl:w-[404px] sm:max-w-[404px] overflow-hidden rounded-[4px] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all hover:shadow-[0px_8px_8px_0px_rgba(0,0,0,0.35)] cursor-pointer"
                   style={{
                     border: "clamp(6px,1.2vw,12px) solid #FFFDFD",

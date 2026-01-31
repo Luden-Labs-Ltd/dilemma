@@ -9,7 +9,7 @@ import { submitFinalChoice, type ApiError } from "@/shared/lib/api";
 import bgImage from "@/shared/assets/dilemmas/common/reason-background.png?format=webp";
 import logoImg from "@/shared/assets/logo.png?format=webp";
 import { isModernThemeDilemma } from "@/shared/config/dilemma-theme";
-import modernThemeReasonFrame from "@/shared/assets/dilemmas/ai-autonomy/reason-frame.png?format=webp";
+import modernThemeReasonFrame from "@/shared/assets/dilemmas/doctor/reason-frame.png?format=webp";
 
 export function ReasonPage() {
   const { t } = useTranslation();

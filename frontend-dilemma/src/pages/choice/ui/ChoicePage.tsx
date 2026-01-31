@@ -15,12 +15,15 @@ import {
   getModernThemeBackground,
   getModernThemeOverlayOpacity,
 } from "@/shared/config/dilemma-theme";
-import modernThemeChoiceFrame from "@/shared/assets/dilemmas/ai-autonomy/choice-frame.png?format=webp";
+import modernThemeChoiceFrame from "@/shared/assets/dilemmas/doctor/choice-frame.png?format=webp";
 
 export function ChoicePage() {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { currentDilemma, setChoice } = useDilemma();
+
+  console.log(currentDilemma, "currentDilemmacurrentDilemmacurrentDilemmacurrentDilemmacurrentDilemma");
+  
   const dilemma = useDilemmaData(currentDilemma);
   const [selectedChoice, setSelectedChoice] = useState<Choice | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);

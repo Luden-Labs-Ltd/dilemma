@@ -1,11 +1,15 @@
+import type { Choice } from "@/shared/types";
+
 const STORAGE_KEY = "dilemma-flow-state";
 
 export interface FlowState {
   currentDilemma: string | null;
-  choice: "a" | "b" | null;
+  choice: Choice | null;
   reasonText: string | null;
   skipped: boolean;
 }
+
+const VALID_CHOICES = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"] as const;
 
 export function loadFlowState(): FlowState | null {
   try {
@@ -20,8 +24,7 @@ export function loadFlowState(): FlowState | null {
     }
     if (
       parsed.choice != null &&
-      parsed.choice !== "a" &&
-      parsed.choice !== "b"
+      !VALID_CHOICES.includes(parsed.choice as (typeof VALID_CHOICES)[number])
     ) {
       return null;
     }

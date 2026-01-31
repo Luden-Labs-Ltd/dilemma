@@ -15,6 +15,7 @@ import { StatisticsModule } from './modules/statistics/statistics.module';
 import { FeedbackModule } from './modules/feedback/feedback.module';
 import { User } from './modules/users/entities/user.entity';
 import { Dilemma } from './modules/dilemmas/entities/dilemma.entity';
+import { DilemmaOption } from './modules/dilemmas/entities/dilemma-option.entity';
 import { UserDecision } from './modules/decisions/entities/user-decision.entity';
 
 @Module({
@@ -50,7 +51,7 @@ import { UserDecision } from './modules/decisions/entities/user-decision.entity'
         synchronize: true,
         timezone: 'UTC',
         extra: { options: '-c timezone=UTC' },
-        entities: [User, Dilemma, UserDecision],
+        entities: [User, Dilemma, DilemmaOption, UserDecision],
       }),
     }),
     UsersModule,

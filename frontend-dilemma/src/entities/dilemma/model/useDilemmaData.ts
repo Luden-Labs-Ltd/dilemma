@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import type { DilemmaType } from "@/shared/types";
+import type { DilemmaType, DilemmaOption } from "@/shared/types";
 
 export function useDilemmaData(dilemmaId: DilemmaType | null) {
   const { t } = useTranslation();
@@ -15,6 +15,13 @@ export function useDilemmaData(dilemmaId: DilemmaType | null) {
     reflectionText: t(`dilemmas.${dilemmaId}.reflectionText`),
   };
 
+  const sources = ["1", "2", "3", "4"].map((sourceId) => ({
+    id: sourceId,
+    title: t(`dilemmas.${dilemmaId}.sources.${sourceId}.title`),
+    subtitle: t(`dilemmas.${dilemmaId}.sources.${sourceId}.subtitle`),
+    content: t(`dilemmas.${dilemmaId}.sources.${sourceId}.content`),
+  }));
+
   if (dilemmaId === "privacy-vs-security") {
     return {
       ...base,
@@ -23,24 +30,27 @@ export function useDilemmaData(dilemmaId: DilemmaType | null) {
         { id: "b" as const, label: t("dilemmas.privacy-vs-security.options.b"), image: "" },
         { id: "c" as const, label: t("dilemmas.privacy-vs-security.options.c"), image: "" },
       ],
-      sources: [],
+      sources,
       image: "",
     };
   }
 
+  const options: DilemmaOption[] = [
+    { id: "a", label: t(`dilemmas.${dilemmaId}.options.a`), image: "" },
+    { id: "b", label: t(`dilemmas.${dilemmaId}.options.b`), image: "" },
+  ];
+
+  if (dilemmaId === "state") {
+    const cLabel = t("dilemmas.state.options.c");
+    if (cLabel && cLabel !== "dilemmas.state.options.c") {
+      options.push({ id: "c", label: cLabel, image: "" });
+    }
+  }
+
   return {
     ...base,
-    options: [
-      { id: "a" as const, label: t(`dilemmas.${dilemmaId}.options.a`), image: "" },
-      { id: "b" as const, label: t(`dilemmas.${dilemmaId}.options.b`), image: "" },
-    ],
-    sources: ["1", "2", "3", "4"].map((sourceId) => ({
-      id: sourceId,
-      title: t(`dilemmas.${dilemmaId}.sources.${sourceId}.title`),
-      subtitle: t(`dilemmas.${dilemmaId}.sources.${sourceId}.subtitle`),
-      content: t(`dilemmas.${dilemmaId}.sources.${sourceId}.content`),
-    })),
+    options,
+    sources,
     image: "",
   };
 }
-
