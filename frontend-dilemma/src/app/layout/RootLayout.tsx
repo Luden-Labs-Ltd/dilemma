@@ -4,24 +4,29 @@ import backgroundGradient from "@/shared/assets/background-gradient.png?format=w
 
 export function RootLayout() {
   const location = useLocation();
-  const isPresentationPage = location.pathname === "/presentation";
+  // Страницы с собственным полноэкранным фоном — скрываем header и фон RootLayout
+  const pagesWithOwnBackground = ["/choice", "/stats", "/insight", "/video"];
+  const hasOwnBackground = pagesWithOwnBackground.includes(location.pathname);
+  const hideLanguageSwitcher = hasOwnBackground;
 
   return (
     <div
       className="relative min-h-screen bg-cover bg-center"
-      style={{
-        backgroundImage: `url(${backgroundGradient})`,
-      }}
+      style={
+        hasOwnBackground
+          ? undefined
+          : { backgroundImage: `url(${backgroundGradient})` }
+      }
     >
-      {!isPresentationPage && (
+      {!hideLanguageSwitcher && (
         <header
           dir="ltr"
-          className="absolute top-0 left-0 right-0 z-20 flex justify-end px-4 pt-4 bg-transparent"
+          className="absolute top-0 left-0 right-0 z-30 flex justify-end px-4 pt-4 bg-transparent"
         >
           <LanguageSwitcher />
         </header>
       )}
-      <main className="pt-2">
+      <main className={hasOwnBackground ? "" : "pt-2"}>
         <Outlet />
       </main>
     </div>

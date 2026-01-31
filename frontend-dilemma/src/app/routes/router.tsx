@@ -2,9 +2,8 @@ import { createBrowserRouter } from "react-router-dom";
 import {
   DilemmaSelectionPage,
   VideoPage,
-  PresentationPage,
   ChoicePage,
-  ReasonPage,
+  // ReasonPage,
   StatsPage,
   ExtraPage,
   InsightPage,
@@ -24,17 +23,13 @@ export const router = createBrowserRouter([
         element: <VideoPage />,
       },
       {
-        path: "/presentation",
-        element: <PresentationPage />,
-      },
-      {
         path: "/choice",
         element: <ChoicePage />,
       },
-      {
-        path: "/reason",
-        element: <ReasonPage />,
-      },
+      // {
+      //   path: "/reason",
+      //   element: <ReasonPage />,
+      // },
       {
         path: "/stats",
         element: <StatsPage />,

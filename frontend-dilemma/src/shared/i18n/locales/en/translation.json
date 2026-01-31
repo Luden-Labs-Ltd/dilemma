@@ -64,8 +64,9 @@
   "stats": {
     "title": "How did others respond?",
     "totalResponses": "Total responses: {{count}}",
+    "visitorsCount": "{{count}} visitors",
     "optionA": "Listened to the machine",
-    "optionB": "Revealed the truth",
+    "optionB": "Revealed the Truth",
     "yourChoice": "Your choice",
     "next": "Next",
     "error": "Failed to load statistics.",
@@ -99,6 +100,10 @@
       "error": "Could not load AI feedback.",
       "retry": "Try again",
       "empty": "No counter-arguments available."
+    },
+    "aiAutonomy": {
+      "thankYouTitle": "Thank you for sharing with us.",
+      "verseBody": "The verse \"Whoever saves a single life in Israel\" emphasizes the immense value of human life in Judaism. It teaches us that saving lives is an important commandment, and that every action taken to save a life is considered great. In this way, the verse reinforces our commitment to care for one another and to act for the common good."
     }
   },
   "finalVote": {
@@ -122,15 +127,26 @@
   },
   "dilemmas": {
     "privacy-vs-security": {
-      "title": "Education or Programming",
-      "subtitle": "Education Dilemma"
+      "title": "Education or Programming?",
+      "subtitle": "Education Dilemma",
+      "questionText": "What is your decision?",
+      "options": {
+        "a": "No to the system\nYes to free choice",
+        "b": "Install the system only with student consent.",
+        "c": "Activate automatic filtering to ensure proper behavior."
+      }
     },
     "ai-autonomy": {
-      "title": "Rescue or Illusion",
-      "subtitle": "AI Dilemma"
+      "title": "Rescue or Illusion?",
+      "subtitle": "AI Dilemma",
+      "questionText": "What is your decision?",
+      "options": {
+        "a": "Discontinue use and return personal responsibility",
+        "b": "Continue using the AI to prevent death"
+      }
     },
     "trolley-problem": {
-      "title": "Strategic Silence",
+      "title": "Voice or Silence?",
       "subtitle": "Military Dilemma",
       "questionText": "What is your command?",
       "description": "You are a commander in Unit 8200. The Prophet system predicts a mass disaster in 48 hours. AI simulations show that if you publish a warning, panic will kill more people than the disaster itself.",

@@ -3,6 +3,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: "Heebo";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/fonts/heebo/Heebo-VariableFont_wght.ttf") format("truetype");
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
@@ -119,10 +127,30 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-family: "Heebo", system-ui, -apple-system, "Segoe UI", Roboto, Arial,
+      "Noto Sans", "Liberation Sans", sans-serif;
   }
 }
 
 @layer utilities {
+  .choice-decorative-frame {
+    transform-origin: center;
+    transform: scale(var(--choice-frame-scale, 1))
+      scaleX(var(--choice-frame-mirror, 1));
+  }
+
+  @media (min-width: 1280px) {
+    .choice-decorative-frame {
+      --choice-frame-scale: 1;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .choice-decorative-frame {
+      --choice-frame-scale: 1;
+    }
+  }
+
   .futuristic-border {
     position: relative;
     background: #0a1628;

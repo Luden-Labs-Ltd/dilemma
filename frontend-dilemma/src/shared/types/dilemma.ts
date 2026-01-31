@@ -4,8 +4,11 @@ export type DilemmaType = string;
 /** Option letter A–J (uppercase for API). */
 export type Choice = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J";
 
+/** id опции для отображения; для API третья опция (c) маппится в "b" */
+export type OptionId = "a" | "b" | "c";
+
 export interface DilemmaOption {
-  id: Choice;
+  id: OptionId;
   label: string;
   image?: string;
 }
@@ -24,7 +27,6 @@ export interface Dilemma {
   image: string;
   description: string;
   questionText: string;
-  /** 2–10 options in order A, B, C, … */
   options: DilemmaOption[];
   sources: Source[];
   reflectionText: string;

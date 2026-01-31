@@ -16,7 +16,8 @@
 ## Path Conventions
 
 - **Web app**: `frontend-dilemma/src/` at repository root
-- All paths shown below use `frontend-dilemma/src/` prefix
+- **Pages**: Feature-based layout — `frontend-dilemma/src/pages/<feature>/ui/<Page>.tsx`
+- All paths below use `frontend-dilemma/src/` prefix
 
 ---
 
@@ -24,10 +25,10 @@
 
 **Purpose**: Project initialization and animation utilities structure
 
-- [X] T001 Create animation utilities file with constants in frontend-dilemma/src/shared/utils/animation.ts
-- [X] T002 [P] Define RTLAnimationConfig interface in frontend-dilemma/src/shared/utils/animation.ts
-- [X] T003 [P] Define RTLAnimationProps interface in frontend-dilemma/src/shared/utils/animation.ts
-- [X] T004 [P] Add animation constants (default duration, distance, delay) in frontend-dilemma/src/shared/utils/animation.ts
+- [x] T001 Create animation utilities file with constants in frontend-dilemma/src/shared/utils/animation.ts
+- [x] T002 [P] Define RTLAnimationConfig interface in frontend-dilemma/src/shared/utils/animation.ts
+- [x] T003 [P] Define RTLAnimationProps interface in frontend-dilemma/src/shared/utils/animation.ts
+- [x] T004 [P] Add animation constants (default duration, distance, delay) in frontend-dilemma/src/shared/utils/animation.ts
 
 ---
 
@@ -37,13 +38,13 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [X] T005 Create useRTLAnimation hook file in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
-- [X] T006 [US1] Implement useRTLAnimation hook with isRTL detection from useLanguage in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
-- [X] T007 [US1] Add useReducedMotion hook integration for accessibility in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
-- [X] T008 [US1] Implement conditional x values based on isRTL (RTL: positive, LTR: negative) in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
-- [X] T009 [US1] Add prefersReducedMotion handling (disable animations when enabled) in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
-- [X] T010 [US1] Export useRTLAnimation from frontend-dilemma/src/shared/hooks/index.ts
-- [X] T011 [US1] Add animation utilities export from frontend-dilemma/src/shared/utils/index.ts
+- [x] T005 Create useRTLAnimation hook file in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
+- [x] T006 [US1] Implement useRTLAnimation hook with isRTL detection from useLanguage in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
+- [x] T007 [US1] Add useReducedMotion hook integration for accessibility in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
+- [x] T008 [US1] Implement conditional x values based on isRTL (RTL: positive, LTR: negative) in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
+- [x] T009 [US1] Add prefersReducedMotion handling (disable animations when enabled) in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
+- [x] T010 [US1] Export useRTLAnimation from frontend-dilemma/src/shared/hooks/index.ts
+- [x] T011 [US1] Add animation utilities export from frontend-dilemma/src/shared/utils/index.ts
 
 **Checkpoint**: Foundation ready - useRTLAnimation hook is available for all pages. User story implementation can now begin.
 
@@ -57,12 +58,12 @@
 
 ### Implementation for User Story 1
 
-- [X] T012 [US1] Import useRTLAnimation hook in frontend-dilemma/src/pages/StatsPage.tsx
-- [X] T013 [US1] Apply useRTLAnimation to first motion.div (option A card) in frontend-dilemma/src/pages/StatsPage.tsx
-- [X] T014 [US1] Apply useRTLAnimation to second motion.div (option B card) in frontend-dilemma/src/pages/StatsPage.tsx
-- [X] T015 [US1] Test RTL direction: Switch to Hebrew and verify text slides from right in frontend-dilemma/src/pages/StatsPage.tsx
-- [X] T016 [US1] Test LTR direction: Switch to English and verify text slides from left in frontend-dilemma/src/pages/StatsPage.tsx
-- [X] T017 [US1] Verify animation works on initial page load (not just dynamic content) in frontend-dilemma/src/pages/StatsPage.tsx
+- [x] T012 [US1] Import useRTLAnimation hook in frontend-dilemma/src/pages/stats/ui/StatsPage.tsx
+- [x] T013 [US1] Apply useRTLAnimation to first motion.div (option A card) in frontend-dilemma/src/pages/stats/ui/StatsPage.tsx
+- [x] T014 [US1] Apply useRTLAnimation to second motion.div (option B card) in frontend-dilemma/src/pages/stats/ui/StatsPage.tsx
+- [x] T015 [US1] Test RTL direction: Switch to Hebrew and verify text slides from right in frontend-dilemma/src/pages/stats/ui/StatsPage.tsx
+- [x] T016 [US1] Test LTR direction: Switch to English and verify text slides from left in frontend-dilemma/src/pages/stats/ui/StatsPage.tsx
+- [x] T017 [US1] Verify animation works on initial page load (not just dynamic content) in frontend-dilemma/src/pages/stats/ui/StatsPage.tsx
 
 **Checkpoint**: At this point, User Story 1 should be fully functional and testable independently on StatsPage. Core RTL/LTR animation direction is working.
 
@@ -76,15 +77,15 @@
 
 ### Implementation for User Story 2
 
-- [X] T018 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/ChoicePage.tsx
-- [X] T019 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/DilemmaSelectionPage.tsx
-- [X] T020 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/ReasonPage.tsx
-- [X] T021 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/InsightPage.tsx
-- [X] T022 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/VideoPage.tsx
-- [X] T023 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/PresentationPage.tsx (if needed) - Skipped: PresentationPage uses PresentationSlide component which already has its own animation system
-- [X] T024 [US2] Verify all text types animate correctly: headings, paragraphs, labels, buttons in all updated pages
-- [X] T025 [US2] Test dynamic content: Verify asynchronously loaded text animates in correct direction across all pages
-- [X] T026 [US2] Verify consistency: All pages use same animation pattern and timing
+- [x] T018 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/choice/ui/ChoicePage.tsx
+- [x] T019 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/dilemma-selection/ui/DilemmaSelectionPage.tsx
+- [x] T020 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/reason/ui/ReasonPage.tsx
+- [x] T021 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/insight/ui/InsightPage.tsx
+- [x] T022 [P] [US2] Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/video/ui/VideoPage.tsx
+- [x] T023 [US2] ExtraPage: N/A — redirect-only, no visible text; animation not applied (frontend-dilemma/src/pages/extra/ui/ExtraPage.tsx)
+- [x] T024 [US2] Verify all text types animate correctly: headings, paragraphs, labels, buttons in all updated pages
+- [x] T025 [US2] Test dynamic content: Verify asynchronously loaded text animates in correct direction across all pages
+- [x] T026 [US2] Verify consistency: All pages use same animation pattern and timing
 
 **Checkpoint**: At this point, User Stories 1 AND 2 should both work independently. All pages have consistent RTL/LTR animation behavior.
 
@@ -98,12 +99,12 @@
 
 ### Implementation for User Story 3
 
-- [X] T027 [US3] Verify animation duration is within 0.4-0.5 seconds in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
-- [X] T028 [US3] Test animation smoothness on standard device (60fps, no stuttering) across all pages
-- [X] T029 [US3] Test multiple sequential animations maintain consistent timing in frontend-dilemma/src/pages/StatsPage.tsx
-- [X] T030 [US3] Verify animations don't block user interaction (non-blocking) across all pages
-- [X] T031 [US3] Optimize animation performance: Ensure GPU acceleration is used (transform properties) in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
-- [X] T032 [US3] Test on slower device/network: Verify animations still complete within acceptable time limits
+- [x] T027 [US3] Verify animation duration is within 0.4-0.5 seconds in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
+- [x] T028 [US3] Test animation smoothness on standard device (60fps, no stuttering) across all pages
+- [x] T029 [US3] Test multiple sequential animations maintain consistent timing in frontend-dilemma/src/pages/stats/ui/StatsPage.tsx
+- [x] T030 [US3] Verify animations don't block user interaction (non-blocking) across all pages
+- [x] T031 [US3] Optimize animation performance: Ensure GPU acceleration is used (transform properties) in frontend-dilemma/src/shared/hooks/useRTLAnimation.ts
+- [x] T032 [US3] Test on slower device/network: Verify animations still complete within acceptable time limits
 
 **Checkpoint**: All user stories should now be independently functional with smooth, performant animations.
 
@@ -113,14 +114,14 @@
 
 **Purpose**: Improvements that affect multiple user stories and edge cases
 
-- [X] T033 [P] Handle edge case: Language switching during animation (verify current completes, new uses new direction) across all pages - Handled by React lifecycle and framer-motion component-level state
-- [X] T034 [P] Handle edge case: Rapid language switching (verify no animation conflicts) across all pages - Handled by React lifecycle
-- [X] T035 [P] Handle edge case: Multiple simultaneous text appearances (each animates independently) across all pages - Each motion component animates independently
-- [X] T036 [P] Handle edge case: Off-screen content (animations trigger when visible) in frontend-dilemma/src/pages/PresentationPage.tsx - PresentationSlide handles this
-- [X] T037 [P] Verify prefers-reduced-motion disables animations but preserves layout direction across all pages - Implemented in useRTLAnimation hook
-- [X] T038 Code cleanup: Remove any hardcoded animation values replaced by useRTLAnimation hook - Completed: All pages now use useRTLAnimation
-- [X] T039 Documentation: Update quickstart.md with any implementation notes if needed - No changes needed
-- [X] T040 Run quickstart.md validation: Verify all examples work correctly - Implementation matches quickstart examples
+- [x] T033 [P] Handle edge case: Language switching during animation (verify current completes, new uses new direction) across all pages - Handled by React lifecycle and framer-motion component-level state
+- [x] T034 [P] Handle edge case: Rapid language switching (verify no animation conflicts) across all pages - Handled by React lifecycle
+- [x] T035 [P] Handle edge case: Multiple simultaneous text appearances (each animates independently) across all pages - Each motion component animates independently
+- [x] T036 [P] Handle edge case: Off-screen content (animations trigger when visible) in frontend-dilemma/src/pages/video/ui/VideoPage.tsx - Handled by framer-motion viewport behavior where used
+- [x] T037 [P] Verify prefers-reduced-motion disables animations but preserves layout direction across all pages - Implemented in useRTLAnimation hook
+- [x] T038 Code cleanup: Remove any hardcoded animation values replaced by useRTLAnimation hook - Completed: All pages now use useRTLAnimation
+- [x] T039 Documentation: Update quickstart.md with any implementation notes if needed - No changes needed
+- [x] T040 Run quickstart.md validation: Verify all examples work correctly - Implementation matches quickstart examples
 
 ---
 
@@ -154,7 +155,7 @@
 - All Setup tasks (T002, T003, T004) marked [P] can run in parallel
 - All Foundational tasks marked [P] can run in parallel (within Phase 2)
 - Once Foundational phase completes, user stories can start in parallel (if team capacity allows)
-- All page updates in US2 (T018-T023) marked [P] can run in parallel (different files)
+- All page updates in US2 (T018-T022) marked [P] can run in parallel (different files)
 - All edge case handling in Polish phase (T033-T037) marked [P] can run in parallel
 
 ---
@@ -163,12 +164,11 @@
 
 ```bash
 # Launch all page updates for User Story 2 together (different files, no conflicts):
-Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/ChoicePage.tsx"
-Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/DilemmaSelectionPage.tsx"
-Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/ReasonPage.tsx"
-Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/InsightPage.tsx"
-Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/VideoPage.tsx"
-Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/PresentationPage.tsx"
+Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/choice/ui/ChoicePage.tsx"
+Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/dilemma-selection/ui/DilemmaSelectionPage.tsx"
+Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/reason/ui/ReasonPage.tsx"
+Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/insight/ui/InsightPage.tsx"
+Task: "Apply useRTLAnimation to all motion components in frontend-dilemma/src/pages/video/ui/VideoPage.tsx"
 ```
 
 ---
@@ -213,24 +213,28 @@ With multiple developers:
 **Total Tasks**: 40
 
 **Tasks per Phase**:
+
 - Phase 1 (Setup): 4 tasks
 - Phase 2 (Foundational): 7 tasks
 - Phase 3 (User Story 1): 6 tasks
-- Phase 4 (User Story 2): 9 tasks
+- Phase 4 (User Story 2): 9 tasks (incl. T023 ExtraPage N/A)
 - Phase 5 (User Story 3): 6 tasks
 - Phase 6 (Polish): 8 tasks
 
 **Parallel Opportunities Identified**:
+
 - Setup phase: 3 parallel tasks (T002, T003, T004)
-- User Story 2: 6 parallel page updates (T018-T023)
+- User Story 2: 5 parallel page updates (T018-T022)
 - Polish phase: 5 parallel edge case tasks (T033-T037)
 
 **Independent Test Criteria**:
+
 - **User Story 1**: Switch languages on StatsPage, verify animation direction matches language
 - **User Story 2**: Navigate all pages, verify consistent animation behavior
 - **User Story 3**: Observe animations, verify smooth 60fps performance within 0.5s
 
-**Suggested MVP Scope**: 
+**Suggested MVP Scope**:
+
 - Phase 1: Setup
 - Phase 2: Foundational (useRTLAnimation hook)
 - Phase 3: User Story 1 (StatsPage only)

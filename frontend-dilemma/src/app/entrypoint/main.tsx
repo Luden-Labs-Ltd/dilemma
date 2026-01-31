@@ -4,7 +4,7 @@ import { RouterProvider } from "react-router-dom";
 import "@/shared/i18n";
 import "../styles/index.css";
 import { router } from "@/app/routes";
-import { DilemmaProvider } from "../context";
+import { DilemmaProvider } from "@/entities/dilemma";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 
 createRoot(document.getElementById('root')!).render(
