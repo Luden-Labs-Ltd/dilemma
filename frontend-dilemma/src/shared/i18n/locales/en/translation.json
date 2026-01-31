@@ -127,7 +127,7 @@
     "changedToA": "You changed your opinion after seeing the sources. This shows openness to new information and the ability to reassess your positions - an important trait for personal growth."
   },
   "dilemmas": {
-    "privacy-vs-security": {
+    "teacher": {
       "title": "Education or Programming?",
       "subtitle": "Education Dilemma",
       "questionText": "What is your decision?",
@@ -137,7 +137,7 @@
         "c": "Activate automatic filtering to ensure proper behavior."
       }
     },
-    "ai-autonomy": {
+    "doctor": {
       "title": "Rescue or Illusion?",
       "subtitle": "AI Dilemma",
       "questionText": "What is your decision?",
@@ -146,7 +146,7 @@
         "b": "Continue using the AI to prevent death"
       }
     },
-    "trolley-problem": {
+    "commander": {
       "title": "Voice or Silence?",
       "subtitle": "Military Dilemma",
       "questionText": "What is your command?",
@@ -176,124 +176,6 @@
           "title": "One Life Against Another",
           "subtitle": "Source",
           "content": "Can one life be prioritized over another? Various opinions exist."
-        }
-      }
-    },
-    "commander": {
-      "title": "Medical Ethics",
-      "subtitle": "Medical Dilemma",
-      "strategicSilence": "Strategic Silence",
-      "commander8200": "You are a commander in Unit 8200",
-      "prophetSystemLine1": "The \"Prophet\" system predicts a mass disaster",
-      "prophetSystemLine2": "In 48 hours.",
-      "aiSimulations": "Artificial intelligence runs simulations of audience reactions.",
-      "conclusionUnequivocal": "The conclusion is unequivocal:",
-      "ifYouPublishWarning": "If you publish a warning",
-      "panicMoreLethal": "The panic will be more lethal than the disaster itself.",
-      "ifYouStaySilent": "If you stay silent, 1,000 people will die.",
-      "ifYouWarn": "If you warn them, 5,000 people will die on the roads.",
-      "machineRecommends": "The machine recommends:",
-      "aiColdEquation": "The artificial intelligence presents you with a cold equation:",
-      "toSave4000": "To save 4,000 people, you must lie to the public and allow",
-      "1000DieWithoutKnowing": "1,000 people to die without knowing what harmed them.",
-      "doYouListenToMachine": "Do you listen to the machine's mathematics",
-      "whichSavesLives": "which saves human lives, or do you act according to human morality",
-      "whichDemandsTruth": "which demands to tell the truth, even if the price in blood will be higher?",
-      "whatIsYourCommand": "What is your command?",
-      "description": "A resident doctor faces a complex dilemma. Two patients need urgent care, but only one resource is available. The first patient is an elderly person with relatively low recovery chances, but he is a father to a large family. The second patient is young with high chances of full recovery, but has no family. As a doctor, you must decide: Will you prioritize the patient with better chances, or the father of the family?",
-      "questionText": "What is your command?",
-      "reflectionText": "Point to consider: The consideration here is between chance of success and family impact. Do we prefer the higher chance of success, or do we also weigh the family and social factors of the patient?",
-      "options": {
-        "a": "ADOPT MACHINE RECOMMENDATION\nSilence to Save Lives",
-        "b": "BROADCAST ALERT\nTruth at Any Cost"
-      },
-      "sources": {
-        "1": {
-          "title": "Sanctity of Life",
-          "subtitle": "Source name",
-          "content": "The principle of sanctity of life teaches us that every human life has infinite value. This principle challenges us to consider whether we can truly compare the value of different lives."
-        },
-        "2": {
-          "title": "Distance from Falsehood",
-          "subtitle": "Source name",
-          "content": "Medical ethics requires complete honesty with patients and families. The decision must be transparent and based on clear criteria."
-        },
-        "3": {
-          "title": "First Do No Harm",
-          "subtitle": "Source name",
-          "content": "The Hippocratic principle instructs doctors to first ensure they do not cause harm. Every decision must consider all potential consequences."
-        },
-        "4": {
-          "title": "One Life Against Another",
-          "subtitle": "Source name",
-          "content": "Jewish law discusses at length the question of whether one life can be prioritized over another. Various opinions exist on this matter."
-        }
-      }
-    },
-    "doctor": {
-      "title": "Professional Ethics",
-      "subtitle": "Professional Dilemma",
-      "description": "You work at a leading tech company and discover that the product you're developing contains a severe security bug. Reporting the bug will delay the launch by months and cost your employer millions of dollars. Your manager asks you to continue with the project and fix the bug in the next version. You know the bug could endanger users.",
-      "questionText": "What would you do - would you choose option A or option B?",
-      "reflectionText": "Point to consider: Does professional responsibility stand above loyalty to the employer? What is the price of compromise in such situations?",
-      "options": {
-        "a": "Option A",
-        "b": "Option B"
-      },
-      "sources": {
-        "1": {
-          "title": "Professional Responsibility",
-          "subtitle": "Source name",
-          "content": "Principles of professional ethics obligate us to place responsibility to the public above business interests. When there is a safety risk, our first duty is to protect users."
-        },
-        "2": {
-          "title": "Loyalty to Employer",
-          "subtitle": "Source name",
-          "content": "On the other hand, loyalty to the employer is an important value. A unilateral decision could harm the company and colleagues. One can try to find a solution that balances different needs."
-        },
-        "3": {
-          "title": "Transparency and Communication",
-          "subtitle": "Source name",
-          "content": "Open communication with management and clear presentation of facts can help find a responsible solution. Sometimes complete information changes the decision."
-        },
-        "4": {
-          "title": "Long-term Consequences",
-          "subtitle": "Source name",
-          "content": "Short-term decisions can have long-term consequences on professional reputation, customer trust, and the entire industry."
-        }
-      }
-    },
-    "teacher": {
-      "title": "State and Jewish Society",
-      "subtitle": "Social Dilemma",
-      "description": "You manage public resources in a mixed city. There is a limited budget to build a new public facility. One community demands a synagogue, a second community demands a secular school, and a third community demands a community center for everyone. Each group claims their needs are more urgent.",
-      "questionText": "What would you do - would you choose option A or option B?",
-      "reflectionText": "Point to consider: How do we balance religious, educational, and communal needs in a diverse society? Is there a way to find a solution that serves everyone?",
-      "options": {
-        "a": "Option A",
-        "b": "Option B",
-        "c": "Option C"
-      },
-      "sources": {
-        "1": {
-          "title": "Equality and Social Justice",
-          "subtitle": "Source name",
-          "content": "The principle of equality obligates treating all groups fairly. One must consider the needs of each community and find a solution that benefits the maximum number of people."
-        },
-        "2": {
-          "title": "Jewish Identity",
-          "subtitle": "Source name",
-          "content": "In a Jewish state, there is room to consider the importance of religious institutions as part of national identity. Synagogues are not just places of prayer but also community centers."
-        },
-        "3": {
-          "title": "Education as Priority",
-          "subtitle": "Source name",
-          "content": "Education is the most important investment in society's future. Schools provide essential services that affect future generations and society's development."
-        },
-        "4": {
-          "title": "Unity and Cooperation",
-          "subtitle": "Source name",
-          "content": "A shared community center can serve all groups and promote dialogue and cooperation. Sometimes a unifying solution is better than a dividing one."
         }
       }
     }
