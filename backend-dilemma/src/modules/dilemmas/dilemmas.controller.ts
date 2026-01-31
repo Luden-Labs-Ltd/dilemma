@@ -1,9 +1,11 @@
 import {
   Controller,
   Get,
+  Patch,
+  Param,
+  Body,
   HttpCode,
   HttpStatus,
-  Param,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { I18nLang } from 'nestjs-i18n';
@@ -11,6 +13,7 @@ import { UserUuid } from '../../common/decorators/user-uuid.decorator';
 import { DilemmasService } from './dilemmas.service';
 import { DilemmaDetailsDto } from './dto/dilemma-details.dto';
 import { DilemmaListItemDto } from './dto/dilemma-list-item.dto';
+import { UpdateDilemmaDto } from './dto/update-dilemma.dto';
 
 @ApiTags('dilemmas')
 @Controller('dilemmas')
@@ -59,5 +62,17 @@ export class DilemmasController {
     @I18nLang() lang?: string,
   ): Promise<DilemmaDetailsDto> {
     return this.dilemmasService.findOneByName(name, clientUuid, lang);
+  }
+
+  @Patch(':name')
+  @ApiOperation({ summary: 'Update dilemma (without options)' })
+  @ApiResponse({ status: 200, description: 'Dilemma updated' })
+  @ApiResponse({ status: 404, description: 'Dilemma not found' })
+  @HttpCode(HttpStatus.OK)
+  async update(
+    @Param('name') name: string,
+    @Body() dto: UpdateDilemmaDto,
+  ) {
+    return this.dilemmasService.updateByName(name, dto);
   }
 }

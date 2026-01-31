@@ -34,7 +34,7 @@ export class DilemmasService implements OnModuleInit {
   }
 
   private async seedDilemmas() {
-    const dilemmaNames = ['medical', 'professional', 'state'] as const;
+    const dilemmaNames = ['doctor', 'commander', 'teacher'] as const;
 
     for (const name of dilemmaNames) {
       const existing = await this.dilemmaRepository.findOne({
@@ -42,7 +42,7 @@ export class DilemmasService implements OnModuleInit {
         relations: ['options'],
       });
       if (!existing) {
-        const optionsCount = name === 'state' ? 3 : 2;
+        const optionsCount = name === 'teacher' ? 3 : 2;
         const letters = getValidOptionLetters(optionsCount);
         const dilemma = this.dilemmaRepository.create({
           name,
@@ -61,9 +61,9 @@ export class DilemmasService implements OnModuleInit {
           );
         }
         console.log(`Seeded dilemma: ${name} (options: ${letters.join(', ')})`);
-      } else if (name === 'state' && (existing.options_count ?? 2) !== 3) {
+      } else if (name === 'teacher' && (existing.options_count ?? 2) !== 3) {
         await this.dilemmaRepository.update(
-          { name: 'state' },
+          { name: 'teacher' },
           { options_count: 3 },
         );
         const hasC = existing.options?.some((o: DilemmaOption) => o.option_letter === 'C');
@@ -173,5 +173,27 @@ export class DilemmasService implements OnModuleInit {
    */
   async canChangeOptions(dilemmaId: number): Promise<boolean> {
     return this.decisionsService.hasAnyDecisionForDilemma(dilemmaId).then((has) => !has);
+  }
+
+  /**
+   * Обновляет дилему без опций: только title, description, is_active.
+   * Опции (options_count, dilemma_options) не меняются.
+   */
+  async updateByName(
+    name: string,
+    dto: { title?: string; description?: string; is_active?: boolean },
+  ): Promise<Dilemma> {
+    const dilemma = await this.dilemmaRepository.findOne({ where: { name } });
+    if (!dilemma) {
+      throw new NotFoundException(`Dilemma with name "${name}" not found`);
+    }
+    const payload: Partial<Dilemma> = {};
+    if (dto.title !== undefined) payload.title = dto.title;
+    if (dto.description !== undefined) payload.description = dto.description;
+    if (dto.is_active !== undefined) payload.is_active = dto.is_active;
+    if (Object.keys(payload).length === 0) return dilemma;
+    await this.dilemmaRepository.update({ name }, payload);
+    const updated = await this.dilemmaRepository.findOne({ where: { name } });
+    return updated ?? dilemma;
   }
 }
