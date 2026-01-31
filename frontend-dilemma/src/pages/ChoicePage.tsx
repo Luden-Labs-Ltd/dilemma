@@ -124,6 +124,8 @@ export function ChoicePage() {
 
   const leftOption = dilemma.options[0];
   const rightOption = dilemma.options[1];
+  const thirdOption = dilemma.options[2] ?? null;
+  const gridCols = thirdOption ? "grid-cols-3" : "grid-cols-2";
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-[#0b1d2b]">
@@ -142,7 +144,7 @@ export function ChoicePage() {
           </div>
 
           <div
-            className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]"
+            className={`absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid ${gridCols} gap-[2.5%]`}
             style={{ direction: "ltr" }}
           >
             {leftOption && (
@@ -266,6 +268,36 @@ export function ChoicePage() {
                       {rightSubtitle.displayedText}
                     </span>
                   )}
+                </div>
+              </motion.button>
+            )}
+
+            {thirdOption && (
+              <motion.button
+                {...rightCardAnimation}
+                initial={{ scale: 0.98 }}
+                animate={{ scale: 1 }}
+                whileTap={!selectedChoice ? { scale: 0.99 } : {}}
+                onClick={() => handleChoice(thirdOption.id)}
+                onMouseEnter={() => setHoveredOption("right")}
+                onMouseLeave={() => setHoveredOption(null)}
+                disabled={isSubmitting}
+                aria-label={thirdOption.label}
+                className={`relative h-full w-full rounded-[28px] outline-none ${
+                  isSubmitting ? "cursor-not-allowed" : ""
+                }`}
+              >
+                <span className="sr-only">{thirdOption.label}</span>
+                <div
+                  className="absolute inset-0 z-10 flex flex-col items-center justify-center text-center gap-[0.5vw] px-[8%] rounded-[28px] bg-[#2a1a1a]/90"
+                  style={{ direction: isRTL ? "rtl" : "ltr" }}
+                >
+                  <span
+                    className="font-['Heebo'] font-black text-[clamp(10px,2.8vw,60px)] leading-[1.15] uppercase max-w-full"
+                    style={{ color: "#F7B7B7" }}
+                  >
+                    {thirdOption.label}
+                  </span>
                 </div>
               </motion.button>
             )}

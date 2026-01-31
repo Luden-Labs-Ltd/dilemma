@@ -77,22 +77,23 @@ async function request<T>(input: string, init?: RequestInit): Promise<T> {
   }
 }
 
+type BackendDilemmaOption = {
+  id: string;
+  title: string;
+  description: string;
+};
+
 type BackendDilemma = {
   name: string;
   title: string;
   description: string;
-  option_a_title: string;
-  option_a_description: string;
-  option_b_title: string;
-  option_b_description: string;
+  options: BackendDilemmaOption[];
+  hasParticipated: boolean;
 };
 
-// Реальная структура ответа от /statistics/paths/:name
+// Response from GET /statistics/dilemma/:name (spec 006: pathCounts dynamic)
 type BackendPathStatsResponse = {
-  AA: number;
-  AB: number;
-  BA: number;
-  BB: number;
+  pathCounts: Record<string, number>;
   totalCompleted: number;
 };
 
@@ -110,19 +111,19 @@ type BackendFeedbackResponse = {
 
 type BackendDecisionResponse = {
   decisionId: number;
-  initialChoice: "A" | "B";
-  finalChoice: "A" | "B";
+  initialChoice: string;
+  finalChoice: string;
   changedMind: boolean;
-  path: "AA" | "AB" | "BB" | "BA";
+  path: string;
   timeToDecide: number;
 };
 
 export type BackendMyDecisionItem = {
   dilemmaName: string;
-  initialChoice: "A" | "B";
-  finalChoice: "A" | "B" | null;
+  initialChoice: string;
+  finalChoice: string | null;
   changedMind?: boolean;
-  path?: "AA" | "AB" | "BB" | "BA";
+  path?: string;
   timeToDecide?: number;
 };
 
@@ -166,9 +167,9 @@ export async function submitInitialChoice(
     throw new Error("dilemmaName must be a non-empty string");
   }
 
-  const choiceValue = choice === "a" ? "A" : "B";
-  if (choiceValue !== "A" && choiceValue !== "B") {
-    throw new Error("choice must be 'a' or 'b'");
+  const choiceValue = typeof choice === "string" ? choice.toUpperCase() : choice;
+  if (!/^[A-J]$/.test(choiceValue)) {
+    throw new Error("choice must be A–J");
   }
 
   let userUuid = getClientUuid();
@@ -181,11 +182,10 @@ export async function submitInitialChoice(
       },
       body: JSON.stringify({
         dilemmaName: String(dilemmaName),
-        choice: choiceValue,
+        choice: choiceValue as "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J",
       }),
     });
   } catch (err) {
-    // Если пользователь уже проголосовал (409 Conflict), генерируем новый UUID и повторяем запрос
     const apiError = err as ApiError;
     if (apiError.type === "http" && apiError.status === 409) {
       userUuid = generateNewClientUuid();
@@ -196,7 +196,7 @@ export async function submitInitialChoice(
         },
         body: JSON.stringify({
           dilemmaName: String(dilemmaName),
-          choice: choiceValue,
+          choice: choiceValue as "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J",
         }),
       });
     }
@@ -212,9 +212,9 @@ export async function submitFinalChoice(
     throw new Error("dilemmaName must be a non-empty string");
   }
 
-  const choiceValue = choice === "a" ? "A" : "B";
-  if (choiceValue !== "A" && choiceValue !== "B") {
-    throw new Error("choice must be 'a' or 'b'");
+  const choiceValue = typeof choice === "string" ? choice.toUpperCase() : choice;
+  if (!/^[A-J]$/.test(choiceValue)) {
+    throw new Error("choice must be A–J");
   }
 
   let userUuid = getClientUuid();
@@ -244,12 +244,38 @@ export async function submitFinalChoice(
         },
         body: JSON.stringify({
           dilemmaName: String(dilemmaName),
-          choice: choiceValue,
+          choice: choiceValue as "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J",
         }),
       });
     }
     throw err;
   }
+}
+
+/** Из pathCounts (AA, AB, …) получаем буквы опций и считаем долю по финальному выбору */
+function optionCountsAndPercentsFromPathCounts(
+  pathCounts: Record<string, number>,
+  total: number
+): { optionCounts: Record<string, number>; optionPercents: Record<string, number> } {
+  const letters = new Set<string>();
+  for (const key of Object.keys(pathCounts)) {
+    if (key.length === 2) {
+      letters.add(key[0]);
+      letters.add(key[1]);
+    }
+  }
+  const sortedLetters = Array.from(letters).sort();
+  const optionCounts: Record<string, number> = {};
+  const optionPercents: Record<string, number> = {};
+  for (const L of sortedLetters) {
+    let count = 0;
+    for (const X of sortedLetters) {
+      count += pathCounts[`${X}${L}`] ?? 0;
+    }
+    optionCounts[L] = count;
+    optionPercents[L] = total > 0 ? Math.round((count / total) * 100) : (sortedLetters.length > 0 ? Math.round(100 / sortedLetters.length) : 0);
+  }
+  return { optionCounts, optionPercents };
 }
 
 export async function fetchDilemmaStats(
@@ -259,23 +285,29 @@ export async function fetchDilemmaStats(
     `/statistics/paths/${dilemmaName}`
   );
 
-  // Бэкенд возвращает статистику путей напрямую
-  const total = data.totalCompleted || (data.AA + data.AB + data.BB + data.BA);
+  const total = data.totalCompleted ?? 0;
+  const pathCounts = data.pathCounts ?? {};
+  const { optionCounts, optionPercents } = optionCountsAndPercentsFromPathCounts(pathCounts, total);
 
-  // Маппим в существующую структуру фронта
-  const aCount = data.AA + data.AB;
-  const bCount = data.BB + data.BA;
-
-  const aPercent = total > 0 ? Math.round((aCount / total) * 100) : 50;
-  const bPercent = total > 0 ? Math.round((bCount / total) * 100) : 50;
+  const aCount = optionCounts["A"] ?? 0;
+  const bCount = optionCounts["B"] ?? 0;
+  const cCount = optionCounts["C"] ?? 0;
+  const aPercent = optionPercents["A"] ?? 50;
+  const bPercent = optionPercents["B"] ?? 50;
+  const cPercent = optionPercents["C"] ?? 33;
 
   return {
     dilemmaId: dilemmaName,
     total,
+    pathCounts,
+    optionCounts,
+    optionPercents,
     aCount,
     bCount,
     aPercent,
     bPercent,
+    cCount,
+    cPercent,
   };
 }
 
@@ -284,11 +316,10 @@ export async function getAiReport(
   choice: Choice,
   reasonText: string | null
 ): Promise<string> {
-  // Пока backend не отдает AI-отчет, оставим локальный текст, но уже с реальной статистикой
   const stats = await fetchDilemmaStats(dilemmaId);
-  const choiceLabel = choice === "a" ? "א" : "ב";
-  const choicePercent =
-    choice === "a" ? stats.aPercent : stats.bPercent;
+  const choiceLabels: Record<string, string> = { A: "א", B: "ב", C: "ג", D: "ד", E: "ה", F: "ו", G: "ז", H: "ח", I: "ט", J: "י" };
+  const choiceLabel = choiceLabels[choice] ?? choice;
+  const choicePercent = stats.optionPercents?.[choice] ?? (choice === "A" ? (stats.aPercent ?? 0) : choice === "B" ? (stats.bPercent ?? 0) : stats.cPercent ?? 33);
 
   if (reasonText) {
     return `על בסיס הבחירה שלך (אפשרות ${choiceLabel}) והסבר שכתבת, נראה שאתה מתחשב בהיבטים מורכבים של הדילמה. כרגע ${choicePercent}% מהמשתתפים בחרו באפשרות זו.`;
@@ -303,9 +334,9 @@ export async function getInsightData(
   reasonText: string | null
 ) {
   const stats = await fetchDilemmaStats(dilemmaId);
-  const choiceLabel = choice === "a" ? "א" : "ב";
-  const choicePercent =
-    choice === "a" ? stats.aPercent : stats.bPercent;
+  const choiceLabels: Record<string, string> = { A: "א", B: "ב", C: "ג", D: "ד", E: "ה", F: "ו", G: "ז", H: "ח", I: "ט", J: "י" };
+  const choiceLabel = choiceLabels[choice] ?? choice;
+  const choicePercent = stats.optionPercents?.[choice] ?? (choice === "A" ? (stats.aPercent ?? 0) : choice === "B" ? (stats.bPercent ?? 0) : stats.cPercent ?? 33);
 
   let interpretation: string;
 
@@ -347,11 +378,14 @@ export async function fetchFeedbackAnalyze(
   dilemmaTextOriginal?: DilemmaTextData
 ): Promise<string[]> {
   const userUuid = getClientUuid();
-  const choiceValue = choice === "a" ? "A" : "B";
+  const choiceValue = typeof choice === "string" ? choice.toUpperCase() : choice;
+  if (!/^[A-J]$/.test(choiceValue)) {
+    throw new Error("choice must be A–J");
+  }
 
   const payload: {
     dilemmaName: string;
-    choice: "A" | "B";
+    choice: string;
     reasoning?: string;
     dilemmaText?: DilemmaTextData;
     dilemmaTextOriginal?: DilemmaTextData;

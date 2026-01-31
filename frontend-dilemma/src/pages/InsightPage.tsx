@@ -22,7 +22,7 @@ export function InsightPage() {
     const currentLang = i18n.language;
     const isHebrew = currentLang === "he";
     
-    if (choice === "a") {
+    if (choice === "A") {
       if (isHebrew) {
         return [
           "שתיקה אסטרטגית (מתוך רצון להציל חיים רבים יותר)",

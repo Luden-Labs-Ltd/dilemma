@@ -4,17 +4,17 @@ export class DecisionResponseDto {
   @ApiProperty()
   decisionId: number;
 
-  @ApiProperty({ enum: ['A', 'B'] })
-  initialChoice: 'A' | 'B';
+  @ApiProperty({ description: 'Initial choice letter (A–J)' })
+  initialChoice: string;
 
-  @ApiProperty({ enum: ['A', 'B'] })
-  finalChoice: 'A' | 'B';
+  @ApiProperty({ description: 'Final choice letter (A–J)' })
+  finalChoice: string;
 
   @ApiProperty()
   changedMind: boolean;
 
-  @ApiProperty({ enum: ['AA', 'AB', 'BB', 'BA'] })
-  path: 'AA' | 'AB' | 'BB' | 'BA';
+  @ApiProperty({ description: 'Two-letter trajectory, e.g. AA, AC, CB' })
+  path: string;
 
   @ApiProperty()
   timeToDecide: number;

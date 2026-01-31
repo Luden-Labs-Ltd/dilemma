@@ -1,6 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class OptionDto {
+  @ApiProperty({ description: 'Option letter (A, B, C, …)' })
+  id: string;
+
   @ApiProperty()
   title: string;
 
@@ -18,11 +21,8 @@ export class DilemmaDetailsDto {
   @ApiProperty()
   description: string;
 
-  @ApiProperty()
-  optionA: OptionDto;
-
-  @ApiProperty()
-  optionB: OptionDto;
+  @ApiProperty({ type: [OptionDto], description: '2–10 options in order A, B, C, …' })
+  options: OptionDto[];
 
   @ApiProperty()
   hasParticipated: boolean;

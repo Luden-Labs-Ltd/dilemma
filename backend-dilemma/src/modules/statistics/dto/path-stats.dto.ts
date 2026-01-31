@@ -1,21 +1,15 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class PathStatsDto {
-  @ApiProperty({ example: 20, description: 'Количество участников с путём AA' })
-  AA: number;
-
-  @ApiProperty({ example: 10, description: 'Количество участников с путём AB' })
-  AB: number;
-
-  @ApiProperty({ example: 5, description: 'Количество участников с путём BA' })
-  BA: number;
-
-  @ApiProperty({ example: 7, description: 'Количество участников с путём BB' })
-  BB: number;
+  @ApiProperty({
+    description: 'Count per trajectory (AA, AB, AC, …). Keys depend on dilemma options count.',
+    example: { AA: 5, AB: 2, AC: 1, BA: 3, BB: 4, BC: 0, CA: 1, CB: 0, CC: 2 },
+  })
+  pathCounts: Record<string, number>;
 
   @ApiProperty({
-    example: 42,
-    description: 'Общее количество завершённых участников (final_choice != null)',
+    description: 'Total completed participants (final_choice != null)',
+    example: 18,
   })
   totalCompleted: number;
 }

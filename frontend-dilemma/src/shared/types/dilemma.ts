@@ -1,12 +1,13 @@
-// Типы для дилемм и ответов пользователей
+// Типы для дилемм и ответов пользователей (spec 006: 2–10 options)
 export type DilemmaType = string;
 
-export type Choice = "a" | "b";
+/** Option letter A–J (uppercase for API). */
+export type Choice = "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J";
 
 export interface DilemmaOption {
   id: Choice;
   label: string;
-  image: string;
+  image?: string;
 }
 
 export interface Source {
@@ -23,7 +24,8 @@ export interface Dilemma {
   image: string;
   description: string;
   questionText: string;
-  options: [DilemmaOption, DilemmaOption];
+  /** 2–10 options in order A, B, C, … */
+  options: DilemmaOption[];
   sources: Source[];
   reflectionText: string;
 }
@@ -37,12 +39,19 @@ export interface UserAnswer {
   timestamp: number;
 }
 
-// Статистика по дилемме
+// Статистика по дилемме (pathCounts: trajectory -> count; для 2 и 3+ опций)
 export interface DilemmaStats {
   dilemmaId: DilemmaType;
   total: number;
-  aCount: number;
-  bCount: number;
-  aPercent: number;
-  bPercent: number;
+  pathCounts: Record<string, number>;
+  /** Количество решений с финальным выбором по букве (A, B, C, …) */
+  optionCounts: Record<string, number>;
+  /** Доля в % по букве (A, B, C, …) */
+  optionPercents: Record<string, number>;
+  aCount?: number;
+  bCount?: number;
+  aPercent?: number;
+  bPercent?: number;
+  cCount?: number;
+  cPercent?: number;
 }

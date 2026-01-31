@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -20,13 +21,30 @@ import { DecisionResponseDto } from './dto/decision-response.dto';
 import { FeedbackResponseDto } from './dto/feedback-response.dto';
 import { FinalChoiceDto } from './dto/final-choice.dto';
 import { InitialChoiceDto } from './dto/initial-choice.dto';
-import { Choice } from './entities/user-decision.entity';
+import { MyDecisionItemDto } from './dto/my-decision-item.dto';
 
 @ApiTags('decisions')
 @Controller('decisions')
 @UseGuards(UuidValidationGuard)
 export class DecisionsController {
   constructor(private readonly decisionsService: DecisionsService) {}
+
+  @Get('my')
+  @ApiOperation({ summary: 'Get my decisions with path' })
+  @ApiHeader({
+    name: 'X-User-UUID',
+    required: true,
+    description: 'User UUID',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'List of user decisions with path (initial_choice + final_choice)',
+    type: [MyDecisionItemDto],
+  })
+  @HttpCode(HttpStatus.OK)
+  async getMyDecisions(@UserUuid() clientUuid: string): Promise<MyDecisionItemDto[]> {
+    return this.decisionsService.findMyDecisions(clientUuid);
+  }
 
   @Post('initial')
   @ApiOperation({ summary: 'Make initial choice' })
@@ -57,7 +75,7 @@ export class DecisionsController {
     return this.decisionsService.createInitialChoice(
       clientUuid,
       dto.dilemmaName,
-      dto.choice as Choice,
+      dto.choice,
       lang,
     );
   }
@@ -85,7 +103,7 @@ export class DecisionsController {
     return this.decisionsService.createFinalChoice(
       clientUuid,
       dto.dilemmaName,
-      dto.choice as Choice,
+      dto.choice,
     );
   }
 }

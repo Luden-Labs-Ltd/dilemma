@@ -254,7 +254,8 @@
       "reflectionText": "Point to consider: How do we balance religious, educational, and communal needs in a diverse society? Is there a way to find a solution that serves everyone?",
       "options": {
         "a": "Option A",
-        "b": "Option B"
+        "b": "Option B",
+        "c": "Option C"
       },
       "sources": {
         "1": {

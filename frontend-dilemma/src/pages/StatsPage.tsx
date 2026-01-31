@@ -9,13 +9,30 @@ import { formatPercent } from "@/shared/lib/utils";
 import type { DilemmaStats } from "@/shared/types";
 import slideStats from "@/shared/assets/slides/medical/slide-stat.png?format=webp";
 
+const OPTION_COLORS: Record<string, string> = {
+  A: "#B7ECF7",
+  B: "#FCD1CF",
+  C: "#C5E1A5",
+  D: "#FFE082",
+  E: "#B39DDB",
+  F: "#80DEEA",
+  G: "#EF9A9A",
+  H: "#A5D6A7",
+  I: "#CE93D8",
+  J: "#FFCC80",
+};
+
 export function StatsPage() {
   const { t, i18n } = useTranslation();
-  const animation = useRTLAnimation({ delay: 0.1 });
-  const animation2 = useRTLAnimation({ delay: 0.2 });
   const navigate = useNavigate();
   const { currentDilemma, choice } = useDilemma();
   const dilemma = useDilemmaData(currentDilemma);
+  const optionCount = dilemma?.options?.length ?? 2;
+  const animations = [
+    useRTLAnimation({ delay: 0.1 }),
+    useRTLAnimation({ delay: 0.2 }),
+    useRTLAnimation({ delay: 0.3 }),
+  ];
 
   const [stats, setStats] = useState<DilemmaStats | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +63,9 @@ export function StatsPage() {
         setStats({
           dilemmaId: currentDilemma,
           total: 0,
+          pathCounts: {},
+          optionCounts: {},
+          optionPercents: {},
           aCount: 0,
           bCount: 0,
           aPercent: 50,
@@ -101,112 +121,62 @@ export function StatsPage() {
           </div>
 
           <div
-            className="absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid grid-cols-2 gap-[2.5%]"
+            className={`absolute left-[6%] right-[6%] top-[12%] bottom-[12%] grid gap-[2.5%] ${optionCount === 3 ? "grid-cols-3" : "grid-cols-2"}`}
             style={{ direction: "ltr" }}
           >
-            <motion.div
-              {...animation}
-              initial={{ 
-                ...animation.initial,
-                scale: 0.98
-              }}
-              animate={{ 
-                ...animation.animate,
-                scale: 1
-              }}
-              className="relative h-full w-full rounded-[28px] outline-none"
-            >
-              <span className="sr-only">{t("stats.optionA")}</span>
-              <div className="absolute inset-0 z-10 px-[10%] text-center">
-                <span
-                  className="absolute left-1/2 top-[12%] -translate-x-1/2 font-['Heebo'] font-medium text-[clamp(14px,3.2vw,72px)] leading-[1.15] max-w-[90%]"
-                  style={{ color: "#B7ECF7" }}
+            {dilemma.options.map((opt, idx) => {
+              const color = OPTION_COLORS[opt.id] ?? "#E6F8F9";
+              const anim = animations[idx] ?? animations[0];
+              const percent = stats?.optionPercents?.[opt.id] ?? stats?.aPercent ?? stats?.bPercent ?? (optionCount === 2 ? 50 : 33);
+              const isChosen = choice === opt.id;
+              const badgePos = optionCount === 2 ? (opt.id === "A" ? "left-[8%]" : "right-[8%]") : (idx === 0 ? "left-[8%]" : idx === 1 ? "left-1/2 -translate-x-1/2" : "right-[8%]");
+              return (
+                <motion.div
+                  key={opt.id}
+                  {...anim}
+                  initial={{ ...anim.initial, scale: 0.98 }}
+                  animate={{ ...anim.animate, scale: 1 }}
+                  className="relative h-full w-full rounded-[28px] outline-none"
                 >
-                  {t("stats.optionA")}
-                </span>
-                <span
-                  className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 font-['Heebo'] font-black text-[clamp(28px,8vw,150px)] leading-none max-w-full"
-                  style={{ color: "#B7ECF7" }}
-                >
-                  {formatPercent(stats ? stats.aPercent : 50)}%
-                </span>
-                {choice === "a" && (
-                  <div
-                    className="absolute left-[8%] bottom-[8%] flex items-center justify-center rounded-full border-2"
-                    style={{
-                      width: "clamp(120px, 10vw, 160px)",
-                      height: "clamp(120px, 10vw, 160px)",
-                      backgroundColor: "rgba(183, 236, 247, 0.19)",
-                      borderColor: "#B7ECF7",
-                      boxShadow: "0px 0px 34px 0px rgba(159, 228, 253, 1)",
-                      padding: "10px",
-                    }}
-                  >
+                  <span className="sr-only">{opt.label}</span>
+                  <div className="absolute inset-0 z-10 px-[8%] text-center">
                     <span
-                      className="font-['Heebo'] font-bold text-center leading-[1.14em] whitespace-pre-line"
-                      style={{
-                        fontSize: "clamp(18px, 1.75vw, 28px)",
-                        color: "#B7ECF7",
-                      }}
+                      className="absolute left-1/2 top-[12%] -translate-x-1/2 font-['Heebo'] font-medium text-[clamp(12px,2.8vw,56px)] leading-[1.15] max-w-[95%] line-clamp-2"
+                      style={{ color }}
                     >
-                      {i18n.language === "he" ? "הבחירה\nשלך" : t("stats.yourChoice")}
+                      {opt.label}
                     </span>
-                  </div>
-                )}
-              </div>
-            </motion.div>
-
-            <motion.div
-              {...animation2}
-              initial={{ 
-                ...animation2.initial,
-                scale: 0.98
-              }}
-              animate={{ 
-                ...animation2.animate,
-                scale: 1
-              }}
-              className="relative h-full w-full rounded-[28px] outline-none"
-            >
-              <span className="sr-only">{t("stats.optionB")}</span>
-              <div className="absolute inset-0 z-10 px-[10%] text-center">
-                <span
-                  className="absolute left-1/2 top-[12%] -translate-x-1/2 font-['Heebo'] font-medium text-[clamp(14px,3.2vw,72px)] leading-[1.15] max-w-[90%]"
-                  style={{ color: "#FCD1CF" }}
-                >
-                  {t("stats.optionB")}
-                </span>
-                <span
-                  className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 font-['Heebo'] font-black text-[clamp(28px,8vw,150px)] leading-none max-w-full"
-                  style={{ color: "#FCD1CF" }}
-                >
-                  {formatPercent(stats ? stats.bPercent : 50)}%
-                </span>
-                {choice === "b" && (
-                  <div
-                    className="absolute right-[8%] bottom-[8%] flex items-center justify-center rounded-full border-2"
-                    style={{
-                      width: "clamp(120px, 10vw, 160px)",
-                      height: "clamp(120px, 10vw, 160px)",
-                      backgroundColor: "rgba(252, 209, 207, 0.19)",
-                      borderColor: "#FCD1CF",
-                      boxShadow: "0px 0px 34px 0px rgba(252, 209, 207, 1)",
-                      padding: "10px",
-                    }}
-                  >
                     <span
-                      className="font-['Heebo'] font-bold text-center leading-[1.14em] whitespace-pre-line"
-                      style={{
-                        fontSize: "clamp(18px, 1.75vw, 28px)",
-                        color: "#FCD1CF",
-                      }}
+                      className="absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 font-['Heebo'] font-black text-[clamp(22px,6vw,120px)] leading-none max-w-full"
+                      style={{ color }}
                     >
-                      {i18n.language === "he" ? "הבחירה\nשלך" : t("stats.yourChoice")}
+                      {formatPercent(percent)}%
                     </span>
+                    {isChosen && (
+                      <div
+                        className={`absolute bottom-[8%] flex items-center justify-center rounded-full border-2 ${idx === 1 && optionCount === 3 ? "left-1/2 -translate-x-1/2" : ""}`}
+                        style={{
+                          width: "clamp(100px, 8vw, 140px)",
+                          height: "clamp(100px, 8vw, 140px)",
+                          backgroundColor: `${color}19`,
+                          borderColor: color,
+                          boxShadow: `0px 0px 24px 0px ${color}`,
+                          padding: "8px",
+                          ...(opt.id === "A" ? { left: "8%" } : opt.id === "B" && optionCount === 2 ? { right: "8%" } : opt.id === "B" && optionCount === 3 ? { left: "50%", transform: "translate(-50%, 0)" } : { right: "8%" }),
+                        }}
+                      >
+                        <span
+                          className="font-['Heebo'] font-bold text-center leading-[1.14em] whitespace-pre-line"
+                          style={{ fontSize: "clamp(14px, 1.4vw, 22px)", color }}
+                        >
+                          {i18n.language === "he" ? "הבחירה\nשלך" : t("stats.yourChoice")}
+                        </span>
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </motion.div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </div>

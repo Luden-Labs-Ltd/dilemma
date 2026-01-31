@@ -1,0 +1,188 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Multi-Option Dilemmas API (006)",
+    "version": "1.0.0",
+    "description": "Extended contracts for variable options (2–10) per dilemma"
+  },
+  "servers": [{ "url": "http://localhost:3000/api", "description": "Development" }],
+  "paths": {
+    "/dilemmas/{name}": {
+      "get": {
+        "tags": ["dilemmas"],
+        "summary": "Get dilemma details with options array",
+        "parameters": [
+          { "name": "name", "in": "path", "required": true, "schema": { "type": "string" } },
+          { "name": "Accept-Language", "in": "header", "required": false, "schema": { "type": "string", "example": "he" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dilemma with 2 or more options",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DilemmaDetailsDto" }
+              }
+            }
+          },
+          "404": { "description": "Dilemma not found" }
+        }
+      }
+    },
+    "/decisions/initial": {
+      "post": {
+        "tags": ["decisions"],
+        "summary": "Submit initial choice (A, B, or C..J)",
+        "parameters": [
+          { "name": "X-User-UUID", "in": "header", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/InitialChoiceDto" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Initial choice saved, feedback returned",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/FeedbackResponseDto" }
+              }
+            }
+          },
+          "400": { "description": "Invalid choice for this dilemma (e.g. choice not in dilemma options)" },
+          "404": { "description": "Dilemma not found" },
+          "409": { "description": "User already participated" }
+        }
+      }
+    },
+    "/decisions/final": {
+      "post": {
+        "tags": ["decisions"],
+        "summary": "Submit final choice (A, B, or C..J)",
+        "parameters": [
+          { "name": "X-User-UUID", "in": "header", "required": true, "schema": { "type": "string", "format": "uuid" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FinalChoiceDto" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Final choice saved",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/DecisionResponseDto" }
+              }
+            }
+          },
+          "400": { "description": "Invalid choice or initial choice not made" },
+          "404": { "description": "Dilemma or user not found" },
+          "409": { "description": "Final choice already made" }
+        }
+      }
+    },
+    "/statistics/dilemma/{name}": {
+      "get": {
+        "tags": ["statistics"],
+        "summary": "Get path statistics (dynamic pathCounts)",
+        "parameters": [
+          { "name": "name", "in": "path", "required": true, "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "Path counts for all trajectories (AA, AB, ... for 2 options; AA..CC for 3, etc.)",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PathStatsDto" }
+              }
+            }
+          },
+          "404": { "description": "Dilemma not found" }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "OptionDto": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string", "enum": ["A","B","C","D","E","F","G","H","I","J"], "description": "Option letter" },
+          "title": { "type": "string" },
+          "description": { "type": "string" }
+        },
+        "required": ["id", "title", "description"]
+      },
+      "DilemmaDetailsDto": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "options": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OptionDto" },
+            "description": "2 to 10 options (A, B, C, ...) in order"
+          },
+          "hasParticipated": { "type": "boolean" }
+        },
+        "required": ["name", "title", "description", "options", "hasParticipated"]
+      },
+      "InitialChoiceDto": {
+        "type": "object",
+        "properties": {
+          "dilemmaName": { "type": "string" },
+          "choice": { "type": "string", "enum": ["A","B","C","D","E","F","G","H","I","J"] }
+        },
+        "required": ["dilemmaName", "choice"]
+      },
+      "FinalChoiceDto": {
+        "type": "object",
+        "properties": {
+          "dilemmaName": { "type": "string" },
+          "choice": { "type": "string", "enum": ["A","B","C","D","E","F","G","H","I","J"] }
+        },
+        "required": ["dilemmaName", "choice"]
+      },
+      "FeedbackResponseDto": {
+        "type": "object",
+        "properties": {
+          "decisionId": { "type": "integer" },
+          "feedback": { "type": "string" }
+        },
+        "required": ["decisionId", "feedback"]
+      },
+      "DecisionResponseDto": {
+        "type": "object",
+        "properties": {
+          "decisionId": { "type": "integer" },
+          "initialChoice": { "type": "string" },
+          "finalChoice": { "type": "string" },
+          "changedMind": { "type": "boolean" },
+          "path": { "type": "string", "description": "Two-letter trajectory, e.g. AA, AC, CB" },
+          "timeToDecide": { "type": "integer" }
+        },
+        "required": ["decisionId", "initialChoice", "finalChoice", "changedMind", "path", "timeToDecide"]
+      },
+      "PathStatsDto": {
+        "type": "object",
+        "properties": {
+          "pathCounts": {
+            "type": "object",
+            "additionalProperties": { "type": "integer" },
+            "description": "Keys: trajectory strings (AA, AB, AC, BA, BB, BC, CA, CB, CC for 3 options; etc.)"
+          },
+          "totalCompleted": { "type": "integer" }
+        },
+        "required": ["pathCounts", "totalCompleted"]
+      }
+    }
+  }
+}
