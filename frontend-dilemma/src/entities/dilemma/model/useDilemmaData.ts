@@ -40,9 +40,10 @@ export function useDilemmaData(dilemmaId: DilemmaType | null) {
     { id: "b", label: t(`dilemmas.${dilemmaId}.options.b`), image: "" },
   ];
 
-  if (dilemmaId === "state") {
-    const cLabel = t("dilemmas.state.options.c");
-    if (cLabel && cLabel !== "dilemmas.state.options.c") {
+  if (dilemmaId === "teacher") {
+    const cKey = dilemmaId === "teacher" ? "dilemmas.teacher.options.c" : "";
+    const cLabel = t(cKey);
+    if (cLabel && cLabel !== cKey) {
       options.push({ id: "c", label: cLabel, image: "" });
     }
   }

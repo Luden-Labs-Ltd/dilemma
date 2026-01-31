@@ -126,6 +126,11 @@ export const DILEMMAS: Record<string, Dilemma> = {
         label: 'אפשרות ב',
         image: '/option-b-state.jpg',
       },
+      {
+        id: 'c',
+        label: 'C',
+        image: '',
+      },
     ],
     sources: [
       {
