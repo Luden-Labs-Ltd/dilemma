@@ -12,5 +12,11 @@ export class PathStatsDto {
     example: 18,
   })
   totalCompleted: number;
+
+  @ApiProperty({
+    description: 'Count of responses per option (final choice A, B, C, …)',
+    example: { A: 9, B: 6, C: 3 },
+  })
+  optionCounts: Record<string, number>;
 }
 

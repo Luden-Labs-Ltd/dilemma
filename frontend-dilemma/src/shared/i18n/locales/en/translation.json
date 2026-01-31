@@ -64,6 +64,7 @@
   "stats": {
     "title": "How did others respond?",
     "totalResponses": "Total responses: {{count}}",
+    "optionResponsesCount": "{{count}}",
     "visitorsCount": "{{count}} visitors",
     "optionA": "Listened to the machine",
     "optionB": "Revealed the Truth",

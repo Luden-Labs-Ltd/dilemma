@@ -91,10 +91,11 @@ type BackendDilemma = {
   hasParticipated: boolean;
 };
 
-// Response from GET /statistics/dilemma/:name (spec 006: pathCounts dynamic)
+// Response from GET /statistics/paths/:name (pathCounts + optionCounts)
 type BackendPathStatsResponse = {
   pathCounts: Record<string, number>;
   totalCompleted: number;
+  optionCounts?: Record<string, number>;
 };
 
 type BackendUser = {
@@ -287,7 +288,8 @@ export async function fetchDilemmaStats(
 
   const total = data.totalCompleted ?? 0;
   const pathCounts = data.pathCounts ?? {};
-  const { optionCounts, optionPercents } = optionCountsAndPercentsFromPathCounts(pathCounts, total);
+  const { optionCounts: derivedCounts, optionPercents } = optionCountsAndPercentsFromPathCounts(pathCounts, total);
+  const optionCounts = data.optionCounts && Object.keys(data.optionCounts).length > 0 ? data.optionCounts : derivedCounts;
 
   const aCount = optionCounts["A"] ?? 0;
   const bCount = optionCounts["B"] ?? 0;

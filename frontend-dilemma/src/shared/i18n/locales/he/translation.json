@@ -64,6 +64,7 @@
   "stats": {
     "title": "איך אחרים ענו?",
     "totalResponses": "כמות משתתפים: {{count}}",
+    "optionResponsesCount": "{{count}}",
     "visitorsCount": "{{count}} מבקרים",
     "optionA": "הקשיבו למכונה",
     "optionB": "גילו את האמת",

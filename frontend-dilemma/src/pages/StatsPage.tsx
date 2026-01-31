@@ -118,6 +118,9 @@ export function StatsPage() {
             <span className="text-[clamp(16px,2.2vw,34px)] font-black leading-tight">
               {t("stats.title")}
             </span>
+            <p className="mt-1 text-[clamp(12px,1.5vw,22px)] font-medium opacity-90">
+              {t("stats.totalResponses", { count: stats?.total ?? 0 })}
+            </p>
           </div>
 
           <div
@@ -128,8 +131,8 @@ export function StatsPage() {
               const color = OPTION_COLORS[opt.id] ?? "#E6F8F9";
               const anim = animations[idx] ?? animations[0];
               const percent = stats?.optionPercents?.[opt.id] ?? stats?.aPercent ?? stats?.bPercent ?? (optionCount === 2 ? 50 : 33);
+              const count = stats?.optionCounts?.[opt.id] ?? 0;
               const isChosen = choice === opt.id;
-              const badgePos = optionCount === 2 ? (opt.id === "A" ? "left-[8%]" : "right-[8%]") : (idx === 0 ? "left-[8%]" : idx === 1 ? "left-1/2 -translate-x-1/2" : "right-[8%]");
               return (
                 <motion.div
                   key={opt.id}
@@ -151,6 +154,12 @@ export function StatsPage() {
                       style={{ color }}
                     >
                       {formatPercent(percent)}%
+                    </span>
+                    <span
+                      className="absolute left-1/2 top-[68%] -translate-x-1/2 font-['Heebo'] font-medium text-[clamp(11px,1.4vw,20px)] opacity-90"
+                      style={{ color }}
+                    >
+                      {t("stats.optionResponsesCount", { count })}
                     </span>
                     {isChosen && (
                       <div

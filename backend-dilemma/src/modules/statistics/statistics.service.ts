@@ -39,6 +39,10 @@ export class StatisticsService {
     }
 
     let totalCompleted = 0;
+    const optionCounts: Record<string, number> = {};
+    for (const letter of letters) {
+      optionCounts[letter] = 0;
+    }
 
     for (const decision of decisions) {
       if (!decision.final_choice) {
@@ -49,12 +53,16 @@ export class StatisticsService {
       if (path in pathCounts) {
         pathCounts[path] += 1;
       }
+      if (decision.final_choice in optionCounts) {
+        optionCounts[decision.final_choice] += 1;
+      }
       totalCompleted += 1;
     }
 
     return {
       pathCounts,
       totalCompleted,
+      optionCounts,
     };
   }
 }
