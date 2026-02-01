@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import boothBackground from "@/shared/assets/dilemmas/common/reason-background.png";
 
-const REDIRECT_DELAY_MS = 5000;
+const REDIRECT_DELAY_MS = 7000;
 
 export function BoothPage() {
   const { t } = useTranslation();

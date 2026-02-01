@@ -1,17 +1,18 @@
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-/** QR size by viewport width for gradual responsive scaling. */
+/** QR size. On mobile: match card width (viewport - padding). Desktop: fixed scales. */
 function getQrSize(): number {
-  if (typeof window === "undefined") return 220;
+  if (typeof window === "undefined") return 200;
   const w = window.innerWidth;
-  if (w < 400) return 140;
-  if (w < 640) return 180;
-  if (w < 768) return 200;
-  if (w < 1024) return 240;
-  if (w < 1280) return 260;
-  if (w < 1920) return 300;
-  return 340;
+  // Mobile (<768): same width as cards (parent px-3 + grid px-3 + gap ≈ 56px)
+  if (w < 768) return Math.max(120, Math.min(400, w - 56));
+  if (w < 1024) return 190;
+  if (w < 1280) return 200;
+  // xl (1280+): 260→380px
+  if (w < 1536) return Math.min(380, 260 + Math.round((w - 1280) / 2.5));
+  // 2xl (1536+): 380→500px
+  return Math.min(500, 380 + Math.round((w - 1536) / 4));
 }
 import QRCode from "react-qr-code";
 import { fetchDilemmaStats } from "@/shared/lib/api";
@@ -53,9 +54,10 @@ export function SharePage() {
   const [qrSize, setQrSize] = useState(() => getQrSize());
 
   useEffect(() => {
-    const onResize = () => setQrSize(getQrSize());
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    const update = () => setQrSize(getQrSize());
+    update(); // run on mount in case window is already large
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
   }, []);
 
   useEffect(() => {
@@ -110,30 +112,30 @@ export function SharePage() {
 
   return (
     <div
-      className="flex min-h-screen flex-col bg-cover bg-center"
+      className="flex min-h-screen flex-col overflow-hidden bg-cover bg-center md:overflow-hidden"
       style={{ backgroundImage: `url(${backgroundGradient})` }}
     >
-      <div className="flex-1 px-3 py-4 sm:px-5 sm:py-6 md:px-6 md:py-8 lg:px-8 lg:py-10 xl:px-20 xl:py-20 2xl:px-12 2xl:py-14">
-        <div className="mb-3 flex justify-center sm:mb-4 md:mb-5 lg:mb-6 xl:mb-8 2xl:mb-10">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-3 py-4 md:overflow-hidden md:px-4 md:py-3 lg:px-6 lg:py-4 xl:px-10 xl:py-5 2xl:px-12 2xl:py-6">
+        <div className="mb-2 flex shrink-0 justify-center md:mb-1 lg:mb-2 xl:mb-3 2xl:mb-4">
           <img
             src={logoImg}
             alt=""
             aria-hidden="true"
-            className="h-auto w-[min(160px,42vw)] max-w-[200px] object-contain sm:max-w-[240px] md:max-w-[280px] lg:max-w-[320px] xl:max-w-[380px] 2xl:max-w-[420px]"
+            className="h-auto w-[min(160px,42vw)] max-w-[200px] object-contain sm:max-w-[220px] md:max-w-[160px] lg:max-w-[180px] xl:max-w-[260px] 2xl:max-w-[320px]"
           />
         </div>
 
         {error && (
-          <p className="mb-3 text-center text-sm text-amber-300 sm:mb-4 md:text-base">
+          <p className="mb-1 shrink-0 text-center text-xs text-amber-300 md:mb-1 md:text-sm">
             {error}
           </p>
         )}
 
-        <div className="flex flex-1 flex-col items-center justify-center px-2 pb-4 pt-2 sm:px-4 sm:pb-6 sm:pt-4 md:pb-8 md:pt-5 lg:pb-10 lg:pt-6">
-          <p className="font-['Heebo'] mb-2 text-center text-sm font-medium text-[#E6F8F9] sm:mb-3 sm:text-base md:text-lg">
+        <div className="flex min-h-0 flex-1 flex-col items-center justify-center px-2 pb-2 pt-1 sm:px-4 sm:pb-3 sm:pt-2 md:pb-2 md:pt-1 lg:pb-3 lg:pt-2">
+          <p className="font-['Heebo'] mb-1 text-center text-xs font-medium text-[#E6F8F9] sm:mb-2 sm:text-sm md:text-sm">
             {t("share.scanToOpen")}
           </p>
-          <div className="rounded-2xl bg-white p-2 shadow-lg sm:p-3 md:p-4">
+          <div className="rounded-xl bg-white p-1.5 shadow-lg sm:p-2 md:p-2 xl:p-4 2xl:p-5">
             <QRCode
               value={appUrl}
               size={qrSize}
@@ -147,13 +149,13 @@ export function SharePage() {
             href={appUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="font-['Heebo'] mt-2 text-sm text-[#9FE4FD] underline underline-offset-2 hover:text-[#B7ECF7] sm:mt-3 md:text-base"
+            className="font-['Heebo'] mt-1 text-xs text-[#9FE4FD] underline underline-offset-2 hover:text-[#B7ECF7] sm:mt-2 sm:text-sm"
           >
             {appUrl}
           </a>
         </div>
 
-        <div className="mx-auto grid w-full grid-cols-3 gap-3 px-2 sm:gap-4 sm:px-4 md:gap-5 md:px-6 lg:gap-6 lg:px-8 xl:gap-8 xl:px-10 2xl:gap-10 2xl:px-12">
+        <div className="mx-auto grid w-full min-h-0 max-w-4xl flex-1 grid-cols-1 gap-2 px-3 py-1 sm:grid-cols-2 sm:gap-3 sm:px-4 md:max-w-5xl md:grid-cols-3 md:gap-3 md:px-4 lg:max-w-6xl lg:gap-4 lg:px-6 xl:max-w-[min(1400px,90vw)] xl:gap-5 xl:px-8 2xl:max-w-[min(1800px,92vw)] 2xl:gap-6 2xl:px-10">
           {DILEMMA_IDS.map((id, index) => {
             const stats = statsList[index] ?? null;
             const titleKey = `dilemmas.${id}.title`;
@@ -162,52 +164,48 @@ export function SharePage() {
             return (
               <div
                 key={id}
-                className="relative min-w-[200px] max-w-[800px] overflow-hidden rounded-xl border-2 border-[#9FE4FD]/50 bg-black/30 shadow-lg backdrop-blur-sm sm:rounded-2xl"
+                className="relative aspect-4/3 min-w-0 max-w-full overflow-hidden rounded-lg border-2 border-[#9FE4FD]/50 shadow-lg sm:min-w-[160px] sm:max-w-[400px] md:rounded-xl xl:min-w-[280px] xl:max-w-[600px] 2xl:min-w-[400px] 2xl:max-w-[800px]"
               >
-                <div className="relative h-32 w-full shrink-0 sm:h-40 md:h-44 lg:h-48 xl:h-56 2xl:h-64">
-                  <img
-                    src={imageSrc}
-                    alt=""
-                    className="h-full w-full object-cover"
-                  />
-                  <div
-                    className="absolute inset-0"
-                    style={{
-                      background:
-                        "linear-gradient(180deg, rgba(0, 0, 0, 0) 40%, rgba(0, 0, 0, 0.6) 80%, rgba(0, 0, 0, 0.9) 100%)",
-                    }}
-                  />
-                </div>
-                <div className="p-4 sm:p-5 md:p-6 lg:p-7 xl:p-8 2xl:p-10">
-                  <h2 className="font-['Heebo'] mb-2 text-center text-sm font-bold text-[#E6F8F9] sm:mb-3 sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl">
+                <img
+                  src={imageSrc}
+                  alt=""
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.4) 50%, rgba(0,0,0,0.85) 100%)",
+                  }}
+                />
+                <div className="absolute inset-x-0 bottom-0 flex flex-col gap-1 p-2 sm:gap-1.5 sm:p-3 md:p-2.5 lg:p-3 xl:gap-2 xl:p-4 2xl:gap-2.5 2xl:p-5">
+                  <h2 className="font-['Heebo'] text-center text-xs font-bold text-white drop-shadow-sm sm:text-sm md:text-sm lg:text-base xl:text-lg 2xl:text-xl">
                     {title}
                   </h2>
-                  <div className="flex flex-col gap-2 text-center sm:gap-3">
-                    {stats && (
-                      <div className="flex h-16 items-end justify-center gap-2 sm:h-20 sm:gap-2.5 md:h-24 md:gap-3 lg:h-28 lg:gap-3 xl:h-32 xl:gap-4 2xl:h-36 2xl:gap-4">
-                        {(["A", "B", "C"] as const).map((opt) => {
-                          const pct = stats.optionPercents?.[opt];
-                          if (pct == null) return null;
-                          return (
-                            <div
-                              key={opt}
-                              className="flex h-full flex-col items-center gap-0.5 sm:gap-1"
-                            >
-                              <div className="flex min-w-7 flex-1 flex-col justify-end sm:min-w-9 md:min-w-10 xl:min-w-12 2xl:min-w-14">
-                                <div
-                                  className="mx-auto w-full max-w-9 rounded-t bg-[#9FE4FD]/80 transition-all duration-300 sm:max-w-10 md:max-w-12 xl:max-w-14 2xl:max-w-16"
-                                  style={{ height: `${Math.max(8, pct)}%` }}
-                                />
-                              </div>
-                              <span className="font-['Heebo'] text-xs font-medium text-[#E6F8F9] sm:text-sm md:text-base xl:text-lg 2xl:text-xl">
-                                {opt} {formatPercent(pct)}%
-                              </span>
+                  {stats && (
+                    <div className="flex h-8 items-end justify-center gap-1 sm:h-10 sm:gap-1.5 md:h-9 md:gap-2 lg:h-10 lg:gap-2 xl:h-14 xl:gap-2.5 2xl:h-16 2xl:gap-3">
+                      {(["A", "B", "C"] as const).map((opt) => {
+                        const pct = stats.optionPercents?.[opt];
+                        if (pct == null) return null;
+                        return (
+                          <div
+                            key={opt}
+                            className="flex h-full flex-col items-center gap-0"
+                          >
+                            <div className="flex min-w-4 flex-1 flex-col justify-end sm:min-w-5 md:min-w-5 lg:min-w-6 xl:min-w-8 2xl:min-w-10">
+                              <div
+                                className="mx-auto w-full max-w-5 rounded-t bg-[#9FE4FD]/90 transition-all duration-300 sm:max-w-6 md:max-w-6 lg:max-w-7 xl:max-w-10 2xl:max-w-12"
+                                style={{ height: `${Math.max(8, pct)}%` }}
+                              />
                             </div>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
+                            <span className="font-['Heebo'] text-[10px] font-medium text-white drop-shadow-sm sm:text-xs xl:text-sm 2xl:text-base">
+                              {opt} {formatPercent(pct)}%
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             );
