@@ -176,15 +176,6 @@ export function DilemmaSelectionPage() {
                   {/* Заголовок по центру карточки */}
                   <div className="absolute inset-0 flex items-center justify-center px-4">
                     <div className="relative w-full max-w-[90%]" dir={textDirection}>
-                      {dilemma.isCompletedByUser && (
-                        <span
-                          className="absolute top-0 shrink-0 rounded-full bg-emerald-500/90 px-2 py-0.5 text-xs font-medium"
-                          style={{ [textDirection === "rtl" ? "left" : "right"]: 0 }}
-                          title={t("dilemmaSelection.completed")}
-                        >
-                          ✓
-                        </span>
-                      )}
                       <div className="flex flex-col items-center justify-center gap-3">
                         <img
                           src={titleIcon}

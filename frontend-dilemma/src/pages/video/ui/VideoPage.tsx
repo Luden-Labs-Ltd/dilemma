@@ -139,7 +139,7 @@ export function VideoPage() {
   if (shouldShowFullscreenVideo && videoSrc) {
     return (
       <div
-        className="fixed inset-0 bg-black"
+        className="fixed inset-0 cursor-pointer bg-black"
         onPointerDown={() => {
           if (phase === "rotate-vertical") {
             navigate("/choice");

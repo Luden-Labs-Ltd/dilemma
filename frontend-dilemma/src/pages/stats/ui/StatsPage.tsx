@@ -136,7 +136,7 @@ export function StatsPage() {
         className="absolute left-1/2 top-4 z-20 h-auto w-[min(200px,50vw)] max-w-[260px] -translate-x-1/2 object-contain"
       />
       <div className="absolute inset-0 z-20 flex items-center justify-center">
-        <div className="relative w-[92vw] max-w-[1280px] aspect-video">
+        <div className="relative w-[95vw] max-w-[2000px] aspect-video">
           {!isModernTheme && (
             <img
               src={slideStats}
