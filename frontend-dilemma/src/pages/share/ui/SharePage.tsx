@@ -5,6 +5,7 @@ import { fetchDilemmaStats } from "@/shared/lib/api";
 import { formatPercent } from "@/shared/lib/utils";
 import type { DilemmaStats } from "@/shared/types";
 import backgroundGradient from "@/shared/assets/background-gradient.png?format=webp";
+import logoImg from "@/shared/assets/logo.png?format=webp";
 import dilemmaOption1 from "@/shared/assets/dilemmas/dilemma-option-1.png?format=webp";
 import dilemmaOption2 from "@/shared/assets/dilemmas/dilemma-option-2.png?format=webp";
 import dilemmaOption3 from "@/shared/assets/dilemmas/dilemma-option-3.png?format=webp";
@@ -93,9 +94,14 @@ export function SharePage() {
       style={{ backgroundImage: `url(${backgroundGradient})` }}
     >
       <div className="flex-1 px-4 py-6">
-        <h1 className="font-['Heebo'] mb-6 text-center text-2xl font-black text-[#E6F8F9] md:text-3xl">
-          {t("share.title")}
-        </h1>
+        <div className="mb-6 flex justify-center">
+          <img
+            src={logoImg}
+            alt=""
+            aria-hidden="true"
+            className="h-auto w-[min(200px,50vw)] max-w-[240px] object-contain"
+          />
+        </div>
 
         {error && (
           <p className="mb-4 text-center text-sm text-amber-300">{error}</p>
@@ -154,19 +160,27 @@ export function SharePage() {
                   <h2 className="font-['Heebo'] mb-3 text-center text-sm font-bold text-[#E6F8F9] md:text-base">
                     {title}
                   </h2>
-                  <div className="flex flex-col gap-2 text-center">
-                    <span className="font-['Heebo'] text-lg font-black text-[#B7ECF7]">
-                      {stats?.total ?? 0} {t("share.participants")}
-                    </span>
+                  <div className="flex flex-col gap-3 text-center">
                     {stats && (
-                      <div className="flex flex-wrap justify-center gap-2 text-sm text-[#E6F8F9]">
+                      <div className="flex justify-center items-end gap-2 sm:gap-3 h-20">
                         {(["A", "B", "C"] as const).map((opt) => {
                           const pct = stats.optionPercents?.[opt];
                           if (pct == null) return null;
                           return (
-                            <span key={opt}>
-                              {opt}: {formatPercent(pct)}%
-                            </span>
+                            <div
+                              key={opt}
+                              className="flex flex-col items-center gap-1 min-w-8 h-full"
+                            >
+                              <div className="flex-1 min-h-0 w-full flex flex-col justify-end">
+                                <div
+                                  className="w-full max-w-10 mx-auto rounded-t bg-[#9FE4FD]/80 transition-all duration-300"
+                                  style={{ height: `${Math.max(8, pct)}%` }}
+                                />
+                              </div>
+                              <span className="font-['Heebo'] text-xs font-medium text-[#E6F8F9]">
+                                {opt} {formatPercent(pct)}%
+                              </span>
+                            </div>
                           );
                         })}
                       </div>
