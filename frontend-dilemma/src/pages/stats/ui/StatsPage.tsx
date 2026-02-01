@@ -135,8 +135,8 @@ export function StatsPage() {
         aria-hidden="true"
         className="absolute left-1/2 top-4 z-20 h-auto w-[min(200px,50vw)] max-w-[260px] -translate-x-1/2 object-contain"
       />
-      <div className="absolute inset-0 z-20 flex items-center justify-center">
-        <div className="relative w-[95vw] max-w-[2000px] aspect-video">
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
+        <div className="relative w-[95vw] max-w-[2000px] aspect-video shrink-0">
           {!isModernTheme && (
             <img
               src={slideStats}
@@ -313,19 +313,19 @@ export function StatsPage() {
             })}
           </div>
         </div>
+        <motion.button
+          type="button"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => navigate("/video-end")}
+          className="mt-6 shrink-0 rounded-[4px] bg-[#E4FFFF] px-10 py-3 font-bold text-black shadow-lg transition-all hover:bg-[#BAEDF0] hover:shadow-xl"
+        >
+          {t("stats.next")}
+        </motion.button>
       </div>
-
-      {isThreeCards && (
-        <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2">
-          <button
-            type="button"
-            onClick={() => navigate("/")}
-            className="rounded-[4px] bg-black/40 px-8 py-3 font-bold text-white backdrop-blur-sm transition hover:bg-black/60"
-          >
-            {t("insight.finish")}
-          </button>
-        </div>
-      )}
     </div>
   );
 }

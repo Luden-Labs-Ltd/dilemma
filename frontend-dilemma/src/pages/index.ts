@@ -1,5 +1,6 @@
 export { DilemmaSelectionPage } from "./dilemma-selection/ui/DilemmaSelectionPage";
 export { VideoPage } from "./video/ui/VideoPage";
+export { VideoEndPage } from "./video-end/ui/VideoEndPage";
 export { ChoicePage } from "./choice/ui/ChoicePage";
 export { ReasonPage } from "./reason/ui/ReasonPage";
 export { StatsPage } from "./stats/ui/StatsPage";

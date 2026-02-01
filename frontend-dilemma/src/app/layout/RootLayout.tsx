@@ -5,7 +5,13 @@ import backgroundGradient from "@/shared/assets/background-gradient.png?format=w
 export function RootLayout() {
   const location = useLocation();
   // Страницы с собственным полноэкранным фоном — скрываем header и фон RootLayout
-  const pagesWithOwnBackground = ["/choice", "/stats", "/insight", "/video"];
+  const pagesWithOwnBackground = [
+    "/choice",
+    "/stats",
+    "/insight",
+    "/video",
+    "/video-end",
+  ];
   const hasOwnBackground = pagesWithOwnBackground.includes(location.pathname);
   const hideLanguageSwitcher = hasOwnBackground;
 

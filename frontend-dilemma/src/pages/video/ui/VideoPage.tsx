@@ -194,7 +194,11 @@ export function VideoPage() {
                 preload="auto"
                 muted={isMuted}
                 onCanPlayThrough={handleVideoCanPlay}
-                onEnded={() => setPhase("rotate-vertical")}
+                onEnded={() =>
+                  isMobileOrTablet
+                    ? setPhase("rotate-vertical")
+                    : navigate("/choice")
+                }
                 className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
               />
               {isMuted && (
