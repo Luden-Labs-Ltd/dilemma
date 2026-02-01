@@ -3,6 +3,7 @@ import {
   DilemmaSelectionPage,
   VideoPage,
   VideoEndPage,
+  BoothPage,
   ChoicePage,
   // ReasonPage,
   StatsPage,
@@ -27,6 +28,10 @@ export const router = createBrowserRouter([
       {
         path: "/video-end",
         element: <VideoEndPage />,
+      },
+      {
+        path: "/booth",
+        element: <BoothPage />,
       },
       {
         path: "/choice",

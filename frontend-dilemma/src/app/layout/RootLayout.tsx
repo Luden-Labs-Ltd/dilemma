@@ -11,6 +11,7 @@ export function RootLayout() {
     "/insight",
     "/video",
     "/video-end",
+    "/booth",
   ];
   const hasOwnBackground = pagesWithOwnBackground.includes(location.pathname);
   const hideLanguageSwitcher = hasOwnBackground;

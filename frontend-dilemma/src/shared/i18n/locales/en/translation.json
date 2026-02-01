@@ -192,5 +192,9 @@
     "title": "Something went wrong",
     "message": "An unexpected error occurred. Please refresh the page.",
     "reload": "Reload page"
+  },
+  "booth": {
+    "description": "In class, the system would pair you with a study partner who has a different perspective for discussion.",
+    "cta": "To continue the experience and for further details, please head over to our team at the booth."
   }
 }

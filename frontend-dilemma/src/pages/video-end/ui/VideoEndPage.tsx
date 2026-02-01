@@ -3,14 +3,15 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PhoneIcon } from "../../video/ui/phone-icon";
-import outroWebm from "@/shared/assets/videos/outro.webm";
+import robotEnglishWebm from "@/shared/assets/videos/robot-English.webm";
+import robotHebrewWebm from "@/shared/assets/videos/robot-Hebrew.webm";
 
 type VideoPhase = "rotate-horizontal" | "video" | "rotate-vertical";
 
 /** Видео после stats. По окончании — переход на главный экран. */
 const VIDEO_END_BY_LANG: { en: string; he: string } = {
-  en: outroWebm,
-  he: outroWebm,
+  en: robotEnglishWebm,
+  he: robotHebrewWebm,
 };
 
 export function VideoEndPage() {
@@ -29,7 +30,7 @@ export function VideoEndPage() {
 
   useEffect(() => {
     if (!shouldShowVideo) {
-      navigate("/", { replace: true });
+      navigate("/booth", { replace: true });
       return;
     }
   }, [shouldShowVideo, navigate]);
@@ -57,7 +58,7 @@ export function VideoEndPage() {
 
   useEffect(() => {
     if (phase !== "rotate-vertical") return;
-    const timer = setTimeout(() => navigate("/", { replace: true }), 3000);
+    const timer = setTimeout(() => navigate("/booth", { replace: true }), 3000);
     return () => clearTimeout(timer);
   }, [phase, navigate]);
 
@@ -94,7 +95,7 @@ export function VideoEndPage() {
       className="fixed inset-0 cursor-pointer bg-black"
       onPointerDown={() => {
         if (phase === "rotate-vertical") {
-          navigate("/", { replace: true });
+          navigate("/booth", { replace: true });
           return;
         }
         if (phase !== "video") return;
@@ -148,15 +149,10 @@ export function VideoEndPage() {
               onEnded={() =>
                 isMobileOrTablet
                   ? setPhase("rotate-vertical")
-                  : navigate("/", { replace: true })
+                  : navigate("/booth", { replace: true })
               }
               className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
             />
-            {isMuted && (
-              <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white shadow-[0_6px_24px_rgba(0,0,0,0.35)] backdrop-blur-md pointer-events-none">
-                Tap to unmute
-              </div>
-            )}
             {isMobileOrTablet && (
               <button
                 type="button"
