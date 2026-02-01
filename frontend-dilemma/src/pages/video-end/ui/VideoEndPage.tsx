@@ -3,15 +3,14 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PhoneIcon } from "../../video/ui/phone-icon";
-import commanderVideoEnWebm from "@/shared/assets/videos/commander-en.webm";
-import commanderVideoHeWebm from "@/shared/assets/videos/commander-he.webm";
+import outroWebm from "@/shared/assets/videos/outro.webm";
 
 type VideoPhase = "rotate-horizontal" | "video" | "rotate-vertical";
 
-/** Видео после stats. Заглушка — commander. По окончании — переход на главный экран. */
+/** Видео после stats. По окончании — переход на главный экран. */
 const VIDEO_END_BY_LANG: { en: string; he: string } = {
-  en: commanderVideoEnWebm,
-  he: commanderVideoHeWebm,
+  en: outroWebm,
+  he: outroWebm,
 };
 
 export function VideoEndPage() {

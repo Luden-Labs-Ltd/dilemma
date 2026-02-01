@@ -75,7 +75,7 @@ export function InsightPage() {
 
   return (
     <div
-      className="flex min-h-screen flex-col items-center justify-center p-2"
+      className="flex min-h-screen flex-col items-center justify-center overflow-y-auto p-4"
       style={isModernTheme ? { backgroundColor: insightFrameBg } : { backgroundImage: `url(${backgroundGradient})`, backgroundSize: "cover", backgroundPosition: "center" }}
     >
       <img
@@ -84,30 +84,16 @@ export function InsightPage() {
         aria-hidden="true"
         className="mb-4 h-auto w-[min(200px,50vw)] max-w-[260px] shrink-0 object-contain"
       />
-      {/* Картинка вне блока на мобильных */}
-      <img
-        src={aiPersona}
-        alt="ai"
-        className="w-[120px] mb-[20px] shrink-0 sm:hidden"
-      />
+      {isModernTheme && (
+        <img src={aiPersona} alt="ai" className="w-24 mb-4 shrink-0 sm:hidden" />
+      )}
 
       <motion.div
         {...containerAnimation}
-        initial={{ 
-          ...containerAnimation.initial,
-          scale: 0.95
-        }}
-        animate={{ 
-          ...containerAnimation.animate,
-          scale: 1
-        }}
-        transition={{ 
-          ...containerAnimation.transition,
-          ease: "easeInOut"
-        }}
-        className={`relative flex max-h-[85vh] max-w-[95vw] w-full min-h-0 flex-col items-center justify-center overflow-hidden rounded-xl ${
-          isModernTheme ? "py-[10%] px-[8%] md:py-[8%] md:px-[6%]" : "py-6 px-4 md:py-8 md:px-6"
-        }`}
+        initial={{ ...containerAnimation.initial, scale: 0.95 }}
+        animate={{ ...containerAnimation.animate, scale: 1 }}
+        transition={{ ...containerAnimation.transition, ease: "easeInOut" }}
+        className="relative flex w-full max-w-[95vw] flex-col items-center justify-center rounded-xl py-8 px-6 sm:py-10 sm:px-8 md:max-w-2xl md:py-12 md:px-10 lg:max-w-3xl xl:max-w-4xl shrink-0"
         style={{
           ...(isModernTheme && { backgroundColor: insightFrameBg }),
           backgroundImage: `url(${isModernTheme ? modernThemeInsightFrame : slideInsightBackground})`,
@@ -117,74 +103,59 @@ export function InsightPage() {
           backgroundBlendMode: isModernTheme ? "normal" : "multiply",
         }}
       >
-        {/* Картинка внутри блока на планшетах и десктопе */}
         <img
           src={aiPersona}
           alt="ai"
-          className={`hidden sm:block shrink-0 ${
+          className={`shrink-0 ${
             isModernTheme
-              ? "sm:w-[100px] md:w-[120px] mb-[15px] md:mb-[20px]"
-              : "sm:w-[150px] md:w-[180px] mb-[25px] md:mb-[30px]"
+              ? "hidden sm:block sm:w-24 md:w-28 lg:w-32 mb-4 md:mb-6"
+              : "w-16 sm:w-24 md:w-28 mb-3 sm:mb-4"
           }`}
         />
 
-        {/* Блок: для ai-autonomy — «Thank you» + стих; для остальных — контраргументы */}
         <motion.div
           {...contentAnimation}
-          initial={{ 
-            ...contentAnimation.initial,
-            y: 20
-          }}
-          animate={{ 
-            ...contentAnimation.animate,
-            y: 0
-          }}
-          className={`flex flex-col items-center justify-center text-center w-full flex-1 min-h-0 ${
-            isModernTheme ? "max-w-xl" : "max-w-2xl"
-          }`}
+          initial={{ ...contentAnimation.initial, y: 20 }}
+          animate={{ ...contentAnimation.animate, y: 0 }}
+          className="flex w-full max-w-2xl flex-1 flex-col items-center justify-center text-center"
         >
           {isModernTheme ? (
             <>
-              <span className="text-[#bbeff3] text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold mb-[20px] shrink-0">
+              <span className="text-[#bbeff3] text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold mb-4 shrink-0">
                 {t("insight.aiAutonomy.thankYouTitle")}
               </span>
-              <div className="flex-1 min-h-0 overflow-y-auto w-full custom-scrollbar pr-1">
-                <p
-                  className="text-white text-[clamp(14px,2.2vw,22px)] leading-relaxed text-start max-w-full"
-                  style={{ direction: i18n.language === "he" ? "rtl" : "ltr" }}
-                >
-                  {t("insight.aiAutonomy.verseBody")}
-                </p>
-              </div>
+              <p
+                className="text-white text-sm sm:text-base md:text-lg leading-relaxed text-start w-full"
+                style={{ direction: i18n.language === "he" ? "rtl" : "ltr" }}
+              >
+                {t("insight.aiAutonomy.verseBody")}
+              </p>
             </>
           ) : (
             <>
               {!!counterArguments?.length && (
-                <span className="text-[#bbeff3] text-xl font-bold mb-[20px]">
+                <span className="text-[#bbeff3] text-base sm:text-lg md:text-xl font-bold mb-3 shrink-0">
                   {t("insight.aiFeedback.title")}
                 </span>
               )}
               {counterArguments !== null && (
                 <>
                   {counterArguments.length === 0 ? (
-                    <p className="text-[#bbeff3]">{t("insight.aiFeedback.empty")}</p>
+                    <p className="text-[#bbeff3] text-sm sm:text-base">{t("insight.aiFeedback.empty")}</p>
                   ) : (
-                    <div className="max-h-[400px] overflow-y-auto w-full custom-scrollbar">
-                      <ul className="list-inside list-disc space-y-2 sm:space-y-3 text-start text-white text-sm sm:text-base w-full pr-2">
-                        {counterArguments.map((arg, i) => (
-                          <li key={i} className="leading-relaxed">{arg}</li>
-                        ))}
-                      </ul>
-                    </div>
+                    <ul className="list-inside list-disc space-y-3 text-start text-white text-sm sm:text-base md:text-lg leading-relaxed w-full">
+                      {counterArguments.map((arg, i) => (
+                        <li key={i}>{arg}</li>
+                      ))}
+                    </ul>
                   )}
                 </>
               )}
             </>
           )}
         </motion.div>
-
-
       </motion.div>
+
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -192,19 +163,10 @@ export function InsightPage() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.98 }}
         onClick={handleNext}
-        className="mx-auto mt-8 mb-4 block rounded-[4px] bg-[#E4FFFF] px-10 py-3 font-bold text-black shadow-lg transition-all hover:bg-[#BAEDF0] hover:shadow-xl shrink-0"
+        className="mx-auto mt-6 mb-4 block rounded-[4px] bg-[#E4FFFF] px-10 py-3 font-bold text-black shadow-lg transition-all hover:bg-[#BAEDF0] hover:shadow-xl shrink-0"
       >
         {t("insight.next")}
       </motion.button>
-      <style>{`
-        .custom-scrollbar {
-          scrollbar-width: none; /* Firefox */
-          -ms-overflow-style: none; /* IE and Edge */
-        }
-        .custom-scrollbar::-webkit-scrollbar {
-          display: none; /* Chrome, Safari, Opera */
-        }
-      `}</style>
     </div>
   );
 }
