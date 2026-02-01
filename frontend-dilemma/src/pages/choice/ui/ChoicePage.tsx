@@ -133,7 +133,7 @@ export function ChoicePage() {
           )}
 
           <div className="absolute left-1/2 top-[-3%] z-10 w-[80%] -translate-x-1/2 text-center text-[#E6F8F9]">
-            <span className="text-[clamp(16px,2.2vw,34px)] font-black leading-tight">
+            <span className="text-[clamp(16px,2.2vw,56px)] xl:text-[clamp(20px,2vw,64px)] font-black leading-tight">
               {dilemma.questionText}
             </span>
           </div>
@@ -246,7 +246,7 @@ export function ChoicePage() {
                   >
                     {isThreeCards ? (
                       <span
-                        className="font-['Heebo'] font-black leading-snug max-w-full shrink-0 text-center text-[clamp(6px,1.1vw,16px)] sm:text-[clamp(7px,1.3vw,20px)] whitespace-pre-line"
+                        className="font-['Heebo'] font-black leading-snug max-w-full shrink-0 text-center text-[clamp(6px,1.1vw,16px)] sm:text-[clamp(7px,1.3vw,20px)] xl:text-[clamp(10px,1.2vw,28px)] 2xl:text-[clamp(12px,1.1vw,32px)] whitespace-pre-line"
                         style={{ color: textColorTitle }}
                       >
                         {option.label}
@@ -256,8 +256,8 @@ export function ChoicePage() {
                         <span
                           className={`font-['Heebo'] font-black uppercase leading-tight max-w-full ${
                             isModernTheme
-                              ? "text-[clamp(8px,1.8vw,28px)]"
-                              : "text-[clamp(10px,2.8vw,60px)] leading-[1.15]"
+                              ? "text-[clamp(8px,1.8vw,48px)] xl:text-[clamp(12px,1.6vw,56px)]"
+                              : "text-[clamp(10px,2.8vw,60px)] xl:text-[clamp(14px,2.2vw,72px)] leading-[1.15]"
                           }`}
                           style={{ color: textColorTitle }}
                         >
@@ -267,8 +267,8 @@ export function ChoicePage() {
                           <span
                             className={`font-['Heebo'] font-normal max-w-full ${
                               isModernTheme
-                                ? "text-[clamp(6px,1.4vw,22px)] leading-tight"
-                                : "text-[clamp(8px,2.2vw,52px)] leading-[1.1]"
+                                ? "text-[clamp(6px,1.4vw,38px)] xl:text-[clamp(8px,1.3vw,44px)] leading-tight"
+                                : "text-[clamp(8px,2.2vw,52px)] xl:text-[clamp(10px,2vw,64px)] leading-[1.1]"
                             }`}
                             style={{ color: textColorSub }}
                           >
@@ -279,8 +279,8 @@ export function ChoicePage() {
                           <span
                             className={`font-['Heebo'] font-normal max-w-full ${
                               isModernTheme
-                                ? "text-[clamp(5px,1.2vw,18px)] leading-tight"
-                                : "text-[clamp(6px,1.8vw,44px)] leading-[1.1]"
+                                ? "text-[clamp(5px,1.2vw,28px)] xl:text-[clamp(6px,1.1vw,34px)] leading-tight"
+                                : "text-[clamp(6px,1.8vw,44px)] xl:text-[clamp(8px,1.6vw,52px)] leading-[1.1]"
                             }`}
                             style={{ color: textColorSub }}
                           >

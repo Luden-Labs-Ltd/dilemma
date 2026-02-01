@@ -146,7 +146,7 @@ export function StatsPage() {
           )}
 
           <div className="absolute left-1/2 top-[-3%] z-10 w-[80%] -translate-x-1/2 text-center text-[#E6F8F9]">
-            <span className="text-[clamp(16px,2.2vw,34px)] font-black leading-tight">
+            <span className="text-[clamp(16px,2.2vw,56px)] xl:text-[clamp(20px,2vw,64px)] font-black leading-tight">
               {t("stats.title")}
             </span>
           </div>
@@ -234,10 +234,10 @@ export function StatsPage() {
                     <span
                       className={`font-['Heebo'] font-medium leading-tight max-w-full whitespace-pre-line ${
                         isThreeCards
-                          ? "text-[clamp(11px,1.7vw,26px)] line-clamp-3 min-h-0 shrink-0"
+                          ? "text-[clamp(11px,1.7vw,26px)] xl:text-[clamp(14px,1.5vw,32px)] 2xl:text-[clamp(16px,1.4vw,36px)] line-clamp-3 min-h-0 shrink-0"
                           : isModernTheme
-                            ? "text-[clamp(10px,1.6vw,24px)] leading-snug shrink-0"
-                            : "absolute left-1/2 top-[12%] -translate-x-1/2 text-[clamp(14px,3.2vw,72px)] leading-[1.15] max-w-[90%]"
+                            ? "text-[clamp(10px,1.6vw,24px)] xl:text-[clamp(12px,1.4vw,36px)] leading-snug shrink-0"
+                            : "absolute left-1/2 top-[12%] -translate-x-1/2 text-[clamp(14px,3.2vw,72px)] xl:text-[clamp(18px,2.8vw,88px)] leading-[1.15] max-w-[90%]"
                       } ${isModernTheme ? "text-[#E6F8F9]" : ""}`}
                       style={!isModernTheme ? { color: labelColor } : undefined}
                     >
@@ -252,10 +252,10 @@ export function StatsPage() {
                     <span
                       className={`font-['Heebo'] font-black leading-none max-w-full shrink-0 ${
                         isThreeCards
-                          ? "text-[clamp(22px,5vw,72px)]"
+                          ? "text-[clamp(22px,5vw,72px)] xl:text-[clamp(26px,4.5vw,88px)] 2xl:text-[clamp(30px,4vw,100px)]"
                           : isModernTheme
-                            ? "text-[clamp(24px,6vw,100px)]"
-                            : "absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 text-[clamp(28px,8vw,150px)]"
+                            ? "text-[clamp(24px,6vw,100px)] xl:text-[clamp(28px,5vw,120px)]"
+                            : "absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 text-[clamp(28px,8vw,150px)] xl:text-[clamp(34px,7vw,180px)]"
                       } ${isThreeCards ? "text-[#B7ECF7]" : isModernTheme ? "text-[#E6F8F9]" : ""}`}
                       style={!isModernTheme && !isThreeCards ? { color: labelColor } : undefined}
                     >
@@ -264,10 +264,10 @@ export function StatsPage() {
                     <span
                       className={`font-['Heebo'] leading-tight shrink-0 ${
                         isThreeCards
-                          ? "text-[#E6F8F9] text-[clamp(10px,1.2vw,18px)]"
+                          ? "text-[#E6F8F9] text-[clamp(10px,1.2vw,18px)] xl:text-[clamp(12px,1.1vw,24px)] 2xl:text-[clamp(14px,1vw,28px)]"
                           : isModernTheme
-                            ? "text-[#E6F8F9]/90 text-[clamp(11px,1.4vw,20px)]"
-                            : "absolute left-1/2 top-[65%] -translate-x-1/2 text-[clamp(12px,1.8vw,24px)]"
+                            ? "text-[#E6F8F9]/90 text-[clamp(11px,1.4vw,20px)] xl:text-[clamp(13px,1.3vw,28px)]"
+                            : "absolute left-1/2 top-[65%] -translate-x-1/2 text-[clamp(12px,1.8vw,24px)] xl:text-[clamp(14px,1.6vw,32px)]"
                       }`}
                       style={!isModernTheme && !isThreeCards ? { color: labelColor } : undefined}
                     >
@@ -296,8 +296,8 @@ export function StatsPage() {
                         <span
                           className={`font-['Heebo'] text-center font-bold leading-tight whitespace-pre-line wrap-break-word ${
                             isThreeCards || isModernTheme
-                              ? "text-[7px] sm:text-[8px] md:text-[10px] px-0.5"
-                              : "text-xs sm:text-sm md:text-base lg:text-lg"
+                              ? "text-[7px] sm:text-[8px] md:text-[10px] xl:text-[12px] 2xl:text-[14px] px-0.5"
+                              : "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl"
                           }`}
                           style={{ color: badgeColor }}
                         >
