@@ -7,6 +7,7 @@ import {
   StatsPage,
   ExtraPage,
   InsightPage,
+  SharePage,
 } from "../../pages";
 import { RootLayout } from "@/app/layout";
 
@@ -41,6 +42,10 @@ export const router = createBrowserRouter([
       {
         path: "/insight",
         element: <InsightPage />,
+      },
+      {
+        path: "/share",
+        element: <SharePage />,
       },
     ],
   },

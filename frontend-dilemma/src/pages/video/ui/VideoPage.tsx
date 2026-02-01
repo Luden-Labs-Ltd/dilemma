@@ -109,6 +109,18 @@ export function VideoPage() {
     videoRef.current?.play().catch(() => undefined);
   };
 
+  const handleOpenInPlayer = (e: React.MouseEvent | React.PointerEvent) => {
+    e.stopPropagation();
+    const video = videoRef.current;
+    if (!video) return;
+    const v = video as HTMLVideoElement & { webkitEnterFullscreen?: () => void };
+    if (typeof v.webkitEnterFullscreen === "function") {
+      v.webkitEnterFullscreen();
+    } else if (typeof video.requestFullscreen === "function") {
+      void video.requestFullscreen();
+    }
+  };
+
   useEffect(() => {
     if (!currentDilemma) return;
     if (shouldShowFullscreenVideo) return;
@@ -186,9 +198,18 @@ export function VideoPage() {
                 className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
               />
               {isMuted && (
-                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white shadow-[0_6px_24px_rgba(0,0,0,0.35)] backdrop-blur-md">
+                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white shadow-[0_6px_24px_rgba(0,0,0,0.35)] backdrop-blur-md pointer-events-none">
                   Tap to unmute
                 </div>
+              )}
+              {isMobileOrTablet && (
+                <button
+                  type="button"
+                  onClick={handleOpenInPlayer}
+                  className="absolute top-4 right-4 rounded-full border border-white/30 bg-black/50 px-3 py-2 text-xs font-medium text-white backdrop-blur-sm hover:bg-black/70 active:bg-black/80"
+                >
+                  {t("video.openInPlayer")}
+                </button>
               )}
             </motion.div>
           )}

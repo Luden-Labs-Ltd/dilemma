@@ -5,3 +5,4 @@ export { ReasonPage } from "./reason/ui/ReasonPage";
 export { StatsPage } from "./stats/ui/StatsPage";
 export { ExtraPage } from "./extra/ui/ExtraPage";
 export { InsightPage } from "./insight/ui/InsightPage";
+export { SharePage } from "./share/ui/SharePage";

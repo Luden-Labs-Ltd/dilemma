@@ -37,7 +37,8 @@
     "playing": "Playing video...",
     "skip": "Skip video",
     "rotateHorizontal": "If you're on a phone or tablet, please rotate your device horizontally to watch the video.",
-    "rotateVertical": "Please rotate your device back to vertical to continue."
+    "rotateVertical": "Please rotate your device back to vertical to continue.",
+    "openInPlayer": "Open in fullscreen player"
   },
   "choice": {
     "subtitle": "Choose one of the options below",
@@ -181,6 +182,11 @@
         }
       }
     }
+  },
+  "share": {
+    "title": "Statistics & app link",
+    "participants": "participants",
+    "scanToOpen": "Scan to open the app"
   },
   "error": {
     "title": "Something went wrong",
