@@ -154,7 +154,7 @@ export function StatsPage() {
           <div
             className={`absolute grid ${
               isThreeCards
-                ? "left-[6%] right-[6%] top-1/2 -translate-y-1/2 aspect-[3/1] h-auto md:left-[1%] md:right-[1%] lg:left-[0.5%] lg:right-[0.5%] xl:left-0 xl:right-0 grid-cols-3 gap-[2.5%] md:gap-[0.75%] lg:gap-[0.5%] xl:gap-[0.25%]"
+                ? "left-[5%] right-[5%] top-1/2 -translate-y-1/2 aspect-2/1 sm:left-[4%] sm:right-[4%] sm:aspect-[2.5/1] md:left-[1%] md:right-[1%] md:aspect-3/1 lg:left-[0.5%] lg:right-[0.5%] xl:left-0 xl:right-0 grid-cols-3 gap-[3%] sm:gap-[2.5%] md:gap-[0.75%] lg:gap-[0.5%] xl:gap-[0.25%]"
                 : "left-[6%] right-[6%] top-[12%] bottom-[12%] md:left-[1%] md:right-[1%] md:top-[5%] md:bottom-[5%] lg:left-[0.5%] lg:right-[0.5%] lg:top-[3%] lg:bottom-[4%] xl:left-0 xl:right-0 xl:top-[2%] xl:bottom-[3%] grid-cols-2 gap-[2.5%] md:gap-[0.75%] lg:gap-[0.5%] xl:gap-[0.25%]"
             }`}
             style={{ direction: "ltr" }}
@@ -171,7 +171,7 @@ export function StatsPage() {
               const isYourChoice =
                 (optionId === "a" && choice === "A") ||
                 (optionId === "b" && choice === "B") ||
-                (optionId === "c" && choice === "B");
+                (optionId === "c" && choice === "C");
               const mirrorFrame = !isThreeCards && index === 1;
               const isRightColor = !isThreeCards && index === 1;
               const labelColor = isModernTheme
@@ -234,7 +234,7 @@ export function StatsPage() {
                     <span
                       className={`font-['Heebo'] font-medium leading-tight max-w-full whitespace-pre-line ${
                         isThreeCards
-                          ? "text-[clamp(11px,1.7vw,26px)] xl:text-[clamp(14px,1.5vw,32px)] 2xl:text-[clamp(16px,1.4vw,36px)] line-clamp-3 min-h-0 shrink-0"
+                          ? "text-[clamp(9px,1.4vw,16px)] sm:text-[clamp(10px,1.5vw,20px)] md:text-[clamp(11px,1.7vw,26px)] xl:text-[clamp(14px,1.5vw,32px)] 2xl:text-[clamp(16px,1.4vw,36px)] line-clamp-3 min-h-0 shrink-0"
                           : isModernTheme
                             ? "text-[clamp(10px,1.6vw,24px)] xl:text-[clamp(12px,1.4vw,36px)] leading-snug shrink-0"
                             : "absolute left-1/2 top-[12%] -translate-x-1/2 text-[clamp(11px,2.5vw,32px)] xl:text-[clamp(14px,2.2vw,40px)] leading-[1.15] max-w-[90%]"
@@ -252,7 +252,7 @@ export function StatsPage() {
                     <span
                       className={`font-['Heebo'] font-black leading-none max-w-full shrink-0 ${
                         isThreeCards
-                          ? "text-[clamp(22px,5vw,72px)] xl:text-[clamp(26px,4.5vw,88px)] 2xl:text-[clamp(30px,4vw,100px)]"
+                          ? "text-[clamp(14px,3.5vw,32px)] sm:text-[clamp(16px,4vw,44px)] md:text-[clamp(22px,5vw,72px)] xl:text-[clamp(26px,4.5vw,88px)] 2xl:text-[clamp(30px,4vw,100px)]"
                           : isModernTheme
                             ? "text-[clamp(24px,6vw,100px)] xl:text-[clamp(28px,5vw,120px)]"
                             : "absolute left-1/2 top-[56%] -translate-x-1/2 -translate-y-1/2 text-[clamp(20px,5.5vw,56px)] xl:text-[clamp(26px,4.5vw,72px)]"
@@ -265,7 +265,7 @@ export function StatsPage() {
                       <div
                         className={`absolute flex min-w-0 shrink-0 items-center justify-center rounded-full border-2 ${
                           isThreeCards || isModernTheme
-                            ? "h-10 w-10 p-1 sm:h-12 sm:w-12 md:h-14 md:w-14"
+                            ? "h-8 w-8 p-0.5 sm:h-9 sm:w-9 md:h-10 md:w-10 lg:h-12 lg:w-12"
                             : "h-10 w-10 p-1 sm:h-14 sm:w-14 sm:p-1.5 md:h-20 md:w-20 md:p-2 lg:h-28 lg:w-28 lg:p-3"
                         } ${
                           index === 0
@@ -277,7 +277,7 @@ export function StatsPage() {
                         <span
                           className={`font-['Heebo'] text-center font-bold leading-tight whitespace-pre-line wrap-break-word ${
                             isThreeCards || isModernTheme
-                              ? "text-[7px] sm:text-[8px] md:text-[10px] xl:text-[12px] 2xl:text-[14px] px-0.5"
+                              ? "text-[6px] sm:text-[7px] md:text-[8px] xl:text-[10px] 2xl:text-[12px] px-0.5"
                               : "text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl"
                           }`}
                           style={{ color: badgeColor }}

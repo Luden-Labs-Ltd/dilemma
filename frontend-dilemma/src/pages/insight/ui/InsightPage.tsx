@@ -94,7 +94,7 @@ export function InsightPage() {
         initial={{ ...containerAnimation.initial, scale: 0.95 }}
         animate={{ ...containerAnimation.animate, scale: 1 }}
         transition={{ ...containerAnimation.transition, ease: "easeInOut" }}
-        className="relative flex w-full max-w-[95vw] flex-col items-center justify-center rounded-xl py-8 px-6 sm:py-10 sm:px-8 md:max-w-2xl md:py-12 md:px-10 lg:max-w-3xl xl:max-w-4xl shrink-0"
+        className="relative flex w-full max-w-[95vw] flex-col items-center justify-center rounded-xl py-8 px-6 sm:py-10 sm:px-8 md:max-w-3xl md:py-12 md:px-10 lg:max-w-4xl xl:max-w-5xl shrink-0"
         style={
           isMdOrLarger
             ? {
