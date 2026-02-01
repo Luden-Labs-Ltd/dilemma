@@ -164,8 +164,10 @@ export function StatsPage() {
               const optionId = option.id as OptionId;
               const percent =
                 optionId === "a"
-                  ? (stats ? stats.aPercent : 50)
-                  : (stats ? stats.bPercent : 50);
+                  ? (stats?.aPercent ?? 50)
+                  : optionId === "b"
+                    ? (stats?.bPercent ?? 50)
+                    : (stats?.cPercent ?? 33);
               const isYourChoice =
                 (optionId === "a" && choice === "A") ||
                 (optionId === "b" && choice === "B") ||
