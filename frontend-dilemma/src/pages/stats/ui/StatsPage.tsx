@@ -58,6 +58,9 @@ export function StatsPage() {
         setStats({
           dilemmaId: currentDilemma,
           total: 0,
+          pathCounts: {},
+          optionCounts: {},
+          optionPercents: {},
           aCount: 0,
           bCount: 0,
           aPercent: 50,
@@ -164,8 +167,9 @@ export function StatsPage() {
                   ? (stats ? stats.aPercent : 50)
                   : (stats ? stats.bPercent : 50);
               const isYourChoice =
-                (optionId === "a" && choice === "a") ||
-                (optionId === "b" && choice === "b");
+                (optionId === "a" && choice === "A") ||
+                (optionId === "b" && choice === "B") ||
+                (optionId === "c" && choice === "B");
               const mirrorFrame = !isThreeCards && index === 1;
               const isRightColor = !isThreeCards && index === 1;
               const labelColor = isModernTheme
@@ -258,7 +262,7 @@ export function StatsPage() {
                     {isThreeCards && (
                       <span className="font-['Heebo'] text-[#E6F8F9] text-[clamp(10px,1.2vw,18px)] leading-tight shrink-0">
                         {t("stats.visitorsCount", {
-                          count: optionId === "a" ? (stats?.aCount ?? 0) : (stats?.bCount ?? 0),
+                          count: optionId === "a" ? (stats?.aCount ?? 0) : optionId === "b" ? (stats?.bCount ?? 0) : (stats?.cCount ?? 0),
                         })}
                       </span>
                     )}

@@ -51,9 +51,9 @@ export function ChoicePage() {
     return null;
   }
 
-  /** Для API: опция c маппится в b (бэкенд поддерживает только A/B) */
+  /** Для API: OptionId (a|b|c) в Choice (A|B); опция c маппится в B */
   const choiceForApi = (optionId: OptionId): Choice =>
-    optionId === "c" ? "b" : optionId;
+    optionId === "a" ? "A" : optionId === "b" ? "B" : "B";
 
   const handleChoice = async (optionId: OptionId) => {
     if (isSubmitting) return;
