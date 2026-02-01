@@ -31,7 +31,7 @@ function getAppUrl(): string {
 }
 
 const DILEMMA_IDS = ["commander", "doctor", "teacher"] as const;
-const POLL_INTERVAL_MS = 30_000;
+const POLL_INTERVAL_MS = 15_000;
 const DILEMMA_IMAGES: Record<(typeof DILEMMA_IDS)[number], string> = {
   commander: dilemmaOption3,
   doctor: dilemmaOption2,

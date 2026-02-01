@@ -122,8 +122,8 @@ export function ChoicePage() {
         aria-hidden="true"
         className="absolute left-1/2 top-4 z-20 h-auto w-[min(200px,50vw)] max-w-[260px] -translate-x-1/2 object-contain"
       />
-      <div className="absolute inset-0 z-20 flex items-center justify-center">
-        <div className="relative w-[95vw] max-w-[2000px] aspect-video">
+      <div className="absolute top-20 left-0 right-0 bottom-0 z-20 flex items-center justify-center">
+        <div className="relative w-[82vw] max-w-[1200px] aspect-video">
           {!isModernTheme && (
             <img
               src={slideStats}
@@ -133,7 +133,7 @@ export function ChoicePage() {
           )}
 
           <div className="absolute left-1/2 top-[-3%] z-10 w-[80%] -translate-x-1/2 text-center text-[#E6F8F9]">
-            <span className="text-[clamp(16px,2.2vw,56px)] xl:text-[clamp(20px,2vw,64px)] font-black leading-tight">
+            <span className="text-[clamp(16px,2.2vw,35px)] xl:text-[clamp(20px,2vw,35px)] font-black leading-tight">
               {dilemma.questionText}
             </span>
           </div>
