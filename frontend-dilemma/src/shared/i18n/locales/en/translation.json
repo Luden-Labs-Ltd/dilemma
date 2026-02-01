@@ -35,7 +35,9 @@
   },
   "video": {
     "playing": "Playing video...",
-    "skip": "Skip video"
+    "skip": "Skip video",
+    "rotateHorizontal": "If you're on a phone or tablet, please rotate your device horizontally to watch the video.",
+    "rotateVertical": "Please rotate your device back to vertical to continue."
   },
   "choice": {
     "subtitle": "Choose one of the options below",

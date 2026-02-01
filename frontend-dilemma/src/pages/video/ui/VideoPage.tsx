@@ -1,15 +1,18 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "@/entities/dilemma";
 import { useRTLAnimation } from "@/shared/hooks";
 import { useEffect, useRef, useState } from "react";
+
+type VideoPhase = "rotate-horizontal" | "video" | "rotate-vertical";
 import commanderVideoEnWebm from "@/shared/assets/videos/commander-en.webm";
 import commanderVideoHeWebm from "@/shared/assets/videos/commander-he.webm";
 import teacherVideoEnWebm from "@/shared/assets/videos/teacher-en.webm";
 import teacherVideoHeWebm from "@/shared/assets/videos/teacher-he.webm";
 import doctorVideoEnWebm from "@/shared/assets/videos/doctor-en.webm";
 import doctorVideoHeWebm from "@/shared/assets/videos/doctor-he.webm";
+import { PhoneIcon } from "./phone-icon";
 
 /** Карта видео: по имени дилеммы и языку. state и professional — вторая карточка (teacher). */
 const VIDEO_BY_DILEMMA_AND_LANG: Record<
@@ -30,7 +33,10 @@ export function VideoPage() {
   const location = useLocation();
   const { currentDilemma } = useDilemma();
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const hasShownRotateHorizontal = useRef(false);
   const [isMuted, setIsMuted] = useState(true);
+  const [isMobileOrTablet, setIsMobileOrTablet] = useState(false);
+  const [phase, setPhase] = useState<VideoPhase>("video");
   const navState = location.state as
     | { selectedDilemmaName?: string; selectedDilemmaIndex?: number }
     | null;
@@ -65,12 +71,39 @@ export function VideoPage() {
   }, [currentDilemma, navState?.selectedDilemmaName, navigate]);
 
   useEffect(() => {
-    if (!videoSrc) return;
+    const mq = window.matchMedia("(max-width: 1024px)");
+    const update = () => setIsMobileOrTablet(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
+  useEffect(() => {
+    if (!shouldShowFullscreenVideo || !videoSrc || !isMobileOrTablet) return;
+    if (hasShownRotateHorizontal.current) return;
+    hasShownRotateHorizontal.current = true;
+    queueMicrotask(() => setPhase("rotate-horizontal"));
+  }, [shouldShowFullscreenVideo, videoSrc, isMobileOrTablet]);
+
+  useEffect(() => {
+    if (phase !== "rotate-horizontal" || !shouldShowFullscreenVideo) return;
+    const timer = setTimeout(() => setPhase("video"), 3000);
+    return () => clearTimeout(timer);
+  }, [phase, shouldShowFullscreenVideo]);
+
+  useEffect(() => {
+    if (phase !== "rotate-vertical") return;
+    const timer = setTimeout(() => navigate("/choice"), 3000);
+    return () => clearTimeout(timer);
+  }, [phase, navigate]);
+
+  useEffect(() => {
+    if (phase !== "video" || !videoSrc) return;
     const video = videoRef.current;
     if (!video) return;
     video.load();
     video.play().catch(() => undefined);
-  }, [videoSrc]);
+  }, [phase, videoSrc]);
 
   const handleVideoCanPlay = () => {
     videoRef.current?.play().catch(() => undefined);
@@ -96,7 +129,11 @@ export function VideoPage() {
       <div
         className="fixed inset-0 bg-black"
         onPointerDown={() => {
-          // Первый тап включает звук и запускает видео (без контролов/оверлеев)
+          if (phase === "rotate-vertical") {
+            navigate("/choice");
+            return;
+          }
+          if (phase !== "video") return;
           const video = videoRef.current;
           if (!video) return;
           video.muted = false;
@@ -105,29 +142,74 @@ export function VideoPage() {
           void video.play();
         }}
       >
-        <video
-          key={videoSrc ?? resolvedDilemmaName ?? "video"}
-          ref={videoRef}
-          src={videoSrc}
-          autoPlay
-          playsInline
-          controls={false}
-          controlsList="nodownload noplaybackrate noremoteplayback"
-          disablePictureInPicture
-          disableRemotePlayback
-          preload="auto"
-          muted={isMuted}
-          onCanPlayThrough={handleVideoCanPlay}
-          onEnded={() => navigate("/choice")}
-          className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
-        >
-        </video>
+        <AnimatePresence mode="wait">
+          {phase === "rotate-horizontal" && (
+            <motion.div
+              key="rotate-horizontal"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
+            >
+              <PhoneIcon position="horizontal" />
+              <p className="text-lg mt-4 sm:text-xl text-white/95 max-w-md font-medium leading-relaxed">
+                {t("video.rotateHorizontal")}
+              </p>
+              <p className="mt-4 text-sm text-white/60">{t("common.continue")}</p>
+            </motion.div>
+          )}
 
-        {isMuted && (
-          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white shadow-[0_6px_24px_rgba(0,0,0,0.35)] backdrop-blur-md">
-            Tap to unmute
-          </div>
-        )}
+          {phase === "video" && (
+            <motion.div
+              key="video"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0"
+            >
+              <video
+                key={videoSrc ?? resolvedDilemmaName ?? "video"}
+                ref={videoRef}
+                src={videoSrc}
+                autoPlay
+                playsInline
+                controls={false}
+                controlsList="nodownload noplaybackrate noremoteplayback"
+                disablePictureInPicture
+                disableRemotePlayback
+                preload="auto"
+                muted={isMuted}
+                onCanPlayThrough={handleVideoCanPlay}
+                onEnded={() => setPhase("rotate-vertical")}
+                className="absolute inset-0 h-full w-full object-cover pointer-events-none select-none"
+              />
+              {isMuted && (
+                <div className="absolute bottom-5 left-1/2 -translate-x-1/2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-white shadow-[0_6px_24px_rgba(0,0,0,0.35)] backdrop-blur-md">
+                  Tap to unmute
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {phase === "rotate-vertical" && (
+            <motion.div
+              key="rotate-vertical"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.4 }}
+              className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center"
+            >
+              <PhoneIcon position="vertical" />
+              <p className="text-lg mt-4 sm:text-xl text-white/95 max-w-md font-medium leading-relaxed">
+                {t("video.rotateVertical")}
+              </p>
+              <p className="mt-4 text-sm text-white/60">{t("common.continue")}</p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     );
   }
