@@ -135,8 +135,8 @@ export function StatsPage() {
         aria-hidden="true"
         className="absolute left-1/2 top-4 z-20 h-auto w-[min(200px,50vw)] max-w-[260px] -translate-x-1/2 object-contain"
       />
-      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center">
-        <div className="relative w-[95vw] max-w-[2000px] aspect-video shrink-0">
+      <div className="absolute top-20 left-0 right-0 bottom-0 z-20 flex flex-col items-center justify-center">
+        <div className="relative w-[76vw] max-w-[1080px] aspect-video shrink-0">
           {!isModernTheme && (
             <img
               src={slideStats}
@@ -260,25 +260,6 @@ export function StatsPage() {
                       style={!isModernTheme && !isThreeCards ? { color: labelColor } : undefined}
                     >
                       {formatPercent(percent)}%
-                    </span>
-                    <span
-                      className={`font-['Heebo'] leading-tight shrink-0 ${
-                        isThreeCards
-                          ? "text-[#E6F8F9] text-[clamp(10px,1.2vw,18px)] xl:text-[clamp(12px,1.1vw,24px)] 2xl:text-[clamp(14px,1vw,28px)]"
-                          : isModernTheme
-                            ? "text-[#E6F8F9]/90 text-[clamp(11px,1.4vw,20px)] xl:text-[clamp(13px,1.3vw,28px)]"
-                            : "absolute left-1/2 top-[65%] -translate-x-1/2 text-[clamp(12px,1.8vw,24px)] xl:text-[clamp(14px,1.6vw,32px)]"
-                      }`}
-                      style={!isModernTheme && !isThreeCards ? { color: labelColor } : undefined}
-                    >
-                      {t("stats.visitorsCount", {
-                        count:
-                          optionId === "a"
-                            ? (stats?.aCount ?? 0)
-                            : optionId === "b"
-                              ? (stats?.bCount ?? 0)
-                              : (stats?.cCount ?? 0),
-                      })}
                     </span>
                     {isYourChoice && (
                       <div

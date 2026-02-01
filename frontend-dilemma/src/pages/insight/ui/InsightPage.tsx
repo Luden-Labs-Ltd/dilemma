@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "@/entities/dilemma";
 import { useDilemmaData } from "@/entities/dilemma";
-import { useRTLAnimation } from "@/shared/hooks";
+import { useRTLAnimation, useIsMdOrLarger } from "@/shared/hooks";
 import slideInsightBackground from "@/shared/assets/dilemmas/common/insight-background.png?format=webp";
 import { isModernThemeDilemma } from "@/shared/config/dilemma-theme";
 import modernThemeInsightFrame from "@/shared/assets/dilemmas/doctor/insight-frame.png?format=webp";
@@ -66,6 +66,7 @@ export function InsightPage() {
   }
 
   const isModernTheme = isModernThemeDilemma(currentDilemma);
+  const isMdOrLarger = useIsMdOrLarger();
   /** Цвет фона под рамкой insight-frame-ai-autonomy — совпадает с краями картинки */
   const insightFrameBg = "#050a12";
 
@@ -94,14 +95,21 @@ export function InsightPage() {
         animate={{ ...containerAnimation.animate, scale: 1 }}
         transition={{ ...containerAnimation.transition, ease: "easeInOut" }}
         className="relative flex w-full max-w-[95vw] flex-col items-center justify-center rounded-xl py-8 px-6 sm:py-10 sm:px-8 md:max-w-2xl md:py-12 md:px-10 lg:max-w-3xl xl:max-w-4xl shrink-0"
-        style={{
-          ...(isModernTheme && { backgroundColor: insightFrameBg }),
-          backgroundImage: `url(${isModernTheme ? modernThemeInsightFrame : slideInsightBackground})`,
-          backgroundSize: "contain",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundBlendMode: isModernTheme ? "normal" : "multiply",
-        }}
+        style={
+          isMdOrLarger
+            ? {
+                ...(isModernTheme && { backgroundColor: insightFrameBg }),
+                backgroundImage: `url(${isModernTheme ? modernThemeInsightFrame : slideInsightBackground})`,
+                backgroundSize: "contain",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat",
+                backgroundBlendMode: isModernTheme ? "normal" : "multiply",
+              }
+            : {
+                backgroundColor: "transparent",
+                border: "2px solid rgba(0, 212, 255, 0.4)",
+              }
+        }
       >
         <img
           src={aiPersona}
