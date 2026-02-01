@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { useDilemma } from "@/entities/dilemma";
 import { useDilemmaData } from "@/entities/dilemma";
 import { useRTLAnimation } from "@/shared/hooks";
-import { submitInitialChoice, type ApiError } from "@/shared/lib/api";
+import { submitInitialChoice, submitFinalChoice, type ApiError } from "@/shared/lib/api";
 import type { Choice, OptionId } from "@/shared/types";
 import slideStats from "@/shared/assets/slides/medical/slide-stat.png?format=webp";
 import decorativeFrame from "@/shared/assets/dilemmas/common/choice-decorative-frame.png?format=webp";
@@ -66,6 +66,8 @@ export function ChoicePage() {
     try {
       setChoice(choice);
       await submitInitialChoice(currentDilemma, choice);
+      // Reason-шаг отключён в роутере — сразу фиксируем финальный выбор, иначе статистика остаётся 0
+      await submitFinalChoice(currentDilemma, choice);
 
       // Переход с анимацией (reason временно скрыт — идём сразу в insight)
       setTimeout(() => {
