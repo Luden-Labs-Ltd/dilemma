@@ -30,7 +30,7 @@ export function BoothPage() {
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5 }}
-        className="relative z-10 w-[95vw] max-w-[2000px] aspect-[2.75] mx-4"
+        className="relative z-10 w-[95vw] max-w-[2000px] aspect-[1.85] sm:aspect-[2.25] md:aspect-[2.75] mx-4"
         style={{
           backgroundImage: `url(${boothBackground})`,
           backgroundSize: "100% 100%",
