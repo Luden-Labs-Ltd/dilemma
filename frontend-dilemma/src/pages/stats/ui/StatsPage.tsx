@@ -261,13 +261,25 @@ export function StatsPage() {
                     >
                       {formatPercent(percent)}%
                     </span>
-                    {isThreeCards && (
-                      <span className="font-['Heebo'] text-[#E6F8F9] text-[clamp(10px,1.2vw,18px)] leading-tight shrink-0">
-                        {t("stats.visitorsCount", {
-                          count: optionId === "a" ? (stats?.aCount ?? 0) : optionId === "b" ? (stats?.bCount ?? 0) : (stats?.cCount ?? 0),
-                        })}
-                      </span>
-                    )}
+                    <span
+                      className={`font-['Heebo'] leading-tight shrink-0 ${
+                        isThreeCards
+                          ? "text-[#E6F8F9] text-[clamp(10px,1.2vw,18px)]"
+                          : isModernTheme
+                            ? "text-[#E6F8F9]/90 text-[clamp(11px,1.4vw,20px)]"
+                            : "absolute left-1/2 top-[65%] -translate-x-1/2 text-[clamp(12px,1.8vw,24px)]"
+                      }`}
+                      style={!isModernTheme && !isThreeCards ? { color: labelColor } : undefined}
+                    >
+                      {t("stats.visitorsCount", {
+                        count:
+                          optionId === "a"
+                            ? (stats?.aCount ?? 0)
+                            : optionId === "b"
+                              ? (stats?.bCount ?? 0)
+                              : (stats?.cCount ?? 0),
+                      })}
+                    </span>
                     {isYourChoice && (
                       <div
                         className={`absolute flex min-w-0 shrink-0 items-center justify-center rounded-full border-2 ${
@@ -303,12 +315,8 @@ export function StatsPage() {
         </div>
       </div>
 
-      {/* Количество участников внизу для всех типов дилемм */}
-      <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-3">
-        <span className="font-['Heebo'] text-[#E6F8F9] text-[clamp(14px,1.8vw,24px)] bg-black/40 px-6 py-2 rounded-full backdrop-blur-sm">
-          {t("stats.totalResponses", { count: stats?.total ?? 0 })}
-        </span>
-        {isThreeCards && (
+      {isThreeCards && (
+        <div className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2">
           <button
             type="button"
             onClick={() => navigate("/")}
@@ -316,8 +324,8 @@ export function StatsPage() {
           >
             {t("insight.finish")}
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
