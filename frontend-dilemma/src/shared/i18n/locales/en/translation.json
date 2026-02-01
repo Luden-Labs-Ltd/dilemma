@@ -10,7 +10,7 @@
   },
   "dilemmaSelection": {
     "title": "AI in the Test of Values",
-    "subtitle": "To make a difference - Choose a dilemma",
+    "subtitle": "Choose a dilemma",
     "loading": "Loading dilemmas...",
     "retry": "Try again",
     "noDilemmas": "No dilemmas available",

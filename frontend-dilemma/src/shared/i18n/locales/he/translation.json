@@ -10,7 +10,7 @@
   },
   "dilemmaSelection": {
     "title": "AI במבחן הערכים",
-    "subtitle": "לשנות - בחרו דילמה",
+    "subtitle": "בחרו דילמה",
     "loading": "טוען דילמות...",
     "retry": "נסה שוב",
     "noDilemmas": "אין דילמות זמינות כרגע",
