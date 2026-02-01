@@ -16,11 +16,20 @@ function getAppUrl(): string {
 }
 
 const DILEMMA_IDS = ["commander", "doctor", "teacher"] as const;
+const POLL_INTERVAL_MS = 30_000;
 const DILEMMA_IMAGES: Record<(typeof DILEMMA_IDS)[number], string> = {
   commander: dilemmaOption3,
   doctor: dilemmaOption2,
   teacher: dilemmaOption1,
 };
+
+const emptyStatsList = DILEMMA_IDS.map((id) => ({
+  dilemmaId: id,
+  total: 0,
+  pathCounts: {} as Record<string, number>,
+  optionCounts: {} as Record<string, number>,
+  optionPercents: {} as Record<string, number>,
+}));
 
 export function SharePage() {
   const { t } = useTranslation();
@@ -31,28 +40,37 @@ export function SharePage() {
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all(DILEMMA_IDS.map((id) => fetchDilemmaStats(id)))
-      .then((data) => {
-        if (!cancelled) setStatsList(data);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setError(t("stats.error"));
-          setStatsList(DILEMMA_IDS.map((id) => ({
-            dilemmaId: id,
-            total: 0,
-            pathCounts: {},
-            optionCounts: {},
-            optionPercents: {},
-          })));
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setIsLoading(false);
-      });
+    function applyResult(data: DilemmaStats[]) {
+      if (!cancelled) setStatsList(data);
+    }
+    function applyError() {
+      if (!cancelled) {
+        setError(t("stats.error"));
+        setStatsList(emptyStatsList);
+      }
+    }
+
+    async function refreshStats() {
+      try {
+        const data = await Promise.all(
+          DILEMMA_IDS.map((id) => fetchDilemmaStats(id))
+        );
+        applyResult(data);
+        if (!cancelled) setError(null);
+      } catch {
+        applyError();
+      }
+    }
+
+    void refreshStats().finally(() => {
+      if (!cancelled) setIsLoading(false);
+    });
+
+    const intervalId = setInterval(refreshStats, POLL_INTERVAL_MS);
 
     return () => {
       cancelled = true;
+      clearInterval(intervalId);
     };
   }, [t]);
 
