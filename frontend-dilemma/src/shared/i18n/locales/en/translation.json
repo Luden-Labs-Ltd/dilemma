@@ -9,8 +9,8 @@
     "optionB": "Option B"
   },
   "dilemmaSelection": {
-    "title": "Values Under Test",
-    "subtitle": "Choose a topic to face the dilemma:",
+    "title": "AI in the Test of Values",
+    "subtitle": "To make a difference - Choose a dilemma",
     "loading": "Loading dilemmas...",
     "retry": "Try again",
     "noDilemmas": "No dilemmas available",

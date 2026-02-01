@@ -4,7 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useDilemma } from "@/entities/dilemma";
 import { useRTLAnimation } from "@/shared/hooks";
 import { useEffect, useRef, useState } from "react";
-import commanderVideoWebm from "@/shared/assets/videos/commander-he.webm";
+import commanderVideoEnWebm from "@/shared/assets/videos/commander-en.webm";
+import commanderVideoHeWebm from "@/shared/assets/videos/commander-he.webm";
 import teacherVideoEnWebm from "@/shared/assets/videos/teacher-en.webm";
 import teacherVideoHeWebm from "@/shared/assets/videos/teacher-he.webm";
 import doctorVideoEnWebm from "@/shared/assets/videos/doctor-en.webm";
@@ -15,8 +16,8 @@ const VIDEO_BY_DILEMMA_AND_LANG: Record<
   string,
   { en: string; he: string } | undefined
 > = {
-  // "trolley-problem": { en: commanderVideoWebm, he: commanderVideoWebm },
-  commander: { en: commanderVideoWebm, he: commanderVideoWebm },
+  // "trolley-problem": { en: commanderVideoEnWebm, he: commanderVideoHeWebm },
+  commander: { en: commanderVideoEnWebm, he: commanderVideoHeWebm },
   doctor: { en:  doctorVideoEnWebm, he:  doctorVideoHeWebm },
   teacher: { en: teacherVideoEnWebm, he: teacherVideoHeWebm },
 };
@@ -51,8 +52,8 @@ export function VideoPage() {
   //         : doctorVideoEnWebm
   //     : resolvedDilemmaName === "commander"
   //       ? langKey === "he"
-  //         ? commanderVideoWebm
-  //         : commanderVideoWebm
+  //         ? commanderVideoHeWebm
+  //         : commanderVideoEnWebm
   //       : undefined;
   const videoSrc = videoFromName;
   const shouldShowFullscreenVideo = Boolean(videoSrc);
