@@ -138,6 +138,11 @@
         "a": "No to the system\nYes to free choice",
         "b": "Install the system only with student consent.",
         "c": "Activate automatic filtering to ensure proper behavior."
+      },
+      "optionsShare": {
+        "a": "Freedom to Err",
+        "b": "Student Choice",
+        "c": "Enforced Behavior"
       }
     },
     "doctor": {
@@ -147,6 +152,10 @@
       "options": {
         "a": "Discontinue use and return personal responsibility",
         "b": "Continue using the AI to prevent death"
+      },
+      "optionsShare": {
+        "a": "Don't use AI",
+        "b": "Use AI"
       }
     },
     "commander": {
@@ -158,6 +167,10 @@
       "options": {
         "a": "ADOPT MACHINE RECOMMENDATION\nSilence to Save Lives",
         "b": "BROADCAST ALERT\nTruth at Any Cost"
+      },
+      "optionsShare": {
+        "a": "Silence",
+        "b": "Truth"
       },
       "sources": {
         "1": {
