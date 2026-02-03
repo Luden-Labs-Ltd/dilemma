@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useDilemma } from "@/entities/dilemma";
 import { useDilemmaData } from "@/entities/dilemma";
-import { useRTLAnimation } from "@/shared/hooks";
+import { useRTLAnimation, useIsMdOrLarger } from "@/shared/hooks";
 import { submitFinalChoice, type ApiError } from "@/shared/lib/api";
 import bgImage from "@/shared/assets/dilemmas/common/reason-background.png?format=webp";
 import logoImg from "@/shared/assets/logo.png?format=webp";
@@ -29,6 +29,7 @@ export function ReasonPage() {
   }
 
   const isModernTheme = isModernThemeDilemma(currentDilemma);
+  const isMdOrLarger = useIsMdOrLarger();
 
   const submitFinal = async (trimmedReason: string | null, skippedReason: boolean) => {
     if (isSubmitting) return;
@@ -111,13 +112,20 @@ export function ReasonPage() {
           className="mb-8"
         >
           <div
-            className="relative min-h-[271px] md:min-h-[371px] max-w-[1026px] overflow-hidden"
-            style={{
-              backgroundImage: `url(${isModernTheme ? modernThemeReasonFrame : bgImage})`,
-              backgroundSize: "contain",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
+            className="relative min-h-[271px] md:min-h-[371px] max-w-[1026px] overflow-hidden rounded-xl"
+            style={
+              isMdOrLarger
+                ? {
+                    backgroundImage: `url(${isModernTheme ? modernThemeReasonFrame : bgImage})`,
+                    backgroundSize: "contain",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                  }
+                : {
+                    backgroundColor: "transparent",
+                    border: "2px solid rgba(0, 212, 255, 0.4)",
+                  }
+            }
           >
             <motion.textarea
               initial={{ opacity: 0 }}

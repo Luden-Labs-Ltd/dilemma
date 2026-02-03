@@ -10,7 +10,7 @@
   },
   "dilemmaSelection": {
     "title": "AI in the Test of Values",
-    "subtitle": "To make a difference - Choose a dilemma",
+    "subtitle": "Choose a dilemma",
     "loading": "Loading dilemmas...",
     "retry": "Try again",
     "noDilemmas": "No dilemmas available",
@@ -138,6 +138,11 @@
         "a": "No to the system\nYes to free choice",
         "b": "Install the system only with student consent.",
         "c": "Activate automatic filtering to ensure proper behavior."
+      },
+      "optionsShare": {
+        "a": "Freedom to Err",
+        "b": "Student Choice",
+        "c": "Enforced Behavior"
       }
     },
     "doctor": {
@@ -147,6 +152,10 @@
       "options": {
         "a": "Discontinue use and return personal responsibility",
         "b": "Continue using the AI to prevent death"
+      },
+      "optionsShare": {
+        "a": "Don't use AI",
+        "b": "Use AI"
       }
     },
     "commander": {
@@ -158,6 +167,10 @@
       "options": {
         "a": "ADOPT MACHINE RECOMMENDATION\nSilence to Save Lives",
         "b": "BROADCAST ALERT\nTruth at Any Cost"
+      },
+      "optionsShare": {
+        "a": "Silence",
+        "b": "Truth"
       },
       "sources": {
         "1": {
@@ -192,5 +205,9 @@
     "title": "Something went wrong",
     "message": "An unexpected error occurred. Please refresh the page.",
     "reload": "Reload page"
+  },
+  "booth": {
+    "description": "In class, the system would pair you with a study partner who has a different perspective for discussion.",
+    "cta": "To continue the experience and for further details, please head over to our team at the booth."
   }
 }

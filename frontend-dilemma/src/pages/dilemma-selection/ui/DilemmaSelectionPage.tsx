@@ -71,7 +71,7 @@ export function DilemmaSelectionPage() {
   const textDirection = i18n.language === "he" ? "rtl" : "ltr";
 
   return (
-    <div className="relative flex min-h-screen flex-col items-center justify-center px-4 py-6 sm:py-12">
+    <div className="relative flex min-h-screen flex-col items-center justify-center px-4 pt-14 pb-3 sm:py-6">
       {/* Заголовок */}
       <motion.div
           {...headerAnimation}
@@ -83,7 +83,7 @@ export function DilemmaSelectionPage() {
             ...headerAnimation.animate,
             y: 0
           }}
-          className="mb-6 sm:mb-12 text-center"
+          className="mb-4 sm:mb-6 text-center"
           dir={textDirection}
         >
           <img
@@ -92,7 +92,7 @@ export function DilemmaSelectionPage() {
             aria-hidden="true"
             className="mx-auto h-auto w-[min(280px,70vw)] max-w-[320px] object-contain"
           />
-          <h1 className="mb-2 sm:mb-4 text-[clamp(32px,8vw,100px)] font-black leading-[1.28em] text-[#E6F8F9]">
+          <h1 className="mb-2 sm:mb-3 text-[clamp(28px,5vw,64px)] font-black leading-[1.28em] text-[#E6F8F9]">
             {t("dilemmaSelection.title")}
           </h1>
           <p className="text-[clamp(16px,3vw,40px)] font-medium leading-[1.4em] text-white">
@@ -118,7 +118,7 @@ export function DilemmaSelectionPage() {
         </div>
       )}
       {!isLoadingDilemmas && !dilemmasError && (
-        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-10 sm:gap-4 md:gap-6 lg:gap-[2.5%] w-full max-w-[1400px]">
+        <div className="flex flex-col sm:flex-row flex-wrap justify-center items-center gap-6 sm:gap-3 md:gap-4 lg:gap-[2.5%] w-full max-w-[1400px]">
           {displayedDilemmas.length === 0 ? (
             <p className="text-[clamp(14px,2.5vw,24px)] text-white">
               {t("dilemmaSelection.noDilemmas")}
@@ -147,7 +147,7 @@ export function DilemmaSelectionPage() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => handleSelectDilemma(dilemma.name)}
-                  className="group relative h-[450px] w-[90%] max-w-[350px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[360px] 2xl:w-[404px] sm:max-w-[404px] overflow-hidden rounded-[4px] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all hover:shadow-[0px_8px_8px_0px_rgba(0,0,0,0.35)] cursor-pointer"
+                  className="group relative h-[320px] sm:h-[340px] w-[90%] max-w-[350px] sm:w-[280px] md:w-[300px] lg:w-[320px] xl:w-[360px] 2xl:w-[404px] sm:max-w-[404px] overflow-hidden rounded-[4px] bg-white shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)] transition-all hover:shadow-[0px_8px_8px_0px_rgba(0,0,0,0.35)] cursor-pointer"
                   style={{
                     border: "clamp(6px,1.2vw,12px) solid #FFFDFD",
                     opacity: 1,
