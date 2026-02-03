@@ -38,4 +38,8 @@ export class UsersService {
   async findAll(): Promise<User[]> {
     return this.userRepository.find();
   }
+
+  async getCount(): Promise<number> {
+    return this.userRepository.count();
+  }
 }
